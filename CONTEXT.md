@@ -24,27 +24,62 @@ A concise account of the companies, roles, responsibilities, and areas in which 
 _Avoid_: Résumé
 
 **Selected work**:
-Honest stories about specific professional problems, Duarte’s contribution, constraints, and lessons, whether completed or ongoing and only where disclosure is appropriate.
-_Avoid_: Personal projects, case studies
+Honest stories about specific problems Duarte tackled through employment or Independent work, including his contribution, constraints, evidence, and lessons, whether completed or ongoing and only where disclosure is appropriate.
+_Avoid_: Project gallery, case study
+
+**Independent work**:
+Self-directed work outside Duarte’s employment that has progressed far enough to support a meaningful, evidence-backed story.
+_Avoid_: Side project, hobby project
+
+**Working on**:
+A small, current selection of active Independent work that is not yet mature enough for Selected Work. An item leaves Working on when it becomes inactive or graduates to Selected Work; it does not appear in both at once.
+_Avoid_: In progress, project tier
 
 **Library**:
 The set of books Duarte intentionally tracks, whether owned or not, presented through different views rather than separate book lists.
 _Avoid_: Book list, bookshelf
 
+**Book**:
+A distinct intellectual publication tracked once in the Library even when Duarte encounters it through multiple languages, formats, or publications. Its Book title is a pragmatic, stable label that should prefer the original title when readily available but may use a familiar translation or transliteration; it does not claim to be authoritative original-language metadata. A Book records one or more authors as ordered display credits; for an editor-led Book, the editor can be recorded as an author without a separate role. A Book can be tracked without a known Edition. Professional Work and books are separate concepts.
+_Avoid_: Work
+
+**Edition**:
+A particular published expression of exactly one Book, distinguished by details such as language, format, publisher, and ISBN. Printed and ebook Editions may have a page count; audiobook Editions may instead have a duration. Edition-specific contributors, such as translators and narrators, belong to the Edition. A Book may have multiple Editions, but an Edition cannot exist without its Book.
+_Avoid_: Book
+
+**Series**:
+A named long-term Library grouping for related Books, intentionally deferred from version one. A Book belongs to at most one Series and may have an optional positive whole-number position in it when reading order matters; known positions are unique within the Series.
+
+**Next reads**:
+A small, unordered selection of Books that Duarte is excited to read soon, intentionally deferred from version one. It is a subset of Books with a want-to-read intention: adding a Book to Next reads creates that intention when absent, while removing it does not remove the broader intention. It is not a fixed queue.
+_Avoid_: Queue, reading shortlist
+
 **Collection status**:
-Whether a tracked book belongs to Duarte’s physical or digital collection; independent of reading status.
+Whether Duarte owns or can permanently retain a particular physical or digital Edition; independent of reading status. Borrowed Editions and temporary subscription access are not in the collection. A Book is represented in the collection whenever at least one of its Editions is in the collection.
 _Avoid_: Library status
 
 **Reading status**:
-Duarte’s relationship to reading a tracked book, such as wanting to read it, currently reading it, having read it, or having paused or abandoned it; independent of ownership.
+Duarte’s current relationship to a Book, derived from its Readings wherever possible and independent of ownership and Edition status. A Book with no Reading or intention is unread. Wanting to read is an explicit intention available only before the first completed Reading, including after an abandoned first attempt. An initial active Reading makes the Book reading; after one or more completions it is read, with the total number of completed Readings available when greater than one. A later active Reading makes it rereading, while abandoning that reread returns it to read without increasing the total. There is no separate intention to reread.
 _Avoid_: Collection status
 
+**Reading**:
+One attempt to read or listen to a Book, including each reread as a separate occurrence. A Reading belongs to one Book and may identify one or more Editions used when Duarte changes format during the attempt; only one Reading of a Book may be active at a time. A Reading is active, completed, or abandoned; there is no paused state. Completed Readings determine how many times the Book has been read.
+_Avoid_: Read count, reading status
+
+**Site language**:
+The visitor-selected language—Portuguese (Portugal) or British English—that controls interface vocabulary, local date and number presentation, and which Equivalent translation is shown. It does not change source-faithful Book or Edition metadata.
+_Avoid_: Content language
+
 **Equivalent translation**:
-Portuguese (Portugal) and English expressions of the same public content that preserve meaning and tone without requiring word-for-word correspondence.
+The Portuguese (Portugal) or British English expression of the same public content, preserving meaning and tone without requiring word-for-word correspondence. The two expressions form one publishable pair; neither is the canonical expression.
 _Avoid_: Literal translation
 
+**Alternate title**:
+A familiar translated title, original-language title, or transliteration that helps a visitor find one Book without replacing its stable Book title or creating another Book.
+_Avoid_: Translated Book
+
 **Reflection**:
-An optional short personal response to a book, distinct from a formal review or required rating.
+One of any number of optional short personal responses to a Book, added whenever Duarte has something worth recording rather than required after each Reading. A Reflection may identify the Reading that prompted it but can also stand alone. Reflections are distinct from formal reviews and ratings.
 _Avoid_: Review
 
 **Central thread**:
