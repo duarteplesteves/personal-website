@@ -1,0 +1,7 @@
+{
+  "name": "personal-website-visual-prototype",
+  "private": true,
+  "scripts": {
+    "prototype:visual": "python3 -m http.server 4173 --directory prototypes/restrained-visual-system"
+  }
+}
