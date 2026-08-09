@@ -176,7 +176,7 @@ function restrainedWorkingRows(t) {
 function restrainedSelectedRows(t) {
   return t.selected.map((item) => `
     <article class="selected-item">
-      <h3><a href="#selected-work">${item.name}</a></h3>
+      <h3>${item.name}</h3>
       <p class="item-meta">${item.meta}</p>
       <p>${item.text}</p>
     </article>`).join("");
