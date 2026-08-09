@@ -165,6 +165,24 @@ function selectedRows(t, mode = "rows") {
     </a>`).join("");
 }
 
+function restrainedWorkingRows(t) {
+  return t.work.map((item) => `
+    <article class="work-item">
+      <h3>${item.name}</h3>
+      <p class="item-meta">${item.meta}</p>
+      <p>${item.text}</p>
+    </article>`).join("");
+}
+
+function restrainedSelectedRows(t) {
+  return t.selected.map((item) => `
+    <article class="selected-item">
+      <h3><a href="#selected-work">${item.name}</a></h3>
+      <p class="item-meta">${item.meta}</p>
+      <p>${item.text}</p>
+    </article>`).join("");
+}
+
 function experienceRows(t) {
   return t.experienceItems.map((item) => `
     <article class="experience-item">
@@ -202,35 +220,33 @@ function renderVariantA(t, lang) {
       ${headerNavigation(t, lang)}
       <main id="main">
         <header class="intro">
-          <p class="prototype-eyebrow">${t.prototypeEyebrow}</p>
           <h1>${t.intro}</h1>
           <p>${t.introAside}</p>
         </header>
 
         <section id="working-on" class="section-block">
-          <div class="section-heading"><h2>${t.workingOn}</h2><p>${t.workingIntro}</p></div>
-          <div class="content-list">${workingRows(t)}</div>
+          <div class="section-heading"><h2>${t.workingOn}</h2></div>
+          <div class="content-list">${restrainedWorkingRows(t)}</div>
         </section>
 
         <section id="selected-work" class="section-block">
-          <div class="section-heading"><h2>${t.selectedWork}</h2><p>${t.selectedIntro}</p></div>
-          <div class="content-list">${selectedRows(t)}</div>
+          <div class="section-heading"><h2>${t.selectedWork}</h2></div>
+          <div class="content-list">${restrainedSelectedRows(t)}</div>
         </section>
 
         <section id="experience" class="section-block">
-          <div class="section-heading"><h2>${t.experience}</h2><p>${t.experienceIntro}</p></div>
+          <div class="section-heading"><h2>${t.experience}</h2></div>
           <div class="experience-list">${experienceRows(t)}</div>
         </section>
 
         <section id="library" class="section-block library-block">
-          <div class="section-heading"><h2>${t.library}</h2><p>${t.libraryIntro}</p></div>
+          <div class="section-heading"><h2>${t.library}</h2></div>
           <div class="shelf-list">${shelfGroups(t)}</div>
           <a class="text-link" href="#library">${t.viewLibrary}<span aria-hidden="true"> →</span></a>
-          <p class="sample-note">${t.sampleNote}</p>
         </section>
 
         <section id="setup" class="section-block setup-block">
-          <div class="section-heading"><h2>${t.setup}</h2><p>${t.setupIntro}</p><p class="item-meta">${t.updated}</p></div>
+          <div class="section-heading"><h2>${t.setup}</h2><p class="item-meta">${t.updated}</p></div>
           <div class="setup-list">${setupGroups(t)}</div>
         </section>
       </main>
