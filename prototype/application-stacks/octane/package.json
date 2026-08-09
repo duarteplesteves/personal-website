@@ -1,0 +1,20 @@
+{
+  "name": "prototype-octane",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run check && vite build && node --import octane/compiler/register scripts/ssg.ts",
+    "check": "tsrx-tsc --noEmit"
+  },
+  "dependencies": {
+    "@octanejs/vite-plugin": "0.1.31",
+    "octane": "0.1.31"
+  },
+  "devDependencies": {
+    "@tsrx/typescript-plugin": "0.3.118",
+    "@types/node": "25.0.10",
+    "typescript": "5.9.3",
+    "vite": "8.0.16"
+  }
+}

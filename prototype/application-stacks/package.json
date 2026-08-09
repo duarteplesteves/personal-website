@@ -1,0 +1,25 @@
+{
+  "name": "personal-home-application-stacks-prototype",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "next-react",
+    "next-tsrx",
+    "octane"
+  ],
+  "scripts": {
+    "build": "npm run build -w next-react && npm run build -w next-tsrx && npm run build -w octane",
+    "build:next-react": "npm run build -w next-react",
+    "build:next-tsrx": "npm run build -w next-tsrx",
+    "build:octane": "npm run build -w octane",
+    "check": "npm run check -w next-react && npm run check -w next-tsrx && npm run check -w octane && node scripts/verify.mjs",
+    "measure": "node scripts/measure.mjs",
+    "serve:next-react": "npx serve next-react/out -l 4101",
+    "serve:next-tsrx": "npx serve next-tsrx/out -l 4102",
+    "serve:octane": "npx serve octane/dist -l 4103"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.3",
+    "serve": "14.2.5"
+  }
+}

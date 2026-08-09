@@ -1,0 +1,24 @@
+{
+  "name": "prototype-next-tsrx",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run typecheck && next build",
+    "typecheck": "tsrx-tsc --noEmit",
+    "check": "tsrx-tsc --noEmit"
+  },
+  "dependencies": {
+    "@tsrx/react": "0.2.56",
+    "@tsrx/turbopack-plugin-react": "0.1.79",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tsrx/typescript-plugin": "0.3.118",
+    "@types/node": "25.0.10",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}
