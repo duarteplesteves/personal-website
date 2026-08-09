@@ -12,8 +12,8 @@ const copy = {
     skip: "Skip to content",
     prototypeEyebrow: "Visual-system prototype · representative content",
     nav: { home: "Home", library: "Library" },
-    intro: "I’m Duarte, a software engineer curious about ideas, problems, and the many shapes a thoughtful solution can take.",
-    introAside: "I work through software, read across disciplines, and keep this small corner of the web as a record of what currently holds my attention.",
+    intro: "Duarte Esteves",
+    introAside: "I’m a software engineer curious about ideas, problems, and the many forms a thoughtful solution can take. I work through software, read across disciplines, and use this site to share what I’m building, learning, and reading.",
     workingOn: "Working on",
     workingIntro: "Independent work that is active, useful, and still taking shape.",
     selectedWork: "Selected Work",
@@ -63,8 +63,8 @@ const copy = {
     skip: "Saltar para o conteúdo",
     prototypeEyebrow: "Protótipo do sistema visual · conteúdo representativo",
     nav: { home: "Início", library: "Biblioteca" },
-    intro: "Sou o Duarte, engenheiro de software curioso sobre ideias, problemas e as muitas formas que uma solução cuidada pode assumir.",
-    introAside: "Trabalho através de software, leio sobre várias disciplinas e mantenho este pequeno canto da web como registo do que prende a minha atenção neste momento.",
+    intro: "Duarte Esteves",
+    introAside: "Sou engenheiro de software e tenho curiosidade por ideias, problemas e pelas muitas formas que uma solução cuidada pode assumir. Trabalho através de software, leio sobre várias disciplinas e uso este site para partilhar o que estou a construir, a aprender e a ler.",
     workingOn: "Em curso",
     workingIntro: "Trabalho independente que está ativo, é útil e continua a ganhar forma.",
     selectedWork: "Trabalho selecionado",
@@ -137,12 +137,11 @@ function localeControl(lang) {
 function headerNavigation(t, lang, className = "site-header") {
   return `
     <header class="${className}">
-      <a class="identity" href="#top" aria-label="Duarte Esteves — ${t.nav.home}">Duarte Esteves</a>
       <nav aria-label="Primary navigation">
         <a href="#top" aria-current="page">${t.nav.home}</a>
         <a href="#library">${t.nav.library}</a>
-        ${localeControl(lang)}
       </nav>
+      ${localeControl(lang)}
     </header>`;
 }
 

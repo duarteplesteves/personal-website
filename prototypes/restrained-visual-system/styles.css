@@ -115,12 +115,9 @@ button { color: inherit; }
   line-height: 1.25;
 }
 .variant-a .intro > p:last-child { max-width: 36rem; margin: 1.5rem 0 0; color: #5c5a55; line-height: 1.7; }
-.variant-a .section-block {
-  display: grid;
-  grid-template-columns: minmax(9rem, 0.72fr) minmax(0, 1.6fr);
-  gap: 3.5rem;
-}
+.variant-a .section-block { display: block; }
 .variant-a .section-block + .section-block { margin-top: 6rem; }
+.variant-a .section-heading { margin-bottom: 2rem; }
 .variant-a .section-heading h2,
 .variant-a .shelf h3,
 .variant-a .work-item h3,
@@ -359,7 +356,6 @@ button { color: inherit; }
 
 @media (max-width: 800px) {
   .variant-a { padding-inline: 1.25rem; }
-  .variant-a .section-block { grid-template-columns: 1fr; gap: 2rem; }
   .variant-a footer { grid-template-columns: 1fr; }
   .variant-a footer nav { justify-items: start; }
 
@@ -400,7 +396,6 @@ button { color: inherit; }
 }
 
 @media (max-width: 500px) {
-  .variant-a .site-header { align-items: flex-start; flex-direction: column; gap: 1.5rem; }
   .variant-a .site-header nav { flex-wrap: wrap; gap: 0.8rem; }
   .variant-a .experience-item { grid-template-columns: 1fr; }
   .variant-a .experience-item .item-meta { grid-row: auto; }
