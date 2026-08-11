@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Throwaway prototype for Duarte's Standalone Library browsing surface." />
+    <title>PROTOTYPE — Duarte's Library</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Three Standalone Library variants, switchable via ?variant=, on a throwaway static prototype route. -->
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="prototype"></div>
+    <p id="results-status" class="sr-status" aria-live="polite"></p>
+
+    <aside class="prototype-switcher" aria-label="Prototype variant switcher">
+      <button type="button" data-direction="previous" aria-label="Previous variant">←</button>
+      <output id="variant-state" aria-live="polite"></output>
+      <button type="button" data-direction="next" aria-label="Next variant">→</button>
+    </aside>
+
+    <script src="./prototype.js"></script>
+  </body>
+</html>
