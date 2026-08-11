@@ -168,6 +168,10 @@ button { cursor: pointer; }
 .book-record { overflow-wrap: break-word; }
 .book-record h3 { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.45; }
 .book-record .authors { margin: 0.3rem 0 0; color: var(--muted); line-height: 1.5; }
+.compact-book-line { line-height: 1.6; }
+.compact-book-line h3 { display: inline; line-height: inherit; }
+.compact-authors { color: var(--muted); }
+.compact-relationships { color: var(--muted); font-size: 0.82rem; }
 .relationship-line { margin: 0.55rem 0 0; }
 .reflection { max-width: 43rem; margin: 1rem 0 0; color: #53514c; line-height: 1.65; text-wrap: pretty; }
 .reflection-date { display: block; margin-block-start: 0.45rem; }
@@ -178,15 +182,16 @@ button { cursor: pointer; }
 .empty-actions { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-block-start: 1rem; }
 .text-button { min-height: 2.75rem; padding: 0; border: 0; background: transparent; font-weight: 600; text-decoration: underline; text-underline-offset: 0.25rem; }
 
-/* A — Continuous index: one narrow reading flow and generous vertical grouping. */
+/* A — Continuous index: one narrow reading flow with compact, single-line Book records. */
 .variant-a { padding-inline: 2rem; }
 .variant-a .site-header, .variant-a main { width: min(100%, 47rem); margin-inline: auto; }
 .variant-a .library-intro { padding-block: 7rem 6rem; }
 .variant-a .current-reading { margin-block-end: 6rem; }
 .variant-a .browser-controls { margin-block-end: 5rem; }
 .variant-a .results-heading { margin-block-end: 2.5rem; }
-.variant-a .book-record + .book-record { margin-block-start: 2.65rem; }
-.variant-a .reflection { padding-inline-start: 1.5rem; }
+.variant-a .book-record + .book-record { margin-block-start: 1.35rem; }
+.variant-a .compact-book-record:has(.reflection) + .book-record { margin-block-start: 1.8rem; }
+.variant-a .reflection { margin-block-start: 0.7rem; padding-inline-start: 1.5rem; }
 
 /* B — Browsing rail: the state of the Library stays beside the scrolling index. */
 .variant-b { padding-inline: 2rem; }

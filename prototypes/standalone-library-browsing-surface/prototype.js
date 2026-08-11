@@ -207,11 +207,20 @@ function reflectionMarkup(book, state) {
   return `<blockquote class="reflection"><span>${reflection}</span><sup class="prototype-marker" aria-hidden="true">*</sup><span class="reflection-date">${escapeHTML(book.reflection.date)}</span></blockquote>`;
 }
 
-function bookRecord(book, t, state, compact = false) {
-  if (compact) {
+function bookRecord(book, t, state, mode = "stacked") {
+  if (mode === "register") {
     return `<li class="book-record">
       <div class="record-title"><h3>${escapeHTML(book.book_title)}${marker(book)}</h3><p class="authors">${escapeHTML(book.authors)}</p></div>
       <div class="record-relationship">${relationshipLine(book, t)}</div>
+      ${reflectionMarkup(book, state)}
+    </li>`;
+  }
+  if (mode === "single-line") {
+    const relationships = relationshipLabels(book, t);
+    return `<li class="book-record compact-book-record">
+      <div class="compact-book-line">
+        <h3>${escapeHTML(book.book_title)}${marker(book)}</h3><span class="compact-authors"> — ${escapeHTML(book.authors)}</span>${relationships.length ? `<span class="compact-relationships"> · ${relationships.map(escapeHTML).join(" · ")}</span>` : ""}
+      </div>
       ${reflectionMarkup(book, state)}
     </li>`;
   }
@@ -310,10 +319,10 @@ function emptyMarkup(t, state) {
   </div>`;
 }
 
-function flatResultsMarkup(t, state, books) {
+function flatResultsMarkup(t, state, books, recordMode = "stacked") {
   return `<section class="library-results" aria-labelledby="books-heading">
     ${resultsHeading(t, state, books.length)}
-    ${books.length ? `<ol class="book-list">${books.map((book) => bookRecord(book, t, state)).join("")}</ol>` : emptyMarkup(t, state)}
+    ${books.length ? `<ol class="book-list">${books.map((book) => bookRecord(book, t, state, recordMode)).join("")}</ol>` : emptyMarkup(t, state)}
     <p class="prototype-note">${t.prototypeNote}</p>
   </section>`;
 }
@@ -333,7 +342,7 @@ function groupedResultsMarkup(t, state, books) {
   });
   const groupMarkup = [...groups].map(([key, group]) => `<section class="letter-group" aria-label="${escapeHTML(key)}">
     <p class="letter-heading" aria-hidden="true">${escapeHTML(key)}</p>
-    <ol class="book-list">${group.map((book) => bookRecord(book, t, state, true)).join("")}</ol>
+    <ol class="book-list">${group.map((book) => bookRecord(book, t, state, "register")).join("")}</ol>
   </section>`).join("");
   return `<section class="library-results" aria-labelledby="books-heading">
     ${resultsHeading(t, state, books.length)}
@@ -353,7 +362,7 @@ function renderVariantA(t, state, books) {
       <header class="library-intro">${introduction(t)}</header>
       ${currentReadingMarkup(t)}
       ${controlMarkup(t, state)}
-      ${flatResultsMarkup(t, state, books)}
+      ${flatResultsMarkup(t, state, books, "single-line")}
     </main>
   </div>`;
 }

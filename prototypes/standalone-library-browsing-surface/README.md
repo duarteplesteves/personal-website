@@ -19,7 +19,7 @@ Open <http://localhost:4174/?variant=A&lang=en>.
 
 ## Variants
 
-- **A — Continuous index:** one narrow reading flow; every layer uses the same calm vertical rhythm.
+- **A — Continuous index:** the selected direction: one narrow reading flow with each Book's title, author, and relationships in one compact line that wraps naturally on narrow screens.
 - **B — Browsing rail:** current reading and controls form a persistent left rail beside the listing.
 - **C — Alphabetical register:** a wider, denser index grouped by the first title or author sort character.
 
