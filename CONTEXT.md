@@ -40,7 +40,7 @@ The set of books Duarte intentionally tracks, whether owned or not, presented th
 _Avoid_: Book list, bookshelf
 
 **Book**:
-A distinct intellectual publication tracked once in the Library even when Duarte encounters it through multiple languages, formats, or publications. Its Book title is a pragmatic, stable label that should prefer the original title when readily available but may use a familiar translation or transliteration; it does not claim to be authoritative original-language metadata. A Book records one or more authors as ordered display credits; for an editor-led Book, the editor can be recorded as an author without a separate role. A Book can be tracked without a known Edition. Professional Work and books are separate concepts.
+A distinct intellectual publication tracked once in the Library even when Duarte encounters it through multiple languages, formats, or publications. Its Book title is a pragmatic, stable label that should prefer the original title when readily available but may use a familiar translation or transliteration; it does not claim to be authoritative original-language metadata. A Book records one or more authors as ordered display credits; each credit keeps its display name and an explicit sort value so author ordering does not infer family names from display text. For an editor-led Book, the editor can be recorded as an author without a separate role. A Book can be tracked without a known Edition. Professional Work and books are separate concepts.
 _Avoid_: Work
 
 **Edition**:
@@ -50,8 +50,12 @@ _Avoid_: Book
 **Series**:
 A named long-term Library grouping for related Books, intentionally deferred from version one. A Book belongs to at most one Series and may have an optional positive whole-number position in it when reading order matters; known positions are unique within the Series.
 
+**Favorites**:
+A manually curated selection of up to five Books Duarte especially enjoyed. A Book does not need to have shaped his thinking or have a Reflection to qualify, the selection may change over time, and its display order is not a ranking.
+_Avoid_: Most significant books, recommendations
+
 **Next reads**:
-A small, unordered selection of Books that Duarte is excited to read soon, intentionally deferred from version one. It is a subset of Books with a want-to-read intention: adding a Book to Next reads creates that intention when absent, while removing it does not remove the broader intention. It is not a fixed queue.
+A manually curated, unordered selection of up to three Books that Duarte is excited to read soon. It is a subset of Books with a want-to-read intention: adding a Book to Next reads creates that intention when absent, while removing it does not remove the broader intention. It is not a fixed queue, and its display order does not promise reading sequence. In version one, it supplies one group in the Home Library preview. A Book leaves Next reads when it starts being read or otherwise ceases to be Want to read; abandoning the Reading does not restore it automatically.
 _Avoid_: Queue, reading shortlist
 
 **Collection status**:
@@ -90,6 +94,14 @@ _Avoid_: Software-engineer identity, personal brand
 The personal home’s main document, revealing its Central thread through a brief introduction, Work, a small Library preview, and direct contact links rather than a long biography.
 _Avoid_: About page, landing page
 
+**Home Library preview**:
+Home’s structured snapshot of Duarte’s present reading, enduring taste, and future curiosity. It groups up to three Books with active Readings as Currently reading, up to five manually selected Favorites, and up to three Next reads. Empty groups are omitted. Title and author credits are the only required entry content; dates and Reflections may enrich entries without becoming obligations. Curated group order carries no ranking or queue semantics, and Duarte handles any cross-group duplication through curation rather than automatic deduplication.
+_Avoid_: Activity feed, recommendations
+
 **Standalone section**:
 A topic with enough meaningful material and its own browsing need to justify a primary destination. In version one, only the Library qualifies; other topics remain on Home or in detail pages until they earn this status.
 _Avoid_: Top-level page
+
+**Setup and tools**:
+A compact, date-stamped Home snapshot of hardware and software Duarte currently relies on, including selected agent-workflow resources he actively uses or has adapted. It is neither an endorsement nor a comprehensive inventory, and interests alone do not qualify.
+_Avoid_: Uses page, recommendations, tool inventory
