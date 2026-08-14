@@ -8,7 +8,7 @@
     "node": ">=22.22.2"
   },
   "scripts": {
-    "build": "nub scripts/build.ts",
+    "build": "nub --import octane/compiler/register scripts/build.ts",
     "validate": "nub scripts/validate.ts",
     "typecheck": "tsc --noEmit",
     "test": "nub run build && node --test"

@@ -18,7 +18,9 @@ const program = loadHome("content/home.json").pipe(
   Effect.flatMap((content) =>
     Effect.all(
       locales.map((locale) =>
-        writePage(`${staging}/${locale}/index.html`, renderHome(content, locale)),
+        Effect.tryPromise(() => renderHome(content, locale)).pipe(
+          Effect.flatMap((html) => writePage(`${staging}/${locale}/index.html`, html)),
+        ),
       ),
       { concurrency: "unbounded" },
     ),

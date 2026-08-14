@@ -22,10 +22,16 @@ test("the build emits only files needed by the static Home routes", async () => 
   assert.equal((await stat("dist/pt/index.html")).isFile(), true);
 });
 
-test("the metadata workaround produces one localized description", async () => {
+test("Octane produces one localized description", async () => {
+  const descriptions = {
+    en: "Duarte Esteves explores software, ideas, learning, and reading.",
+    pt: "Duarte Esteves explora software, ideias, aprendizagem e leitura.",
+  };
+
   for (const locale of ["en", "pt"]) {
     const html = await readFile(`dist/${locale}/index.html`, "utf8");
     assert.equal(html.match(/<meta name="description"/g)?.length, 1);
-    assert.match(html, /<meta name="description" content="[^"]+" data-octane-hoisted>/);
+    assert.ok(html.includes(`<meta name="description" content="${descriptions[locale]}">`));
+    assert.doesNotMatch(html, /data-octane-hoisted/);
   }
 });
