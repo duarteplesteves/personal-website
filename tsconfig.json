@@ -6,10 +6,10 @@
     "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "allowArbitraryExtensions": true,
     "jsx": "preserve",
     "jsxImportSource": "octane",
-    "types": ["node"]
+    "types": ["node"],
+    "plugins": [{ "name": "@tsrx/typescript-plugin" }]
   },
-  "include": ["scripts/**/*.ts", "src/**/*.ts"]
+  "include": ["scripts/**/*.ts", "src/**/*.ts", "src/**/*.tsrx", "vite.config.ts"]
 }
