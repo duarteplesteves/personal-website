@@ -14,7 +14,7 @@
     "test": "nub run build && node --test"
   },
   "dependencies": {
-    "effect": "3.22.1",
+    "effect": "4.0.0-rc.109",
     "octane": "0.1.37"
   },
   "devDependencies": {
