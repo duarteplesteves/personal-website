@@ -26,6 +26,6 @@ test("the metadata workaround produces one localized description", async () => {
   for (const locale of ["en", "pt"]) {
     const html = await readFile(`dist/${locale}/index.html`, "utf8");
     assert.equal(html.match(/<meta name="description"/g)?.length, 1);
-    assert.match(html, new RegExp(`<meta name="description" content="[^"]+" data-octane-metadata-workaround="35">`));
+    assert.match(html, /<meta name="description" content="[^"]+" data-octane-hoisted>/);
   }
 });
