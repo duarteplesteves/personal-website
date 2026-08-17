@@ -12,4 +12,3 @@ export const HomeContentSchema = Schema.Struct({
 });
 
 export type HomeContent = typeof HomeContentSchema.Type;
-export type SiteLanguage = "en" | "pt";

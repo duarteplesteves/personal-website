@@ -1,21 +1,29 @@
 import { NodeFileSystem, NodePath, NodeRuntime } from "@effect/platform-node";
-import { Console, Effect, FileSystem, Layer, Path } from "effect";
+import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
 import { loadHome } from "../src/load-home.ts";
-import type { SiteLanguage } from "../src/home-content.ts";
+import { homePublication } from "../src/publication.ts";
 
 type RenderHome = typeof import("../src/render-home.ts").renderHome;
 
 const output = "dist";
 const staging = ".dist-temporary";
 const rendererEntry = "../.vite-ssg/render-home.js";
-const locales: readonly SiteLanguage[] = ["en", "pt"];
+
+class RendererLoadError extends Schema.TaggedError<RendererLoadError>()("RendererLoadError", {
+  cause: Schema.Defect(),
+  message: Schema.String,
+}) {}
 
 const loadRenderer = Effect.tryPromise({
   try: async () => {
     const module = (await import(rendererEntry)) as { renderHome: RenderHome };
     return module.renderHome;
   },
-  catch: (error) => new Error(`Could not load Vite's server build: ${String(error)}`),
+  catch: (cause) =>
+    new RendererLoadError({
+      cause,
+      message: `Could not load Vite's server build: ${String(cause)}`,
+    }),
 });
 
 const writePage = Effect.fn("writePage")(function* (file: string, html: string) {
@@ -34,15 +42,15 @@ const cleanupStaging = Effect.gen(function* () {
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const { content, renderHome } = yield* Effect.all({
-    content: loadHome("content/home.json"),
+    content: loadHome("content/home.yaml"),
     renderHome: loadRenderer,
   });
 
   yield* cleanupStaging;
   yield* Effect.all(
-    locales.map((locale) =>
-      Effect.tryPromise(() => renderHome(content, locale)).pipe(
-        Effect.flatMap((html) => writePage(`${staging}/${locale}/index.html`, html)),
+    homePublication.map((publication) =>
+      Effect.tryPromise(() => renderHome(content, publication)).pipe(
+        Effect.flatMap((html) => writePage(`${staging}/${publication.outputPath}`, html)),
       ),
     ),
     { concurrency: "unbounded" },

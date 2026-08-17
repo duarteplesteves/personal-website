@@ -2,7 +2,7 @@ import { NodeFileSystem, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect } from "effect";
 import { loadHome } from "../src/load-home.ts";
 
-const source = process.argv[2] ?? "content/home.json";
+const source = process.argv[2] ?? "content/home.yaml";
 
 const program = loadHome(source).pipe(
   Effect.flatMap(() => Console.log(`Validated bilingual Home content: ${source}`)),

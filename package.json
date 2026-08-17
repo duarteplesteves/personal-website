@@ -14,11 +14,12 @@
   },
   "dependencies": {
     "effect": "4.0.0-rc.109",
-    "octane": "0.1.38"
+    "octane": "0.1.39",
+    "yaml": "2.9.0"
   },
   "devDependencies": {
     "@effect/platform-node": "4.0.0-rc.109",
-    "@octanejs/vite-plugin": "0.1.38",
+    "@octanejs/vite-plugin": "0.1.39",
     "@tsrx/typescript-plugin": "0.3.120",
     "@types/node": "26.2.0",
     "oxc-tsrx": "0.4.0",
