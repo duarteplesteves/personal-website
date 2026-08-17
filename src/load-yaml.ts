@@ -266,10 +266,17 @@ const inspectNodes = (
   return [];
 };
 
-const decodeLoadedYaml = <S extends Schema.Top>(loaded: LoadedYaml, schema: S) =>
-  Schema.decodeUnknownEffect(schema, { errors: "all", onExcessProperty: "error" })(
-    loaded.value,
-  ).pipe(Effect.mapError((error) => contentValidationError(loaded.diagnostics(error))));
+const decodeLoadedYaml = Effect.fn("decodeLoadedYaml")(function* <S extends Schema.Top>(
+  loaded: LoadedYaml,
+  schema: S,
+) {
+  return yield* Schema.decodeUnknownEffect(schema, {
+    errors: "all",
+    onExcessProperty: "error",
+  })(loaded.value).pipe(
+    Effect.mapError((error) => contentValidationError(loaded.diagnostics(error))),
+  );
+});
 
 const parseYaml = Effect.fn("parseYaml")(function* (source: string, text: string) {
   if (Buffer.byteLength(text) > maximumSourceBytes) {
@@ -344,5 +351,4 @@ export const loadYaml = Effect.fn("loadYaml")(function* (source: string) {
   return yield* parseYaml(source, text);
 });
 
-export const decodeYaml = <S extends Schema.Top>(loaded: LoadedYaml, schema: S) =>
-  decodeLoadedYaml(loaded, schema);
+export const decodeYaml = decodeLoadedYaml;
