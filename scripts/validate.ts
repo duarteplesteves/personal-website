@@ -1,16 +1,15 @@
 import { NodeFileSystem, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect } from "effect";
-import { loadHome } from "../src/load-home.ts";
+import { authoredCatalogSources, validateCatalog } from "../src/validate-catalog.ts";
 
-const source = process.argv[2] ?? "content/home.yaml";
+const requestedSources = process.argv.slice(2);
+const sources = requestedSources.length === 0 ? authoredCatalogSources : requestedSources;
 
-const program = loadHome(source).pipe(
-  Effect.flatMap(() => Console.log(`Validated bilingual Home content: ${source}`)),
-  Effect.tapError((error) =>
-    Console.error(
-      `Home validation failed in ${source}:\n${error instanceof Error ? error.message : String(error)}`,
-    ),
+const program = validateCatalog(sources).pipe(
+  Effect.flatMap((count) =>
+    Console.log(`Validated ${count} authored content source${count === 1 ? "" : "s"}`),
   ),
+  Effect.tapError((error) => Console.error(error.message)),
   Effect.provide(NodeFileSystem.layer),
 );
 
