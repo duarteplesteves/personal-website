@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "jsx": "preserve",
+    "jsxImportSource": "octane",
+    "types": ["node"],
+    "plugins": [{ "name": "@tsrx/typescript-plugin" }]
+  },
+  "include": ["scripts/**/*.ts", "src/**/*.ts", "src/**/*.tsrx", "vite.config.ts"]
+}
