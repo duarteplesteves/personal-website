@@ -1,9 +1,14 @@
 import { NodeFileSystem, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Schema, Stream } from "effect";
 import { loadHome } from "../src/repository/load-home.ts";
-import { HomePageDataSchema } from "../src/page-data-schema.ts";
-import { projectHome } from "../src/project-home.ts";
-import { homePublication } from "../src/publication.ts";
+import { loadSite } from "../src/repository/load-site.ts";
+import {
+  HomePageDataSchema,
+  LibraryPageDataSchema,
+  RootPageDataSchema,
+} from "../src/page-data-schema.ts";
+import { projectPage, projectRoot } from "../src/project-site.ts";
+import { sitePublication } from "../src/publication.ts";
 import { validateCatalog } from "../src/repository/validate-catalog.ts";
 
 const output = ".generated";
@@ -44,23 +49,32 @@ const generate = Effect.fn("generate")(function* (development: boolean) {
   const generation = Effect.gen(function* () {
     yield* recoverInterruptedReplacement();
     yield* validateCatalog();
-    const home = yield* loadHome("content/home.yaml");
-    const pages = yield* Effect.forEach(homePublication, (publication) => {
-      const page = projectHome(home, publication.siteLanguage);
-      return Schema.decodeUnknownEffect(HomePageDataSchema, {
+    const [home, site] = yield* Effect.all([
+      loadHome("content/home.yaml"),
+      loadSite("content/site.yaml"),
+    ]);
+    const pages = yield* Effect.forEach(sitePublication, (publication) => {
+      const page = projectPage(home, site, publication);
+      const schema = publication.page === "home" ? HomePageDataSchema : LibraryPageDataSchema;
+      return Schema.decodeUnknownEffect(schema, {
         errors: "all",
         onExcessProperty: "error",
       })(page).pipe(Effect.map((data) => ({ publication, data })));
     });
+    const root = yield* Schema.decodeUnknownEffect(RootPageDataSchema, {
+      errors: "all",
+      onExcessProperty: "error",
+    })(projectRoot(site));
 
     yield* remove(staging);
     for (const { data, publication } of pages) {
-      const target = `${staging}/${publication.siteLanguage}/home.json`;
+      const target = `${staging}/${publication.siteLanguage}/${publication.page}.json`;
       yield* fs.makeDirectory(`${staging}/${publication.siteLanguage}`, { recursive: true });
       yield* fs.writeFileString(target, `${JSON.stringify(data, null, 2)}\n`);
     }
+    yield* fs.writeFileString(`${staging}/root.json`, `${JSON.stringify(root, null, 2)}\n`);
     yield* replaceOutput();
-    yield* Console.log(`Generated ${pages.length} route-level content files`);
+    yield* Console.log(`Generated ${pages.length + 1} route-level content files`);
   });
 
   return yield* generation.pipe(
