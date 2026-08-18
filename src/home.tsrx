@@ -1,15 +1,14 @@
-import type { HomeContent } from "./home-content.ts";
-import type { SiteLanguage } from "./publication.ts";
+import type { HomePageData } from "./page-data-schema.ts";
 
-type HomeProps = { content: HomeContent; siteLanguage: SiteLanguage };
+type HomeProps = { content: HomePageData };
 
-export function Home({ content, siteLanguage }: HomeProps) @{
+export function Home({ content }: HomeProps) @{
   <>
     <title>{content.title}</title>
-    <meta name="description" content={content.description[siteLanguage]} />
+    <meta name="description" content={content.description} />
     <main>
       <h1>{content.title}</h1>
-      <p>{content.introduction[siteLanguage]}</p>
+      <p>{content.introduction}</p>
     </main>
   </>;
 }
