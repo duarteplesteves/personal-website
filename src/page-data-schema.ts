@@ -5,3 +5,5 @@ export const HomePageDataSchema = Schema.Struct({
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
 });
+
+export type HomePageData = typeof HomePageDataSchema.Type;
