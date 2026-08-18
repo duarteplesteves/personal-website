@@ -1,4 +1,4 @@
-import type { HomeContent } from "./home-content.ts";
+import type { HomeContent } from "./repository/home-content.ts";
 import type { HomePageData } from "./page-data-schema.ts";
 import type { SiteLanguage } from "./publication.ts";
 

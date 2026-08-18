@@ -1,6 +1,6 @@
 import { NodeFileSystem, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect } from "effect";
-import { selectCatalogEntries, validateCatalog } from "../src/validate-catalog.ts";
+import { selectCatalogEntries, validateCatalog } from "../src/repository/validate-catalog.ts";
 
 const program = selectCatalogEntries(process.argv.slice(2)).pipe(
   Effect.flatMap(validateCatalog),

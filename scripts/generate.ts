@@ -1,10 +1,10 @@
 import { NodeFileSystem, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Schema, Stream } from "effect";
-import { loadHome } from "../src/load-home.ts";
+import { loadHome } from "../src/repository/load-home.ts";
 import { HomePageDataSchema } from "../src/page-data-schema.ts";
 import { projectHome } from "../src/project-home.ts";
 import { homePublication } from "../src/publication.ts";
-import { validateCatalog } from "../src/validate-catalog.ts";
+import { validateCatalog } from "../src/repository/validate-catalog.ts";
 
 const output = ".generated";
 const staging = ".generated-temporary";

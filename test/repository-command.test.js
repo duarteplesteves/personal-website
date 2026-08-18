@@ -205,11 +205,16 @@ test("frontend boundary rejects repository runtime dependencies", async (context
   const directory = await mkdtemp(join(tmpdir(), "personal-home-boundary-"));
   context.after(() => rm(directory, { recursive: true, force: true }));
   await mkdir(join(directory, "src/browser"), { recursive: true });
+  await mkdir(join(directory, "src/repository"), { recursive: true });
+  await writeFile(
+    join(directory, "src/repository/home-content.ts"),
+    "export const HomeContentSchema = {};\n",
+  );
   await writeFile(
     join(directory, "src/browser/enhance.ts"),
     [
       'import { Effect } from "effect";',
-      'import { HomeContentSchema } from "../home-content.ts";',
+      'import { HomeContentSchema } from "../repository/home-content.ts";',
       'import { readFile } from "node:fs/promises";',
       'import { parse } from "yaml";',
       "void [Effect, HomeContentSchema, readFile, parse];",
@@ -221,7 +226,77 @@ test("frontend boundary rejects repository runtime dependencies", async (context
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /src\/browser\/enhance\.ts:1:1/);
   assert.match(result.stderr, /Effect runtime values are not allowed/i);
-  assert.match(result.stderr, /repository schemas are not allowed/i);
+  assert.match(result.stderr, /repository modules are not allowed/i);
   assert.match(result.stderr, /filesystem access is not allowed/i);
   assert.match(result.stderr, /YAML parsing is not allowed/i);
+});
+
+test("frontend boundary rejects runtime re-exports", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "personal-home-boundary-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, "src/browser"), { recursive: true });
+  await writeFile(join(directory, "src/browser/effect.ts"), 'export { Effect } from "effect";\n');
+
+  const result = runScript(directory, boundaryScript);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /src\/browser\/effect\.ts:1:1/);
+  assert.match(result.stderr, /Effect runtime values are not allowed/i);
+});
+
+test("frontend boundary rejects transitive runtime dependencies", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "personal-home-boundary-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, "src"), { recursive: true });
+  await writeFile(
+    join(directory, "src/home.tsrx"),
+    'import { runtime } from "./runtime.ts";\nexport function Home() @{ <p>{String(runtime)}</p>; }\n',
+  );
+  await writeFile(
+    join(directory, "src/runtime.ts"),
+    'import { Effect } from "effect";\nexport const runtime = Effect.void;\n',
+  );
+
+  const result = runScript(directory, boundaryScript);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /src\/runtime\.ts:1:1/);
+  assert.match(result.stderr, /Effect runtime values are not allowed/i);
+  assert.match(result.stderr, /src\/home\.tsrx -> src\/runtime\.ts -> effect/);
+});
+
+test("frontend boundary rejects non-static runtime imports", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "personal-home-boundary-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, "src/browser"), { recursive: true });
+  await writeFile(
+    join(directory, "src/browser/dynamic.ts"),
+    'const moduleName = "effect";\nvoid import(moduleName);\n',
+  );
+
+  const result = runScript(directory, boundaryScript);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /src\/browser\/dynamic\.ts:2:6/);
+  assert.match(result.stderr, /non-static runtime imports are not allowed/i);
+});
+
+test("frontend boundary resolves TypeScript behind JavaScript module specifiers", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "personal-home-boundary-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, "src"), { recursive: true });
+  await writeFile(
+    join(directory, "src/home.tsrx"),
+    'import { runtime } from "./runtime.js";\nexport function Home() @{ <p>{String(runtime)}</p>; }\n',
+  );
+  await writeFile(
+    join(directory, "src/runtime.ts"),
+    'import { Effect } from "effect";\nexport const runtime = Effect.void;\n',
+  );
+
+  const result = runScript(directory, boundaryScript);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /src\/runtime\.ts:1:1/);
+  assert.match(result.stderr, /Effect runtime values are not allowed/i);
 });
