@@ -1,6 +1,6 @@
 import { NodeFileSystem, NodePath, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
-import { loadHome } from "../src/load-home.ts";
+import { loadGeneratedHome } from "../src/load-generated-home.ts";
 import { homePublication } from "../src/publication.ts";
 
 type RenderHome = typeof import("../src/render-home.ts").renderHome;
@@ -41,15 +41,13 @@ const cleanupStaging = Effect.gen(function* () {
 
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
-  const { content, renderHome } = yield* Effect.all({
-    content: loadHome("content/home.yaml"),
-    renderHome: loadRenderer,
-  });
+  const renderHome = yield* loadRenderer;
 
   yield* cleanupStaging;
   yield* Effect.all(
     homePublication.map((publication) =>
-      Effect.tryPromise(() => renderHome(content, publication)).pipe(
+      loadGeneratedHome(publication.siteLanguage).pipe(
+        Effect.flatMap((content) => Effect.tryPromise(() => renderHome(content, publication))),
         Effect.flatMap((html) => writePage(`${staging}/${publication.outputPath}`, html)),
       ),
     ),

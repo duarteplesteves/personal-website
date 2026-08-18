@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build && nub scripts/build.ts",
+    "build": "nub run generate && nub run boundary:check && vite build && nub scripts/build.ts",
+    "generate": "nub scripts/generate.ts",
+    "dev:content": "nub scripts/generate.ts --watch",
+    "identifier": "nub scripts/identifier.ts",
+    "boundary:check": "nub scripts/check-frontend-boundary.ts",
     "validate": "nub scripts/validate.ts",
     "typecheck": "tsrx-tsc --noEmit",
     "lint": "oxlint src scripts test vite.config.ts",

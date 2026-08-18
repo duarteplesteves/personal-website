@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,10 +16,16 @@ description:
   pt: Descrição portuguesa
 `;
 
-const validateScript = join(dirname(fileURLToPath(import.meta.url)), "../scripts/validate.ts");
+const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const validateScript = join(repositoryRoot, "scripts/validate.ts");
+const generateScript = join(repositoryRoot, "scripts/generate.ts");
+const identifierScript = join(repositoryRoot, "scripts/identifier.ts");
+const boundaryScript = join(repositoryRoot, "scripts/check-frontend-boundary.ts");
 
-const runValidate = (directory, ...sources) =>
-  spawnSync("nub", [validateScript, ...sources], { cwd: directory, encoding: "utf8" });
+const runScript = (directory, script, ...arguments_) =>
+  spawnSync("nub", [script, ...arguments_], { cwd: directory, encoding: "utf8" });
+
+const runValidate = (directory, ...sources) => runScript(directory, validateScript, ...sources);
 
 const writeCatalog = async (context, contents) => {
   const directory = await mkdtemp(join(tmpdir(), "personal-home-"));
@@ -115,4 +121,107 @@ test("validate rejects unknown Home fields", async (context) => {
   const result = await validateSource(context, `${validHome}unknown: true\n`);
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /\[\$\.unknown\].*Unexpected key/i);
+});
+
+test("generate atomically replaces deterministic route-level plain data", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+
+  const first = runScript(directory, generateScript);
+  assert.equal(first.status, 0, first.stderr);
+  const englishPath = join(directory, ".generated/en/home.json");
+  const portuguesePath = join(directory, ".generated/pt/home.json");
+  const firstEnglish = await readFile(englishPath, "utf8");
+  const firstPortuguese = await readFile(portuguesePath, "utf8");
+
+  assert.deepEqual(JSON.parse(firstEnglish), {
+    title: "Duarte Esteves",
+    introduction: "English introduction",
+    description: "English description",
+  });
+  assert.deepEqual(JSON.parse(firstPortuguese), {
+    title: "Duarte Esteves",
+    introduction: "Introdução portuguesa",
+    description: "Descrição portuguesa",
+  });
+  await writeFile(join(directory, ".generated/stale.json"), "stale\n");
+
+  const second = runScript(directory, generateScript);
+  assert.equal(second.status, 0, second.stderr);
+  assert.equal(await readFile(englishPath, "utf8"), firstEnglish);
+  assert.equal(await readFile(portuguesePath, "utf8"), firstPortuguese);
+  await assert.rejects(readFile(join(directory, ".generated/stale.json"), "utf8"), {
+    code: "ENOENT",
+  });
+});
+
+test("failed production generation preserves the complete previous output", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+  assert.equal(runScript(directory, generateScript).status, 0);
+  const englishPath = join(directory, ".generated/en/home.json");
+  const portuguesePath = join(directory, ".generated/pt/home.json");
+  const previousEnglish = await readFile(englishPath, "utf8");
+  const previousPortuguese = await readFile(portuguesePath, "utf8");
+  await writeFile(
+    join(directory, "content/home.yaml"),
+    validHome.replace("  pt: Introdução portuguesa\n", ""),
+  );
+
+  const result = runScript(directory, generateScript);
+
+  assert.notEqual(result.status, 0);
+  assert.equal(await readFile(englishPath, "utf8"), previousEnglish);
+  assert.equal(await readFile(portuguesePath, "utf8"), previousPortuguese);
+});
+
+test("invalid development generation removes stale generated output", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+  assert.equal(runScript(directory, generateScript).status, 0);
+  await writeFile(
+    join(directory, "content/home.yaml"),
+    validHome.replace("  pt: Introdução portuguesa\n", ""),
+  );
+
+  const result = runScript(directory, generateScript, "--development");
+
+  assert.notEqual(result.status, 0);
+  await assert.rejects(readFile(join(directory, ".generated/en/home.json"), "utf8"), {
+    code: "ENOENT",
+  });
+});
+
+test("identifier emits a UUIDv7 through the project command", () => {
+  const result = runScript(repositoryRoot, identifierScript);
+  const identifier = result.stdout.trim();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(identifier, /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  assert.ok(
+    Math.abs(Number.parseInt(identifier.replaceAll("-", "").slice(0, 12), 16) - Date.now()) <
+      10_000,
+  );
+});
+
+test("frontend boundary rejects repository runtime dependencies", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "personal-home-boundary-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, "src/browser"), { recursive: true });
+  await writeFile(
+    join(directory, "src/browser/enhance.ts"),
+    [
+      'import { Effect } from "effect";',
+      'import { HomeContentSchema } from "../home-content.ts";',
+      'import { readFile } from "node:fs/promises";',
+      'import { parse } from "yaml";',
+      "void [Effect, HomeContentSchema, readFile, parse];",
+    ].join("\n"),
+  );
+
+  const result = runScript(directory, boundaryScript);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /src\/browser\/enhance\.ts:1:1/);
+  assert.match(result.stderr, /Effect runtime values are not allowed/i);
+  assert.match(result.stderr, /repository schemas are not allowed/i);
+  assert.match(result.stderr, /filesystem access is not allowed/i);
+  assert.match(result.stderr, /YAML parsing is not allowed/i);
 });
