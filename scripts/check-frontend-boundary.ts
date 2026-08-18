@@ -8,7 +8,7 @@ class FrontendBoundaryError extends Schema.TaggedError<FrontendBoundaryError>()(
 ) {}
 
 const repositorySchemaPattern =
-  /(?:^|\/)(?:authored-fields|home-content|load-home|load-yaml|page-data-schema|validate-catalog)(?:\.ts)?$/;
+  /(?:^|\/)(?:authored-fields|home-content|load-home|load-yaml|validate-catalog)(?:\.ts)?$/;
 
 const forbiddenReason = (specifier: string, typeOnly: boolean): string | undefined => {
   if (

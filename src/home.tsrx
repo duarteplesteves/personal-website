@@ -1,4 +1,4 @@
-import type { HomePageData } from "./page-data.ts";
+import type { HomePageData } from "./page-data-schema.ts";
 
 type HomeProps = { content: HomePageData };
 

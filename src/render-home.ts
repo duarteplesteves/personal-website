@@ -1,6 +1,6 @@
 import { prerender } from "octane/static";
 import { Home } from "./home.tsrx";
-import type { HomePageData } from "./page-data.ts";
+import type { HomePageData } from "./page-data-schema.ts";
 import type { HomePublication } from "./publication.ts";
 
 export async function renderHome(content: HomePageData, publication: HomePublication) {
