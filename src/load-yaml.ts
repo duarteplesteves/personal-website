@@ -1,13 +1,4 @@
-import {
-  DateTime,
-  Effect,
-  FileSystem,
-  Option,
-  Predicate,
-  Result,
-  Schema,
-  SchemaIssue,
-} from "effect";
+import { Effect, FileSystem, Predicate, Schema, SchemaIssue } from "effect";
 import {
   LineCounter,
   isAlias,
@@ -29,75 +20,6 @@ const standardTags = new Set([
   "tag:yaml.org,2002:int",
   "tag:yaml.org,2002:float",
 ]);
-const dateCandidatePattern = /^\d{4}(?:-\d{1,2}(?:-\d{1,2})?)?$/;
-const isoPartialDatePattern = /^\d{4}(?:-\d{2}(?:-\d{2})?)?$/;
-const absoluteUrlCandidatePattern = /^[a-z][a-z\d+.-]*:\S+$/i;
-
-const IsoPartialDate = Schema.String.pipe(
-  Schema.check(
-    Schema.makeFilter(
-      (value) => {
-        if (!isoPartialDatePattern.test(value)) return false;
-        const parsed = Option.getOrUndefined(DateTime.make(value));
-        return parsed !== undefined && DateTime.formatIsoDate(parsed).startsWith(value);
-      },
-      { expected: "a valid ISO partial date (YYYY, YYYY-MM, or YYYY-MM-DD)" },
-    ),
-  ),
-);
-
-const SafeAbsoluteUrl = Schema.URLFromString.pipe(
-  Schema.check(
-    Schema.makeFilter(
-      (url) => {
-        if (url.protocol !== "https:" && url.protocol !== "mailto:") return false;
-        if (url.username !== "" || url.password !== "") return false;
-        return !/%0a|%0d/i.test(url.href);
-      },
-      { expected: "a well-formed https or mailto URL without credentials" },
-    ),
-  ),
-);
-
-const stringSafetyIssue = (value: string): string | undefined => {
-  if (
-    dateCandidatePattern.test(value) &&
-    Result.isFailure(Schema.decodeUnknownResult(IsoPartialDate)(value))
-  ) {
-    return "invalid ISO partial date; use a real date in YYYY, YYYY-MM, or YYYY-MM-DD form";
-  }
-
-  if (
-    (value.startsWith("//") || absoluteUrlCandidatePattern.test(value)) &&
-    Result.isFailure(Schema.decodeUnknownResult(SafeAbsoluteUrl)(value))
-  ) {
-    return "unsafe URL; use a well-formed https or mailto URL without credentials";
-  }
-};
-
-const authoredStringIssues = (
-  input: Schema.Json,
-  path: ReadonlyArray<PropertyKey> = [],
-): Array<Schema.FilterIssue> => {
-  if (Predicate.isString(input)) {
-    const issue = stringSafetyIssue(input);
-    return issue === undefined ? [] : [{ path, issue }];
-  }
-  if (Array.isArray(input)) {
-    return input.flatMap((value, index) => authoredStringIssues(value, [...path, index]));
-  }
-  if (Predicate.isObject(input)) {
-    return (Object.entries(input) as Array<[string, Schema.Json]>).flatMap(([key, value]) =>
-      authoredStringIssues(value, [...path, key]),
-    );
-  }
-  return [];
-};
-
-const AuthoredYaml = Schema.Json.pipe(
-  Schema.check(Schema.makeFilter((input) => authoredStringIssues(input))),
-);
-
 const DiagnosticSchema = Schema.Struct({
   source: Schema.String,
   line: Schema.Int,
@@ -147,16 +69,12 @@ export const contentValidationError = (
 };
 
 class LoadedYaml {
-  readonly value: Schema.Json;
-
   constructor(
     readonly source: string,
-    value: Schema.Json,
+    readonly value: unknown,
     private readonly document: Document.Parsed,
     private readonly lineCounter: LineCounter,
-  ) {
-    this.value = value;
-  }
+  ) {}
 
   private location(path: DataPath): SourceLocation {
     let candidate = [...path];
@@ -217,7 +135,7 @@ class LoadedYaml {
   }
 }
 
-const sourceDiagnostic = (
+export const sourceValidationError = (
   source: string,
   reason: string,
   line = 1,
@@ -241,7 +159,7 @@ const inspectNodes = (
   const offset = node.range?.[0] ?? 0;
   const location = lineCounter.linePos(offset);
   const diagnostic = (reason: string) =>
-    sourceDiagnostic(source, reason, location.line, location.col, path);
+    sourceValidationError(source, reason, location.line, location.col, path);
 
   if (isAlias(node)) return [diagnostic("aliases are not allowed; repeat the value explicitly")];
   if (node.tag !== undefined && !standardTags.has(node.tag)) {
@@ -281,7 +199,7 @@ const decodeLoadedYaml = Effect.fn("decodeLoadedYaml")(function* <S extends Sche
 const parseYaml = Effect.fn("parseYaml")(function* (source: string, text: string) {
   if (Buffer.byteLength(text) > maximumSourceBytes) {
     return yield* contentValidationError([
-      sourceDiagnostic(source, `source exceeds the ${maximumSourceBytes}-byte limit`),
+      sourceValidationError(source, `source exceeds the ${maximumSourceBytes}-byte limit`),
     ]);
   }
 
@@ -301,14 +219,16 @@ const parseYaml = Effect.fn("parseYaml")(function* (source: string, text: string
         version: "1.2",
       }),
     catch: (cause) =>
-      contentValidationError([sourceDiagnostic(source, `could not parse YAML: ${String(cause)}`)]),
+      contentValidationError([
+        sourceValidationError(source, `could not parse YAML: ${String(cause)}`),
+      ]),
   });
 
   if (documents.length !== 1) {
     const secondDocument = documents[1];
     const location = lineCounter.linePos(secondDocument?.range?.[0] ?? 0);
     return yield* contentValidationError([
-      sourceDiagnostic(
+      sourceValidationError(
         source,
         `expected one document, received ${documents.length}; keep one YAML document per source`,
         location.line,
@@ -322,7 +242,7 @@ const parseYaml = Effect.fn("parseYaml")(function* (source: string, text: string
     return yield* contentValidationError(
       document.errors.map((error) => {
         const location = lineCounter.linePos(error.pos[0]);
-        return sourceDiagnostic(source, error.message, location.line, location.col);
+        return sourceValidationError(source, error.message, location.line, location.col);
       }),
     );
   }
@@ -330,10 +250,8 @@ const parseYaml = Effect.fn("parseYaml")(function* (source: string, text: string
   const nodeDiagnostics = inspectNodes(source, lineCounter, document.contents);
   if (nodeDiagnostics.length > 0) return yield* contentValidationError(nodeDiagnostics);
 
-  const value = document.toJS({ maxAliasCount: 0 }) as unknown;
-  const unvalidated = new LoadedYaml(source, value as Schema.Json, document, lineCounter);
-  const authoredValue = yield* decodeLoadedYaml(unvalidated, AuthoredYaml);
-  return new LoadedYaml(source, authoredValue, document, lineCounter);
+  const value: unknown = document.toJS({ maxAliasCount: 0 });
+  return new LoadedYaml(source, value, document, lineCounter);
 });
 
 export const loadYaml = Effect.fn("loadYaml")(function* (source: string) {
@@ -343,7 +261,7 @@ export const loadYaml = Effect.fn("loadYaml")(function* (source: string) {
     .pipe(
       Effect.mapError((error) =>
         contentValidationError([
-          sourceDiagnostic(source, `could not read source: ${String(error)}`),
+          sourceValidationError(source, `could not read source: ${String(error)}`),
         ]),
       ),
     );

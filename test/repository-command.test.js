@@ -1,7 +1,8 @@
 import { spawnSync } from "node:child_process";
-import { mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -15,28 +16,32 @@ description:
   pt: Descrição portuguesa
 `;
 
-const runValidate = (...sources) =>
-  spawnSync("nub", ["scripts/validate.ts", ...sources], { encoding: "utf8" });
+const validateScript = join(dirname(fileURLToPath(import.meta.url)), "../scripts/validate.ts");
 
-const validateSource = async (context, contents) => {
+const runValidate = (directory, ...sources) =>
+  spawnSync("nub", [validateScript, ...sources], { cwd: directory, encoding: "utf8" });
+
+const writeCatalog = async (context, contents) => {
   const directory = await mkdtemp(join(tmpdir(), "personal-home-"));
   context.after(() => rm(directory, { recursive: true, force: true }));
-  const source = join(directory, "home.yaml");
-  await writeFile(source, contents);
-  return runValidate(source);
+  await mkdir(join(directory, "content"));
+  await writeFile(join(directory, "content/home.yaml"), contents);
+  return directory;
+};
+
+const validateSource = async (context, contents) => {
+  const directory = await writeCatalog(context, contents);
+  return runValidate(directory);
 };
 
 test("validate accepts the complete authored catalog without generating output", async (context) => {
-  const directory = await mkdtemp(join(tmpdir(), "personal-home-"));
-  context.after(() => rm(directory, { recursive: true, force: true }));
-  const source = join(directory, "home.yaml");
-  await writeFile(source, validHome);
+  const directory = await writeCatalog(context, validHome);
 
-  const result = runValidate(source);
+  const result = runValidate(directory);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Validated 1 authored content source/);
-  assert.deepEqual(await readdir(directory), ["home.yaml"]);
+  assert.deepEqual(await readdir(join(directory, "content")), ["home.yaml"]);
 });
 
 test("validate rejects a missing Equivalent translation", async (context) => {
@@ -81,22 +86,14 @@ test("validate rejects multiple YAML documents", async (context) => {
   assert.match(result.stderr, /expected one document, received 2/i);
 });
 
-test("validate rejects invalid ISO partial dates", async (context) => {
-  const result = await validateSource(
-    context,
-    validHome.replace("English description", "2025-02-30"),
-  );
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /\[\$\.description\.en\].*invalid ISO partial date/i);
-});
+test("validate does not interpret authored prose as a date or URL field", async (context) => {
+  const contents = validHome
+    .replace("English introduction", "The unfinished date was 2025-02-30")
+    .replace("English description", "The example used javascript:alert(1)");
 
-test("validate rejects unsafe URLs", async (context) => {
-  const result = await validateSource(
-    context,
-    validHome.replace("English description", "javascript:alert(1)"),
-  );
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /\[\$\.description\.en\].*unsafe URL/i);
+  const result = await validateSource(context, contents);
+
+  assert.equal(result.status, 0, result.stderr);
 });
 
 test("validate rejects oversized YAML", async (context) => {
@@ -105,33 +102,13 @@ test("validate rejects oversized YAML", async (context) => {
   assert.match(result.stderr, /home\.yaml:1:1 \[\$\].*exceeds the 1048576-byte limit/i);
 });
 
-test("validation diagnostics include a stable identifier when available", async (context) => {
-  const identifier = "019ce466-5f83-7000-8000-000000000036";
-  const result = await validateSource(
-    context,
-    `items:\n  - id: ${identifier}\n    link: javascript:alert(1)\n`,
-  );
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, new RegExp(`\\(id: ${identifier}\\)`));
-  assert.match(result.stderr, /\[\$\.items\[0\]\.link\].*unsafe URL/i);
-});
+test("validate rejects sources outside the authored catalog", async (context) => {
+  const directory = await writeCatalog(context, validHome);
 
-test("validate reports every invalid source in the requested catalog", async (context) => {
-  const directory = await mkdtemp(join(tmpdir(), "personal-home-catalog-"));
-  context.after(() => rm(directory, { recursive: true, force: true }));
-  const duplicateSource = join(directory, "duplicate.yaml");
-  const translationSource = join(directory, "translation.yaml");
-  await writeFile(duplicateSource, `${validHome}title: Another title\n`);
-  await writeFile(translationSource, validHome.replace("  pt: Introdução portuguesa\n", ""));
-
-  const result = runValidate(duplicateSource, translationSource);
+  const result = runValidate(directory, "content/other.yaml");
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /duplicate\.yaml:\d+:\d+.*keys must be unique/i);
-  assert.match(
-    result.stderr,
-    /translation\.yaml:\d+:\d+.*Missing Portuguese Equivalent translation/i,
-  );
+  assert.match(result.stderr, /content\/other\.yaml:1:1.*unknown authored content source/i);
 });
 
 test("validate rejects unknown Home fields", async (context) => {
