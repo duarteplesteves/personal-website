@@ -1,24 +1,24 @@
 import { NodeFileSystem, NodePath, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
-import { loadGeneratedHome } from "../src/load-generated-home.ts";
-import { homePublication } from "../src/publication.ts";
+import { loadGeneratedPage, loadGeneratedRoot } from "../src/load-generated-site.ts";
+import { sitePublication, type Publication } from "../src/publication.ts";
 
-type RenderHome = typeof import("../src/render-home.ts").renderHome;
+interface Renderers {
+  readonly renderPage: typeof import("../src/render-site.ts").renderPage;
+  readonly renderRoot: typeof import("../src/render-site.ts").renderRoot;
+}
 
 const output = "dist";
 const staging = ".dist-temporary";
-const rendererEntry = "../.vite-ssg/render-home.js";
+const rendererEntry = "../.vite-ssg/render-site.js";
 
 class RendererLoadError extends Schema.TaggedError<RendererLoadError>()("RendererLoadError", {
   cause: Schema.Defect(),
   message: Schema.String,
 }) {}
 
-const loadRenderer = Effect.tryPromise({
-  try: async () => {
-    const module = (await import(rendererEntry)) as { renderHome: RenderHome };
-    return module.renderHome;
-  },
+const loadRenderers = Effect.tryPromise({
+  try: async () => (await import(rendererEntry)) as Renderers,
   catch: (cause) =>
     new RendererLoadError({
       cause,
@@ -39,18 +39,31 @@ const cleanupStaging = Effect.gen(function* () {
   yield* fs.remove(staging, { recursive: true, force: true });
 });
 
+const renderLocalized = Effect.fn("renderLocalized")(function* (
+  renderers: Renderers,
+  publication: Publication,
+) {
+  const content = yield* loadGeneratedPage(publication);
+  const html = yield* Effect.tryPromise(() => renderers.renderPage(content, publication));
+  yield* writePage(`${staging}/${publication.outputPath}`, html);
+});
+
+const renderRootPage = Effect.fn("renderRootPage")(function* (renderers: Renderers) {
+  const content = yield* loadGeneratedRoot();
+  const html = yield* Effect.tryPromise(() => renderers.renderRoot(content));
+  yield* writePage(`${staging}/index.html`, html);
+});
+
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
-  const renderHome = yield* loadRenderer;
+  const renderers = yield* loadRenderers;
 
   yield* cleanupStaging;
   yield* Effect.all(
-    homePublication.map((publication) =>
-      loadGeneratedHome(publication.siteLanguage).pipe(
-        Effect.flatMap((content) => Effect.tryPromise(() => renderHome(content, publication))),
-        Effect.flatMap((html) => writePage(`${staging}/${publication.outputPath}`, html)),
-      ),
-    ),
+    [
+      ...sitePublication.map((publication) => renderLocalized(renderers, publication)),
+      renderRootPage(renderers),
+    ],
     { concurrency: "unbounded" },
   );
 

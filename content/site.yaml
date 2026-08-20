@@ -1,0 +1,44 @@
+navigation:
+  home:
+    en: Home
+    pt: Início
+  library:
+    en: Library
+    pt: Biblioteca
+  primaryLabel:
+    en: Primary navigation
+    pt: Navegação principal
+  skipLabel:
+    en: Skip to content
+    pt: Saltar para o conteúdo
+  currentLanguageLabel:
+    en: "Current Site language:"
+    pt: "Idioma atual do site:"
+  switchLanguageLabel:
+    en: Change the Site language to Portuguese
+    pt: Alterar o idioma do site para inglês
+
+languages:
+  en: English
+  pt: Português
+
+root:
+  title: Duarte Esteves
+  description: Personal website of Duarte Esteves in Portuguese and English.
+  heading:
+    en: Choose a language
+    pt: Escolha o idioma
+  introduction:
+    en: Continue to the personal website in British English.
+    pt: Continue para o site pessoal em português de Portugal.
+
+library:
+  heading:
+    en: Library
+    pt: Biblioteca
+  description:
+    en: Books Duarte Esteves is reading, has read, or plans to read.
+    pt: Livros que Duarte Esteves está a ler, já leu ou pretende ler.
+  introduction:
+    en: A growing record of books I am reading, have read, or want to read.
+    pt: Um registo em crescimento dos livros que estou a ler, já li ou quero ler.

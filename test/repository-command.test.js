@@ -19,6 +19,7 @@ description:
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const validateScript = join(repositoryRoot, "scripts/validate.ts");
 const generateScript = join(repositoryRoot, "scripts/generate.ts");
+const validSite = await readFile(join(repositoryRoot, "content/site.yaml"), "utf8");
 const identifierScript = join(repositoryRoot, "scripts/identifier.ts");
 const boundaryScript = join(repositoryRoot, "scripts/check-frontend-boundary.ts");
 
@@ -32,6 +33,7 @@ const writeCatalog = async (context, contents) => {
   context.after(() => rm(directory, { recursive: true, force: true }));
   await mkdir(join(directory, "content"));
   await writeFile(join(directory, "content/home.yaml"), contents);
+  await writeFile(join(directory, "content/site.yaml"), validSite);
   return directory;
 };
 
@@ -46,8 +48,8 @@ test("validate accepts the complete authored catalog without generating output",
   const result = runValidate(directory);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Validated 1 authored content source/);
-  assert.deepEqual(await readdir(join(directory, "content")), ["home.yaml"]);
+  assert.match(result.stdout, /Validated 2 authored content sources/);
+  assert.deepEqual(await readdir(join(directory, "content")), ["home.yaml", "site.yaml"]);
 });
 
 test("validate rejects a missing Equivalent translation", async (context) => {
@@ -132,17 +134,45 @@ test("generate atomically replaces deterministic route-level plain data", async 
   const portuguesePath = join(directory, ".generated/pt/home.json");
   const firstEnglish = await readFile(englishPath, "utf8");
   const firstPortuguese = await readFile(portuguesePath, "utf8");
+  const firstEnglishPage = JSON.parse(firstEnglish);
+  const firstPortuguesePage = JSON.parse(firstPortuguese);
 
-  assert.deepEqual(JSON.parse(firstEnglish), {
-    title: "Duarte Esteves",
-    introduction: "English introduction",
-    description: "English description",
-  });
-  assert.deepEqual(JSON.parse(firstPortuguese), {
-    title: "Duarte Esteves",
-    introduction: "Introdução portuguesa",
-    description: "Descrição portuguesa",
-  });
+  assert.deepEqual(
+    {
+      title: firstEnglishPage.title,
+      introduction: firstEnglishPage.introduction,
+      description: firstEnglishPage.description,
+    },
+    {
+      title: "Duarte Esteves",
+      introduction: "English introduction",
+      description: "English description",
+    },
+  );
+  assert.deepEqual(
+    {
+      title: firstPortuguesePage.title,
+      introduction: firstPortuguesePage.introduction,
+      description: firstPortuguesePage.description,
+    },
+    {
+      title: "Duarte Esteves",
+      introduction: "Introdução portuguesa",
+      description: "Descrição portuguesa",
+    },
+  );
+  assert.equal(
+    JSON.parse(await readFile(join(directory, ".generated/en/library.json"))).heading,
+    "Library",
+  );
+  assert.equal(
+    JSON.parse(await readFile(join(directory, ".generated/pt/library.json"))).heading,
+    "Biblioteca",
+  );
+  assert.equal(
+    JSON.parse(await readFile(join(directory, ".generated/root.json"))).languages.pt,
+    "Português",
+  );
   await writeFile(join(directory, ".generated/stale.json"), "stale\n");
 
   const second = runScript(directory, generateScript);

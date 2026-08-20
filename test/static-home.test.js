@@ -13,13 +13,21 @@ for (const [siteLanguage, introduction] of homes) {
     assert.match(html, new RegExp(`<html lang="${siteLanguage === "en" ? "en-GB" : "pt-PT"}">`));
     assert.match(html, /<h1>Duarte Esteves<\/h1>/);
     assert.ok(html.includes(introduction));
-    assert.doesNotMatch(html, /<script\b/i);
+    assert.equal(html.match(/<script\b/g)?.length, 1);
+    assert.doesNotMatch(html, /<script[^>]+src=/i);
   });
 }
 
-test("the build emits only files needed by the static Home routes", async () => {
-  assert.equal((await stat("dist/en/index.html")).isFile(), true);
-  assert.equal((await stat("dist/pt/index.html")).isFile(), true);
+test("the build emits the root and localized Home and Library routes", async () => {
+  for (const file of [
+    "dist/index.html",
+    "dist/en/index.html",
+    "dist/pt/index.html",
+    "dist/en/library/index.html",
+    "dist/pt/library/index.html",
+  ]) {
+    assert.equal((await stat(file)).isFile(), true);
+  }
 });
 
 test("Octane places Home metadata in the document head for each Site language", async () => {
