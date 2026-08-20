@@ -172,6 +172,53 @@ test("validate rejects invalid and duplicate durable Book identifiers", async (c
   assert.match(duplicate.stderr, /duplicate durable identifier/i);
 });
 
+test("validate accepts complete Editions and format-appropriate optional fields", async (context) => {
+  const directory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Balada para Sophie\n    language: pt-PT\n    format: hardcover\n    publisher: Porto Editora\n    publicationDate: 2024-09\n    isbn: 978-3-16-148410-0\n    contributors:\n      - displayName: João Translator\n        role: translator\n    pageCount: 320\n    inCollection: true\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en-GB\n    format: ebook\n    pageCount: 300\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en\n    format: audiobook\n    durationMinutes: 600\n`,
+  );
+
+  const result = runValidate(directory, "content/library.yaml");
+
+  assert.equal(result.status, 0, result.stderr);
+  const generated = runScript(directory, generateScript);
+  assert.equal(generated.status, 0, generated.stderr);
+  const page = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
+  assert.equal(page.books[0].inCollection, true);
+  assert.ok(!("editions" in page));
+});
+
+test("validate rejects incomplete Editions and format-inappropriate extents", async (context) => {
+  const incompleteDirectory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Balada para Sophie\n    language: not_a_language\n`,
+  );
+  const printDurationDirectory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Balada para Sophie\n    language: pt\n    format: paperback\n    durationMinutes: 600\n`,
+  );
+  const audioPagesDirectory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Balada para Sophie\n    language: en\n    format: audiobook\n    pageCount: 320\n`,
+  );
+
+  const incomplete = runValidate(incompleteDirectory, "content/library.yaml");
+  const printDuration = runValidate(printDurationDirectory, "content/library.yaml");
+  const audioPages = runValidate(audioPagesDirectory, "content/library.yaml");
+
+  assert.notEqual(incomplete.status, 0);
+  assert.match(incomplete.stderr, /format/i);
+  assert.match(incomplete.stderr, /BCP 47/i);
+  assert.notEqual(printDuration.status, 0);
+  assert.match(printDuration.stderr, /duration.*audiobook/i);
+  assert.notEqual(audioPages.status, 0);
+  assert.match(audioPages.stderr, /page count.*print or ebook/i);
+});
+
 test("validate rejects references to Books that do not exist", async (context) => {
   const directory = await writeCatalog(
     context,
@@ -243,12 +290,15 @@ test("generate atomically replaces deterministic route-level plain data", async 
         { displayName: "Filipe Melo", sortValue: "Melo, Filipe" },
       ],
       alternateTitles: [],
+      inCollection: false,
     },
   ]);
   assert.equal(
     JSON.parse(await readFile(join(directory, ".generated/root.json"))).languages.pt,
     "Português",
   );
+  assert.equal(englishLibrary.books[0].inCollection, false);
+  assert.ok(!("editions" in englishLibrary));
   await writeFile(join(directory, ".generated/stale.json"), "stale\n");
 
   const second = runScript(directory, generateScript);
