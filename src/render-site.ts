@@ -7,7 +7,7 @@ import type { Publication } from "./publication.ts";
 import { Root } from "./root.tsrx";
 import { siteStyles } from "./site-styles.ts";
 
-const document = (
+const htmlDocument = (
   language: string,
   rendered: Awaited<ReturnType<typeof prerender>>,
   enhancement: string,
@@ -16,12 +16,12 @@ const document = (
 
 async function renderHome(content: HomePageData, publication: Publication) {
   const rendered = await prerender(Home, { content }, { headChannel: "separate" });
-  return document(publication.documentLanguage, rendered, languageControlEnhancement);
+  return htmlDocument(publication.documentLanguage, rendered, languageControlEnhancement);
 }
 
 async function renderLibrary(content: LibraryPageData, publication: Publication) {
   const rendered = await prerender(Library, { content }, { headChannel: "separate" });
-  return document(publication.documentLanguage, rendered, languageControlEnhancement);
+  return htmlDocument(publication.documentLanguage, rendered, languageControlEnhancement);
 }
 
 export async function renderPage(content: PageData, publication: Publication) {
@@ -32,5 +32,5 @@ export async function renderPage(content: PageData, publication: Publication) {
 
 export async function renderRoot(content: RootPageData) {
   const rendered = await prerender(Root, { content }, { headChannel: "separate" });
-  return document("en", rendered, rootLanguageResolver(content.homePathnames));
+  return htmlDocument("en", rendered, rootLanguageResolver(content.homePathnames));
 }

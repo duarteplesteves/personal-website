@@ -94,8 +94,19 @@ for (const route of localizedRoutes) {
     assert.ok(html.includes(`>${route.currentLanguage}</span>`));
     assert.ok(html.includes(`href="${route.equivalent}"`));
     assert.ok(html.includes(`>${route.alternateLanguage}</a>`));
+
+    const currentPath = route.path.includes("/library") ? route.library : route.home;
+    const otherPath = currentPath === route.home ? route.library : route.home;
+    assert.ok(html.includes(`href="${currentPath}" aria-current="page"`));
+    assert.ok(!html.includes(`href="${otherPath}" aria-current="`));
   });
 }
+
+test("the current-language label is separated from its value for screen readers", async () => {
+  const html = await readArtifact("/en/index.html");
+
+  assert.ok(html.includes("Current Site language:</span> <span>English</span>"));
+});
 
 test("the language control saves the explicit choice and preserves Library query state", async () => {
   const html = await readArtifact("/en/library/index.html");

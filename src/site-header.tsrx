@@ -21,7 +21,7 @@ export function SiteHeader({ content }: { content: PageData }) @{
         </a>
       </nav>
       <p class="language-navigation">
-        <span class="visually-hidden">{content.navigation.currentLanguageLabel} </span>
+        <span class="visually-hidden">{content.navigation.currentLanguageLabel}</span>{" "}
         <span>{content.navigation.currentLanguageName}</span>
         <span aria-hidden="true"> · </span>
         <a

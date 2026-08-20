@@ -1,14 +1,12 @@
 import type { HomePageData, LibraryPageData, PageData, RootPageData } from "./page-data-schema.ts";
-import { findPublication, type Publication, type SiteLanguage } from "./publication.ts";
+import { equivalentPublication, findPublication, type Publication } from "./publication.ts";
 import type { HomeContent } from "./repository/home-content.ts";
 import type { SiteContent } from "./repository/site-content.ts";
 
-const alternateLanguage = (siteLanguage: SiteLanguage): SiteLanguage =>
-  siteLanguage === "en" ? "pt" : "en";
-
 const projectNavigation = (site: SiteContent, publication: Publication) => {
   const { siteLanguage } = publication;
-  const alternate = alternateLanguage(siteLanguage);
+  const equivalent = equivalentPublication(publication);
+  const alternate = equivalent.siteLanguage;
   return {
     homeLabel: site.navigation.home[siteLanguage],
     homePathname: findPublication("home", siteLanguage).pathname,
@@ -20,10 +18,10 @@ const projectNavigation = (site: SiteContent, publication: Publication) => {
     currentLanguageName: site.languages[siteLanguage],
     alternateLanguageName: site.languages[alternate],
     switchLanguageLabel: site.navigation.switchLanguageLabel[siteLanguage],
-    equivalentPathname: publication.equivalentPathname,
-    alternateDocumentLanguage: alternate === "en" ? "en-GB" : "pt-PT",
+    equivalentPathname: equivalent.pathname,
+    alternateDocumentLanguage: equivalent.documentLanguage,
     alternateSiteLanguage: alternate,
-  } as const;
+  };
 };
 
 export const projectHome = (
@@ -40,7 +38,7 @@ export const projectHome = (
 
 export const projectLibrary = (site: SiteContent, publication: Publication): LibraryPageData => ({
   page: "library",
-  title: `${site.library.heading[publication.siteLanguage]} — Duarte Esteves`,
+  title: `${site.library.heading[publication.siteLanguage]} — ${site.root.title}`,
   heading: site.library.heading[publication.siteLanguage],
   introduction: site.library.introduction[publication.siteLanguage],
   description: site.library.description[publication.siteLanguage],

@@ -134,12 +134,14 @@ test("generate atomically replaces deterministic route-level plain data", async 
   const portuguesePath = join(directory, ".generated/pt/home.json");
   const firstEnglish = await readFile(englishPath, "utf8");
   const firstPortuguese = await readFile(portuguesePath, "utf8");
+  const firstEnglishPage = JSON.parse(firstEnglish);
+  const firstPortuguesePage = JSON.parse(firstPortuguese);
 
   assert.deepEqual(
     {
-      title: JSON.parse(firstEnglish).title,
-      introduction: JSON.parse(firstEnglish).introduction,
-      description: JSON.parse(firstEnglish).description,
+      title: firstEnglishPage.title,
+      introduction: firstEnglishPage.introduction,
+      description: firstEnglishPage.description,
     },
     {
       title: "Duarte Esteves",
@@ -149,9 +151,9 @@ test("generate atomically replaces deterministic route-level plain data", async 
   );
   assert.deepEqual(
     {
-      title: JSON.parse(firstPortuguese).title,
-      introduction: JSON.parse(firstPortuguese).introduction,
-      description: JSON.parse(firstPortuguese).description,
+      title: firstPortuguesePage.title,
+      introduction: firstPortuguesePage.introduction,
+      description: firstPortuguesePage.description,
     },
     {
       title: "Duarte Esteves",

@@ -6,7 +6,6 @@ export interface Publication {
   readonly siteLanguage: SiteLanguage;
   readonly documentLanguage: "en-GB" | "pt-PT";
   readonly pathname: string;
-  readonly equivalentPathname: string;
   readonly outputPath: string;
 }
 
@@ -16,7 +15,6 @@ export const sitePublication: ReadonlyArray<Publication> = [
     siteLanguage: "en",
     documentLanguage: "en-GB",
     pathname: "/en",
-    equivalentPathname: "/pt",
     outputPath: "en/index.html",
   },
   {
@@ -24,7 +22,6 @@ export const sitePublication: ReadonlyArray<Publication> = [
     siteLanguage: "pt",
     documentLanguage: "pt-PT",
     pathname: "/pt",
-    equivalentPathname: "/en",
     outputPath: "pt/index.html",
   },
   {
@@ -32,7 +29,6 @@ export const sitePublication: ReadonlyArray<Publication> = [
     siteLanguage: "en",
     documentLanguage: "en-GB",
     pathname: "/en/library",
-    equivalentPathname: "/pt/library",
     outputPath: "en/library/index.html",
   },
   {
@@ -40,7 +36,6 @@ export const sitePublication: ReadonlyArray<Publication> = [
     siteLanguage: "pt",
     documentLanguage: "pt-PT",
     pathname: "/pt/library",
-    equivalentPathname: "/en/library",
     outputPath: "pt/library/index.html",
   },
 ];
@@ -59,3 +54,6 @@ export const findPublication = (page: Page, siteLanguage: SiteLanguage): Publica
   }
   return publication;
 };
+
+export const equivalentPublication = (publication: Publication): Publication =>
+  findPublication(publication.page, publication.siteLanguage === "en" ? "pt" : "en");
