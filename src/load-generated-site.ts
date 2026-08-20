@@ -1,10 +1,6 @@
 import { Effect, FileSystem, Schema } from "effect";
-import {
-  HomePageDataSchema,
-  LibraryPageDataSchema,
-  RootPageDataSchema,
-} from "./page-data-schema.ts";
-import type { SiteLanguage } from "./publication.ts";
+import { PageDataSchema, RootPageDataSchema } from "./page-data-schema.ts";
+import { generatedPagePath, generatedRootPath, type Publication } from "./publication.ts";
 
 export class GeneratedContentError extends Schema.TaggedError<GeneratedContentError>()(
   "GeneratedContentError",
@@ -50,18 +46,12 @@ const decodeGenerated = <S extends Schema.Top>(source: string, schema: S) =>
     ),
   );
 
-export const loadGeneratedHome = Effect.fn("loadGeneratedHome")(function* (
-  siteLanguage: SiteLanguage,
+export const loadGeneratedPage = Effect.fn("loadGeneratedPage")(function* (
+  publication: Publication,
 ) {
-  return yield* decodeGenerated(`.generated/${siteLanguage}/home.json`, HomePageDataSchema);
-});
-
-export const loadGeneratedLibrary = Effect.fn("loadGeneratedLibrary")(function* (
-  siteLanguage: SiteLanguage,
-) {
-  return yield* decodeGenerated(`.generated/${siteLanguage}/library.json`, LibraryPageDataSchema);
+  return yield* decodeGenerated(`.generated/${generatedPagePath(publication)}`, PageDataSchema);
 });
 
 export const loadGeneratedRoot = Effect.fn("loadGeneratedRoot")(function* () {
-  return yield* decodeGenerated(".generated/root.json", RootPageDataSchema);
+  return yield* decodeGenerated(`.generated/${generatedRootPath}`, RootPageDataSchema);
 });

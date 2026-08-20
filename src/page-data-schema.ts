@@ -33,6 +33,8 @@ export const LibraryPageDataSchema = Schema.Struct({
   navigation: NavigationDataSchema,
 });
 
+export const PageDataSchema = Schema.Union([HomePageDataSchema, LibraryPageDataSchema]);
+
 export const RootPageDataSchema = Schema.Struct({
   title: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
@@ -44,5 +46,5 @@ export const RootPageDataSchema = Schema.Struct({
 
 export type HomePageData = typeof HomePageDataSchema.Type;
 export type LibraryPageData = typeof LibraryPageDataSchema.Type;
+export type PageData = typeof PageDataSchema.Type;
 export type RootPageData = typeof RootPageDataSchema.Type;
-export type PageData = HomePageData | LibraryPageData;

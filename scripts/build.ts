@@ -1,15 +1,10 @@
 import { NodeFileSystem, NodePath, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
-import {
-  loadGeneratedHome,
-  loadGeneratedLibrary,
-  loadGeneratedRoot,
-} from "../src/load-generated-site.ts";
-import { sitePublication } from "../src/publication.ts";
+import { loadGeneratedPage, loadGeneratedRoot } from "../src/load-generated-site.ts";
+import { sitePublication, type Publication } from "../src/publication.ts";
 
 interface Renderers {
-  readonly renderHome: typeof import("../src/render-site.ts").renderHome;
-  readonly renderLibrary: typeof import("../src/render-site.ts").renderLibrary;
+  readonly renderPage: typeof import("../src/render-site.ts").renderPage;
   readonly renderRoot: typeof import("../src/render-site.ts").renderRoot;
 }
 
@@ -44,34 +39,33 @@ const cleanupStaging = Effect.gen(function* () {
   yield* fs.remove(staging, { recursive: true, force: true });
 });
 
+const renderLocalized = Effect.fn("renderLocalized")(function* (
+  renderers: Renderers,
+  publication: Publication,
+) {
+  const content = yield* loadGeneratedPage(publication);
+  const html = yield* Effect.tryPromise(() => renderers.renderPage(content, publication));
+  yield* writePage(`${staging}/${publication.outputPath}`, html);
+});
+
+const renderRootPage = Effect.fn("renderRootPage")(function* (renderers: Renderers) {
+  const content = yield* loadGeneratedRoot();
+  const html = yield* Effect.tryPromise(() => renderers.renderRoot(content));
+  yield* writePage(`${staging}/index.html`, html);
+});
+
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const renderers = yield* loadRenderers;
 
   yield* cleanupStaging;
   yield* Effect.all(
-    sitePublication.map((publication) => {
-      const render =
-        publication.page === "home"
-          ? loadGeneratedHome(publication.siteLanguage).pipe(
-              Effect.flatMap((content) =>
-                Effect.tryPromise(() => renderers.renderHome(content, publication)),
-              ),
-            )
-          : loadGeneratedLibrary(publication.siteLanguage).pipe(
-              Effect.flatMap((content) =>
-                Effect.tryPromise(() => renderers.renderLibrary(content, publication)),
-              ),
-            );
-      return render.pipe(
-        Effect.flatMap((html) => writePage(`${staging}/${publication.outputPath}`, html)),
-      );
-    }),
+    [
+      ...sitePublication.map((publication) => renderLocalized(renderers, publication)),
+      renderRootPage(renderers),
+    ],
     { concurrency: "unbounded" },
   );
-  const root = yield* loadGeneratedRoot();
-  const rootHtml = yield* Effect.tryPromise(() => renderers.renderRoot(root));
-  yield* writePage(`${staging}/index.html`, rootHtml);
 
   yield* fs.remove(output, { recursive: true, force: true });
   yield* fs.rename(staging, output);
