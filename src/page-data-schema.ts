@@ -34,6 +34,7 @@ const PublicBookSchema = Schema.Struct({
     }),
   ),
   alternateTitles: Schema.Array(Schema.NonEmptyString),
+  inCollection: Schema.Boolean,
 });
 
 export const LibraryPageDataSchema = Schema.Struct({

@@ -47,7 +47,14 @@ export const projectLibrary = (
   heading: site.library.heading[publication.siteLanguage],
   introduction: site.library.introduction[publication.siteLanguage],
   description: site.library.description[publication.siteLanguage],
-  books: library.books.map((book) => ({ ...book, alternateTitles: book.alternateTitles ?? [] })),
+  books: library.books.map((book) => ({
+    ...book,
+    alternateTitles: book.alternateTitles ?? [],
+    inCollection:
+      library.editions?.some(
+        (edition) => edition.bookId === book.id && edition.inCollection === true,
+      ) ?? false,
+  })),
   navigation: projectNavigation(site, publication),
 });
 

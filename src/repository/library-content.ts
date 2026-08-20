@@ -1,4 +1,5 @@
 import { Schema } from "effect";
+import { IsoPartialDate } from "./authored-fields.ts";
 
 const DurableIdentifierSchema = Schema.String.pipe(Schema.check(Schema.isUUID(7)));
 
@@ -14,13 +15,55 @@ const BookSchema = Schema.Struct({
   alternateTitles: Schema.optionalKey(Schema.Array(Schema.NonEmptyString)),
 });
 
-const EditionSchema = Schema.Struct({
+const Bcp47LanguageSchema = Schema.NonEmptyString.pipe(
+  Schema.check(
+    Schema.makeFilter(
+      (value) => {
+        try {
+          new Intl.Locale(value);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { expected: "a BCP 47 language tag" },
+    ),
+  ),
+);
+
+const PositiveIntegerSchema = Schema.Int.pipe(Schema.check(Schema.isGreaterThan(0)));
+
+const EditionFields = {
   id: DurableIdentifierSchema,
   bookId: DurableIdentifierSchema,
   title: Schema.NonEmptyString,
-  language: Schema.NonEmptyString,
-  format: Schema.Literals(["hardcover", "paperback", "ebook", "audiobook"]),
-});
+  language: Bcp47LanguageSchema,
+  publisher: Schema.optionalKey(Schema.NonEmptyString),
+  publicationDate: Schema.optionalKey(IsoPartialDate),
+  isbn: Schema.optionalKey(Schema.NonEmptyString),
+  contributors: Schema.optionalKey(
+    Schema.Array(
+      Schema.Struct({
+        displayName: Schema.NonEmptyString,
+        role: Schema.NonEmptyString,
+      }),
+    ),
+  ),
+  inCollection: Schema.optionalKey(Schema.Boolean),
+};
+
+const EditionSchema = Schema.Union([
+  Schema.Struct({
+    ...EditionFields,
+    format: Schema.Literals(["hardcover", "paperback", "ebook"]),
+    pageCount: Schema.optionalKey(PositiveIntegerSchema),
+  }),
+  Schema.Struct({
+    ...EditionFields,
+    format: Schema.Literal("audiobook"),
+    durationMinutes: Schema.optionalKey(PositiveIntegerSchema),
+  }),
+]);
 
 export const LibraryContentSchema = Schema.Struct({
   books: Schema.Array(BookSchema),
