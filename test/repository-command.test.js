@@ -20,6 +20,7 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const validateScript = join(repositoryRoot, "scripts/validate.ts");
 const generateScript = join(repositoryRoot, "scripts/generate.ts");
 const validSite = await readFile(join(repositoryRoot, "content/site.yaml"), "utf8");
+const validLibrary = await readFile(join(repositoryRoot, "content/library.yaml"), "utf8");
 const identifierScript = join(repositoryRoot, "scripts/identifier.ts");
 const boundaryScript = join(repositoryRoot, "scripts/check-frontend-boundary.ts");
 
@@ -28,12 +29,13 @@ const runScript = (directory, script, ...arguments_) =>
 
 const runValidate = (directory, ...sources) => runScript(directory, validateScript, ...sources);
 
-const writeCatalog = async (context, contents) => {
+const writeCatalog = async (context, contents, library = validLibrary) => {
   const directory = await mkdtemp(join(tmpdir(), "personal-home-"));
   context.after(() => rm(directory, { recursive: true, force: true }));
   await mkdir(join(directory, "content"));
   await writeFile(join(directory, "content/home.yaml"), contents);
   await writeFile(join(directory, "content/site.yaml"), validSite);
+  await writeFile(join(directory, "content/library.yaml"), library);
   return directory;
 };
 
@@ -48,8 +50,12 @@ test("validate accepts the complete authored catalog without generating output",
   const result = runValidate(directory);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Validated 2 authored content sources/);
-  assert.deepEqual(await readdir(join(directory, "content")), ["home.yaml", "site.yaml"]);
+  assert.match(result.stdout, /Validated 3 authored content sources/);
+  assert.deepEqual(await readdir(join(directory, "content")), [
+    "home.yaml",
+    "library.yaml",
+    "site.yaml",
+  ]);
 });
 
 test("validate rejects a missing Equivalent translation", async (context) => {
@@ -119,6 +125,66 @@ test("validate rejects sources outside the authored catalog", async (context) =>
   assert.match(result.stderr, /content\/other\.yaml:1:1.*unknown authored content source/i);
 });
 
+test("validate accepts a sparse Book with optional Alternate titles", async (context) => {
+  const directory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\n    alternateTitles:\n      - My Brilliant Friend\n`,
+  );
+
+  const result = runValidate(directory, "content/library.yaml");
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Validated 1 authored content source/);
+});
+
+test("validate requires an explicit sort value for every author credit", async (context) => {
+  const directory = await writeCatalog(
+    context,
+    validHome,
+    validLibrary.replace("        sortValue: Cavia, Juan\n", ""),
+  );
+
+  const result = runValidate(directory, "content/library.yaml");
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /library\.yaml:\d+:\d+ \[\$\.books\[0\]\.authors\[0\]\.sortValue\]/);
+});
+
+test("validate rejects invalid and duplicate durable Book identifiers", async (context) => {
+  const invalidDirectory = await writeCatalog(
+    context,
+    validHome,
+    validLibrary.replace("01a01fcd-0a4e-7c1c-9e31-8de4688c1482", "not-an-identifier"),
+  );
+  const duplicateDirectory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\n${validLibrary.split("\n").slice(1).join("\n")}`,
+  );
+
+  const invalid = runValidate(invalidDirectory, "content/library.yaml");
+  const duplicate = runValidate(duplicateDirectory, "content/library.yaml");
+
+  assert.notEqual(invalid.status, 0);
+  assert.match(invalid.stderr, /a UUID v7/i);
+  assert.notEqual(duplicate.status, 0);
+  assert.match(duplicate.stderr, /duplicate durable identifier/i);
+});
+
+test("validate rejects references to Books that do not exist", async (context) => {
+  const directory = await writeCatalog(
+    context,
+    validHome,
+    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    title: My Brilliant Friend\n    language: en\n    format: paperback\n`,
+  );
+
+  const result = runValidate(directory, "content/library.yaml");
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /\[\$\.editions\[0\]\.bookId\].*referenced Book does not exist/i);
+});
+
 test("validate rejects unknown Home fields", async (context) => {
   const result = await validateSource(context, `${validHome}unknown: true\n`);
   assert.notEqual(result.status, 0);
@@ -161,14 +227,24 @@ test("generate atomically replaces deterministic route-level plain data", async 
       description: "Descrição portuguesa",
     },
   );
-  assert.equal(
-    JSON.parse(await readFile(join(directory, ".generated/en/library.json"))).heading,
-    "Library",
+  const englishLibrary = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
+  const portugueseLibrary = JSON.parse(
+    await readFile(join(directory, ".generated/pt/library.json")),
   );
-  assert.equal(
-    JSON.parse(await readFile(join(directory, ".generated/pt/library.json"))).heading,
-    "Biblioteca",
-  );
+  assert.equal(englishLibrary.heading, "Library");
+  assert.equal(portugueseLibrary.heading, "Biblioteca");
+  assert.deepEqual(englishLibrary.books, portugueseLibrary.books);
+  assert.deepEqual(englishLibrary.books, [
+    {
+      id: "01a01fcd-0a4e-7c1c-9e31-8de4688c1482",
+      title: "Ballad for Sophie",
+      authors: [
+        { displayName: "Juan Cavia", sortValue: "Cavia, Juan" },
+        { displayName: "Filipe Melo", sortValue: "Melo, Filipe" },
+      ],
+      alternateTitles: [],
+    },
+  ]);
   assert.equal(
     JSON.parse(await readFile(join(directory, ".generated/root.json"))).languages.pt,
     "Português",

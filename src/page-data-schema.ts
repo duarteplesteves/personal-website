@@ -24,12 +24,25 @@ export const HomePageDataSchema = Schema.Struct({
   navigation: NavigationDataSchema,
 });
 
+const PublicBookSchema = Schema.Struct({
+  id: Schema.String.pipe(Schema.check(Schema.isUUID(7))),
+  title: Schema.NonEmptyString,
+  authors: Schema.NonEmptyArray(
+    Schema.Struct({
+      displayName: Schema.NonEmptyString,
+      sortValue: Schema.NonEmptyString,
+    }),
+  ),
+  alternateTitles: Schema.Array(Schema.NonEmptyString),
+});
+
 export const LibraryPageDataSchema = Schema.Struct({
   page: Schema.Literal("library"),
   title: Schema.NonEmptyString,
   heading: Schema.NonEmptyString,
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
+  books: Schema.Array(PublicBookSchema),
   navigation: NavigationDataSchema,
 });
 

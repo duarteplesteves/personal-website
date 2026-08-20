@@ -1,0 +1,8 @@
+books:
+  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
+    title: Ballad for Sophie
+    authors:
+      - displayName: Juan Cavia
+        sortValue: Cavia, Juan
+      - displayName: Filipe Melo
+        sortValue: Melo, Filipe

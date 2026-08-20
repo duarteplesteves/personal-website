@@ -83,6 +83,15 @@ h1 {
   line-height: 1.6;
   text-wrap: pretty;
 }
+.book-list {
+  padding: 0;
+  margin-block: 3rem 0;
+  list-style: none;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+.book-list cite { font-style: normal; }
 .language-chooser { padding-block-start: clamp(4rem, 16vw, 9rem); }
 .language-chooser h1 { max-width: 15ch; font-size: clamp(2rem, 8vw, 4.25rem); }
 .chooser-options {

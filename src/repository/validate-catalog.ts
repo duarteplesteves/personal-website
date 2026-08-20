@@ -1,5 +1,6 @@
 import { Effect, FileSystem, Result } from "effect";
 import { loadHome } from "./load-home.ts";
+import { loadLibrary } from "./load-library.ts";
 import { loadSite } from "./load-site.ts";
 import {
   type ContentValidationError,
@@ -16,6 +17,7 @@ export interface CatalogEntry {
 
 export const authoredCatalog: ReadonlyArray<CatalogEntry> = [
   { source: "content/home.yaml", validate: loadHome },
+  { source: "content/library.yaml", validate: loadLibrary },
   { source: "content/site.yaml", validate: loadSite },
 ];
 

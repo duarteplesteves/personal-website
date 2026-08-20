@@ -1,6 +1,7 @@
 import { NodeFileSystem, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Schema, Stream } from "effect";
 import { loadHome } from "../src/repository/load-home.ts";
+import { loadLibrary } from "../src/repository/load-library.ts";
 import { loadSite } from "../src/repository/load-site.ts";
 import { PageDataSchema, RootPageDataSchema } from "../src/page-data-schema.ts";
 import { projectPage, projectRoot } from "../src/project-site.ts";
@@ -45,15 +46,18 @@ const generate = Effect.fn("generate")(function* (development: boolean) {
   const generation = Effect.gen(function* () {
     yield* recoverInterruptedReplacement();
     yield* validateCatalog();
-    const [home, site] = yield* Effect.all([
+    const [home, library, site] = yield* Effect.all([
       loadHome("content/home.yaml"),
+      loadLibrary("content/library.yaml"),
       loadSite("content/site.yaml"),
     ]);
     const pages = yield* Effect.forEach(sitePublication, (publication) =>
       Schema.decodeUnknownEffect(PageDataSchema, {
         errors: "all",
         onExcessProperty: "error",
-      })(projectPage(home, site, publication)).pipe(Effect.map((data) => ({ publication, data }))),
+      })(projectPage(home, library, site, publication)).pipe(
+        Effect.map((data) => ({ publication, data })),
+      ),
     );
     const root = yield* Schema.decodeUnknownEffect(RootPageDataSchema, {
       errors: "all",
