@@ -1,6 +1,7 @@
 import type { HomePageData, LibraryPageData, PageData, RootPageData } from "./page-data-schema.ts";
 import { equivalentPublication, findPublication, type Publication } from "./publication.ts";
 import type { HomeContent } from "./repository/home-content.ts";
+import type { LibraryContent } from "./repository/library-content.ts";
 import type { SiteContent } from "./repository/site-content.ts";
 
 const projectNavigation = (site: SiteContent, publication: Publication) => {
@@ -36,23 +37,29 @@ export const projectHome = (
   navigation: projectNavigation(site, publication),
 });
 
-export const projectLibrary = (site: SiteContent, publication: Publication): LibraryPageData => ({
+export const projectLibrary = (
+  library: LibraryContent,
+  site: SiteContent,
+  publication: Publication,
+): LibraryPageData => ({
   page: "library",
   title: `${site.library.heading[publication.siteLanguage]} — ${site.root.title}`,
   heading: site.library.heading[publication.siteLanguage],
   introduction: site.library.introduction[publication.siteLanguage],
   description: site.library.description[publication.siteLanguage],
+  books: library.books.map((book) => ({ ...book, alternateTitles: book.alternateTitles ?? [] })),
   navigation: projectNavigation(site, publication),
 });
 
 export const projectPage = (
   home: HomeContent,
+  library: LibraryContent,
   site: SiteContent,
   publication: Publication,
 ): PageData =>
   publication.page === "home"
     ? projectHome(home, site, publication)
-    : projectLibrary(site, publication);
+    : projectLibrary(library, site, publication);
 
 export const projectRoot = (site: SiteContent): RootPageData => ({
   title: site.root.title,
