@@ -33,12 +33,11 @@ const Bcp47LanguageSchema = Schema.NonEmptyString.pipe(
 
 const PositiveIntegerSchema = Schema.Int.pipe(Schema.check(Schema.isGreaterThan(0)));
 
-const EditionSchema = Schema.Struct({
+const EditionFields = {
   id: DurableIdentifierSchema,
   bookId: DurableIdentifierSchema,
   title: Schema.NonEmptyString,
   language: Bcp47LanguageSchema,
-  format: Schema.Literals(["hardcover", "paperback", "ebook", "audiobook"]),
   publisher: Schema.optionalKey(Schema.NonEmptyString),
   publicationDate: Schema.optionalKey(IsoPartialDate),
   isbn: Schema.optionalKey(Schema.NonEmptyString),
@@ -50,27 +49,21 @@ const EditionSchema = Schema.Struct({
       }),
     ),
   ),
-  pageCount: Schema.optionalKey(PositiveIntegerSchema),
-  durationMinutes: Schema.optionalKey(PositiveIntegerSchema),
   inCollection: Schema.optionalKey(Schema.Boolean),
-}).check(
-  Schema.makeFilter((edition) => {
-    const issues: Array<Schema.FilterIssue> = [];
-    if (edition.pageCount !== undefined && edition.format === "audiobook") {
-      issues.push({
-        path: ["pageCount"],
-        issue: "page count is only valid for print or ebook Editions",
-      });
-    }
-    if (edition.durationMinutes !== undefined && edition.format !== "audiobook") {
-      issues.push({
-        path: ["durationMinutes"],
-        issue: "duration is only valid for audiobook Editions",
-      });
-    }
-    return issues;
+};
+
+const EditionSchema = Schema.Union([
+  Schema.Struct({
+    ...EditionFields,
+    format: Schema.Literals(["hardcover", "paperback", "ebook"]),
+    pageCount: Schema.optionalKey(PositiveIntegerSchema),
   }),
-);
+  Schema.Struct({
+    ...EditionFields,
+    format: Schema.Literal("audiobook"),
+    durationMinutes: Schema.optionalKey(PositiveIntegerSchema),
+  }),
+]);
 
 export const LibraryContentSchema = Schema.Struct({
   books: Schema.Array(BookSchema),

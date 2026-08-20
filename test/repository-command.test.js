@@ -214,9 +214,9 @@ test("validate rejects incomplete Editions and format-inappropriate extents", as
   assert.match(incomplete.stderr, /format/i);
   assert.match(incomplete.stderr, /BCP 47/i);
   assert.notEqual(printDuration.status, 0);
-  assert.match(printDuration.stderr, /duration.*audiobook/i);
+  assert.match(printDuration.stderr, /durationMinutes.*Unexpected key/i);
   assert.notEqual(audioPages.status, 0);
-  assert.match(audioPages.stderr, /page count.*print or ebook/i);
+  assert.match(audioPages.stderr, /pageCount.*Unexpected key/i);
 });
 
 test("validate rejects references to Books that do not exist", async (context) => {
