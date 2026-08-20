@@ -24,6 +24,10 @@ export const SiteContentSchema = Schema.Struct({
     heading: EquivalentTranslationSchema,
     description: EquivalentTranslationSchema,
     introduction: EquivalentTranslationSchema,
+    currentlyReading: EquivalentTranslationSchema,
+    favorites: EquivalentTranslationSchema,
+    nextReads: EquivalentTranslationSchema,
+    viewLibrary: EquivalentTranslationSchema,
   }),
 });
 

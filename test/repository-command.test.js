@@ -189,6 +189,48 @@ test("validate accepts complete Editions and format-appropriate optional fields"
   assert.ok(!("editions" in page));
 });
 
+test("Readings and curation derive public Library and Home relationships", async (context) => {
+  const library = `${validLibrary.trim()}\n    alternateTitles:\n      - Balada para Sophie\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en\n    format: hardcover\nreadings:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    editionIds:\n      - 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    state: completed\n    startedOn: 2024-01\n    endedOn: 2024-02\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    state: active\nfavorites:\n  - 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n`;
+  const directory = await writeCatalog(context, validHome, library);
+
+  assert.equal(runValidate(directory).status, 0);
+  const generated = runScript(directory, generateScript);
+  assert.equal(generated.status, 0, generated.stderr);
+  const libraryPage = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
+  const homePage = JSON.parse(await readFile(join(directory, ".generated/en/home.json")));
+
+  assert.deepEqual(
+    {
+      readingStatus: libraryPage.books[0].readingStatus,
+      completionCount: libraryPage.books[0].completionCount,
+      rereading: libraryPage.books[0].rereading,
+      favorite: libraryPage.books[0].favorite,
+      nextRead: libraryPage.books[0].nextRead,
+    },
+    { readingStatus: "read", completionCount: 1, rereading: true, favorite: true, nextRead: false },
+  );
+  assert.deepEqual(homePage.libraryPreview.currentlyReading, [
+    {
+      id: libraryPage.books[0].id,
+      title: "Ballad for Sophie",
+      authors: libraryPage.books[0].authors,
+    },
+  ]);
+  assert.equal(homePage.libraryPreview.favorites.length, 1);
+  assert.ok(!("nextReads" in homePage.libraryPreview));
+});
+
+test("validate rejects invalid Reading and curation relationships", async (context) => {
+  const library = `${validLibrary.trim()}\nreadings:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    editionIds:\n      - 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    state: active\n    endedOn: 2025-01\nnextReads:\n  - 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n`;
+  const directory = await writeCatalog(context, validHome, library);
+  const result = runValidate(directory, "content/library.yaml");
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /active Reading cannot have an end date/i);
+  assert.match(result.stderr, /referenced Edition does not exist/i);
+  assert.match(result.stderr, /Next reads Book cannot have an active or completed Reading/i);
+});
+
 test("validate rejects incomplete Editions and format-inappropriate extents", async (context) => {
   const incompleteDirectory = await writeCatalog(
     context,
@@ -291,6 +333,11 @@ test("generate atomically replaces deterministic route-level plain data", async 
       ],
       alternateTitles: [],
       inCollection: false,
+      readingStatus: "unread",
+      completionCount: 0,
+      rereading: false,
+      favorite: false,
+      nextRead: false,
     },
   ]);
   assert.equal(

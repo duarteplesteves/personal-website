@@ -16,11 +16,30 @@ const NavigationDataSchema = Schema.Struct({
   alternateSiteLanguage: Schema.Literals(["en", "pt"]),
 });
 
+const PublicBookIdentitySchema = Schema.Struct({
+  id: Schema.String.pipe(Schema.check(Schema.isUUID(7))),
+  title: Schema.NonEmptyString,
+  authors: Schema.NonEmptyArray(
+    Schema.Struct({ displayName: Schema.NonEmptyString, sortValue: Schema.NonEmptyString }),
+  ),
+});
+
 export const HomePageDataSchema = Schema.Struct({
   page: Schema.Literal("home"),
   title: Schema.NonEmptyString,
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
+  libraryPreview: Schema.Struct({
+    heading: Schema.NonEmptyString,
+    currentlyReadingLabel: Schema.NonEmptyString,
+    favoritesLabel: Schema.NonEmptyString,
+    nextReadsLabel: Schema.NonEmptyString,
+    libraryLabel: Schema.NonEmptyString,
+    libraryPathname: Schema.NonEmptyString,
+    currentlyReading: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
+    favorites: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
+    nextReads: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
+  }),
   navigation: NavigationDataSchema,
 });
 
@@ -35,6 +54,11 @@ const PublicBookSchema = Schema.Struct({
   ),
   alternateTitles: Schema.Array(Schema.NonEmptyString),
   inCollection: Schema.Boolean,
+  readingStatus: Schema.Literals(["unread", "wantToRead", "reading", "read"]),
+  completionCount: Schema.Int,
+  rereading: Schema.Boolean,
+  favorite: Schema.Boolean,
+  nextRead: Schema.Boolean,
 });
 
 export const LibraryPageDataSchema = Schema.Struct({
