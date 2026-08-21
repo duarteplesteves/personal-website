@@ -1,11 +1,1024 @@
 books:
+  - id: 01a2d000-0000-7001-8001-000000000001
+    title: A Amiga Genial
+    authors:
+      - displayName: Elena Ferrante
+        sortValue: Elena Ferrante
+  - id: 01a2d000-0000-7002-8002-000000000002
+    title: A Breve Vida das Flores
+    authors:
+      - displayName: Valérie Perrin
+        sortValue: Valérie Perrin
+  - id: 01a2d000-0000-7003-8003-000000000003
+    title: A Condição Humana
+    authors:
+      - displayName: Hannah Arendt
+        sortValue: Hannah Arendt
+  - id: 01a2d000-0000-7004-8004-000000000004
+    title: A Década dos Psicopatas
+    authors:
+      - displayName: Daniel Oliveira
+        sortValue: Daniel Oliveira
+  - id: 01a2d000-0000-7005-8005-000000000005
+    title: A Fábrica do Absoluto
+    authors:
+      - displayName: Karel Čapek
+        sortValue: Karel Čapek
+  - id: 01a2d000-0000-7006-8006-000000000006
+    title: A Fúria
+    authors:
+      - displayName: Silvina Ocampo
+        sortValue: Silvina Ocampo
+  - id: 01a2d000-0000-7007-8007-000000000007
+    title: A Geração da Utopia
+    authors:
+      - displayName: Pepetela
+        sortValue: Pepetela
+  - id: 01a2d000-0000-7008-8008-000000000008
+    title: A Insustentável Leveza do Ser
+    authors:
+      - displayName: Milan Kundera
+        sortValue: Milan Kundera
+  - id: 01a2d000-0000-7009-8009-000000000009
+    title: A Invenção de Morel
+    authors:
+      - displayName: Adolfo Bioy Casares
+        sortValue: Adolfo Bioy Casares
+  - id: 01a2d000-0000-700a-800a-00000000000a
+    title: A Laranja Mecânica
+    authors:
+      - displayName: Anthony Burgess
+        sortValue: Anthony Burgess
+  - id: 01a2d000-0000-700b-800b-00000000000b
+    title: A Man Called Ove
+    authors:
+      - displayName: Fredrik Backman
+        sortValue: Fredrik Backman
+  - id: 01a2d000-0000-700c-800c-00000000000c
+    title: A Manual For Cleaning Women
+    authors:
+      - displayName: Lucia Berlin
+        sortValue: Lucia Berlin
+  - id: 01a2d000-0000-700d-800d-00000000000d
+    title: A Metamorfose
+    authors:
+      - displayName: Franz Kafka
+        sortValue: Franz Kafka
+  - id: 01a2d000-0000-700e-800e-00000000000e
+    title: A morte de Ivan Ilich
+    authors:
+      - displayName: Lev Tolstoi
+        sortValue: Lev Tolstoi
+  - id: 01a2d000-0000-700f-800f-00000000000f
+    title: A Moveable Feast
+    authors:
+      - displayName: Ernest Hemingway
+        sortValue: Ernest Hemingway
+  - id: 01a2d000-0000-7010-8010-000000000010
+    title: A Máquina de Fazer Espanhóis
+    authors:
+      - displayName: Valter Hugo Mãe
+        sortValue: Valter Hugo Mãe
+  - id: 01a2d000-0000-7011-8011-000000000011
+    title: A Origem
+    authors:
+      - displayName: Graça Pina de Morais
+        sortValue: Graça Pina de Morais
+  - id: 01a2d000-0000-7012-8012-000000000012
+    title: A Paixão segundo G.H.
+    authors:
+      - displayName: Clarice Lispector
+        sortValue: Clarice Lispector
+  - id: 01a2d000-0000-7013-8013-000000000013
+    title: A Psicologia do Amor
+    authors:
+      - displayName: Irvin D. Yalom
+        sortValue: Irvin D. Yalom
+  - id: 01a2d000-0000-7014-8014-000000000014
+    title: A Sociedade do Cansaço
+    authors:
+      - displayName: Byung-Chul Han
+        sortValue: Byung-Chul Han
+  - id: 01a2d000-0000-7015-8015-000000000015
+    title: A Utilidade do Inútil
+    authors:
+      - displayName: Nuccio Ordine
+        sortValue: Nuccio Ordine
+  - id: 01a2d000-0000-7016-8016-000000000016
+    title: A voz do dono
+    authors:
+      - displayName: Stanisław Lem
+        sortValue: Stanisław Lem
+  - id: 01a2d000-0000-7017-8017-000000000017
+    title: Adoecer
+    authors:
+      - displayName: Hélia Correia
+        sortValue: Hélia Correia
+  - id: 01a2d000-0000-7018-8018-000000000018
+    title: Apenas Miúdos
+    authors:
+      - displayName: Patti Smith
+        sortValue: Patti Smith
+  - id: 01a2d000-0000-7019-8019-000000000019
+    title: Apologia do Ócio
+    authors:
+      - displayName: Robert Louis Stevenson
+        sortValue: Robert Louis Stevenson
+  - id: 01a2d000-0000-701a-801a-00000000001a
+    title: Aprender a Rezar na era da Técnica
+    authors:
+      - displayName: Gonçalo M. Tavares
+        sortValue: Gonçalo M. Tavares
+  - id: 01a2d000-0000-701b-801b-00000000001b
+    title: As Cores da Infâmia
+    authors:
+      - displayName: Albert Cossery
+        sortValue: Albert Cossery
+  - id: 01a2d000-0000-701c-801c-00000000001c
+    title: As Intermitências da Morte
+    authors:
+      - displayName: José Saramago
+        sortValue: José Saramago
+  - id: 01a2d000-0000-701d-801d-00000000001d
+    title: As Malditas
+    authors:
+      - displayName: Camila Sosa Villada
+        sortValue: Camila Sosa Villada
+  - id: 01a2d000-0000-701e-801e-00000000001e
+    title: As primas
+    authors:
+      - displayName: Aurora Venturini
+        sortValue: Aurora Venturini
+  - id: 01a2d000-0000-701f-801f-00000000001f
+    title: As Que não Morrem
+    authors:
+      - displayName: Anne Boyer
+        sortValue: Anne Boyer
+  - id: 01a2d000-0000-7020-8020-000000000020
+    title: Assim Lhes Fazemos a Guerra
+    authors:
+      - displayName: Joseph Andras
+        sortValue: Joseph Andras
+  - id: 01a2d000-0000-7021-8021-000000000021
+    title: Atirar para o torto
+    authors:
+      - displayName: Margarida Vale de Gato
+        sortValue: Margarida Vale de Gato
   - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
     title: Ballad for Sophie
     authors:
       - displayName: Juan Cavia
-        sortValue: Cavia, Juan
+        sortValue: Juan Cavia
       - displayName: Filipe Melo
-        sortValue: Melo, Filipe
+        sortValue: Filipe Melo
+  - id: 01a2d000-0000-7022-8022-000000000022
+    title: Beleza
+    authors:
+      - displayName: Roger Scruton
+        sortValue: Roger Scruton
+  - id: 01a2d000-0000-7023-8023-000000000023
+    title: Beloved
+    authors:
+      - displayName: Toni Morrison
+        sortValue: Toni Morrison
+  - id: 01a2d000-0000-7024-8024-000000000024
+    title: Burnt Sugar
+    authors:
+      - displayName: Avni Doshi
+        sortValue: Avni Doshi
+  - id: 01a2d000-0000-7025-8025-000000000025
+    title: Cartas a um Jovem Poeta
+    authors:
+      - displayName: Rainer Maria Rilke
+        sortValue: Rainer Maria Rilke
+  - id: 01a2d000-0000-7026-8026-000000000026
+    title: Castas
+    authors:
+      - displayName: Isabel Wilkerson
+        sortValue: Isabel Wilkerson
+  - id: 01a2d000-0000-7027-8027-000000000027
+    title: Cem anos de solidão
+    authors:
+      - displayName: Gabriel García Márquez
+        sortValue: Gabriel García Márquez
+  - id: 01a2d000-0000-7028-8028-000000000028
+    title: Como é Linda a Puta da Vida
+    authors:
+      - displayName: Miguel Esteves Cardoso
+        sortValue: Miguel Esteves Cardoso
+  - id: 01a2d000-0000-7029-8029-000000000029
+    title: Conduz o Teu Arado Sobre os Ossos dos Mortos
+    authors:
+      - displayName: Olga Tokarczuk
+        sortValue: Olga Tokarczuk
+  - id: 01a2d000-0000-702a-802a-00000000002a
+    title: Contos Exemplares
+    authors:
+      - displayName: Sophia de Mello Breyner Andresen
+        sortValue: Sophia de Mello Breyner Andresen
+  - id: 01a2d000-0000-702b-802b-00000000002b
+    title: Contra a Interpretação
+    authors:
+      - displayName: Susan Sontag
+        sortValue: Susan Sontag
+  - id: 01a2d000-0000-702c-802c-00000000002c
+    title: Coração tão branco
+    authors:
+      - displayName: Javier Marías
+        sortValue: Javier Marías
+  - id: 01a2d000-0000-702d-802d-00000000002d
+    title: Crime e Castigo
+    authors:
+      - displayName: Fiódor Dostoiévski
+        sortValue: Fiódor Dostoiévski
+  - id: 01a2d000-0000-702e-802e-00000000002e
+    title: Crítica da Razão Negra
+    authors:
+      - displayName: Achille Mbembe
+        sortValue: Achille Mbembe
+  - id: 01a2d000-0000-702f-802f-00000000002f
+    title: Cândido ou o Optimismo
+    authors:
+      - displayName: Voltaire
+        sortValue: Voltaire
+  - id: 01a2d000-0000-7030-8030-000000000030
+    title: De Olhos Fixos no Sol
+    authors:
+      - displayName: Irvin D. Yalom
+        sortValue: Irvin D. Yalom
+  - id: 01a2d000-0000-7031-8031-000000000031
+    title: De Profundis, Valsa Lenta
+    authors:
+      - displayName: José Cardoso Pires
+        sortValue: José Cardoso Pires
+  - id: 01a2d000-0000-7032-8032-000000000032
+    title: Dear Ijeawele
+    authors:
+      - displayName: Chimamanda Ngozi Adichie
+        sortValue: Chimamanda Ngozi Adichie
+  - id: 01a2d000-0000-7033-8033-000000000033
+    title: Desobediência Civil/Defesa de John Brown
+    authors:
+      - displayName: Henry David Thoreau
+        sortValue: Henry David Thoreau
+  - id: 01a2d000-0000-7034-8034-000000000034
+    title: Do Inconveniente de Ter Nascido
+    authors:
+      - displayName: E. M. Cioran
+        sortValue: E. M. Cioran
+  - id: 01a2d000-0000-7035-8035-000000000035
+    title: Do Lado de Swann (vol. 1)
+    authors:
+      - displayName: Marcel Proust
+        sortValue: Marcel Proust
+  - id: 01a2d000-0000-7036-8036-000000000036
+    title: Dor Fantasma
+    authors:
+      - displayName: Rafael Gallo
+        sortValue: Rafael Gallo
+  - id: 01a2d000-0000-7037-8037-000000000037
+    title: Ecologia
+    authors:
+      - displayName: Joana Bértholo
+        sortValue: Joana Bértholo
+  - id: 01a2d000-0000-7038-8038-000000000038
+    title: Elite Capture
+    authors:
+      - displayName: Olúfẹ́mi Táíwò
+        sortValue: Olúfẹ́mi Táíwò
+  - id: 01a2d000-0000-7039-8039-000000000039
+    title: Elogio da Loucura
+    authors:
+      - displayName: Erasmo de Roterdão
+        sortValue: Erasmo de Roterdão
+  - id: 01a2d000-0000-703a-803a-00000000003a
+    title: Ensaio Sobre a Cegueira
+    authors:
+      - displayName: José Saramago
+        sortValue: José Saramago
+  - id: 01a2d000-0000-703b-803b-00000000003b
+    title: Ficções
+    authors:
+      - displayName: Jorge Luís Borges
+        sortValue: Jorge Luís Borges
+  - id: 01a2d000-0000-703c-803c-00000000003c
+    title: Filho da Mãe
+    authors:
+      - displayName: Hugo Gonçalves
+        sortValue: Hugo Gonçalves
+  - id: 01a2d000-0000-703d-803d-00000000003d
+    title: Fome
+    authors:
+      - displayName: Knut Hamsun
+        sortValue: Knut Hamsun
+  - id: 01a2d000-0000-703e-803e-00000000003e
+    title: Frankenstein
+    authors:
+      - displayName: Mary Shelley
+        sortValue: Mary Shelley
+  - id: 01a2d000-0000-703f-803f-00000000003f
+    title: Hamlet
+    authors:
+      - displayName: William Shakespeare
+        sortValue: William Shakespeare
+  - id: 01a2d000-0000-7040-8040-000000000040
+    title: 'Hip Hop Tuga: 40 anos de RAP em Portugal'
+    authors:
+      - displayName: Ricardo Farinha
+        sortValue: Ricardo Farinha
+  - id: 01a2d000-0000-7041-8041-000000000041
+    title: Homo Deus
+    authors:
+      - displayName: Yuval Noah Harari
+        sortValue: Yuval Noah Harari
+  - id: 01a2d000-0000-7042-8042-000000000042
+    title: Húmus
+    authors:
+      - displayName: Raul Brandão
+        sortValue: Raul Brandão
+  - id: 01a2d000-0000-7043-8043-000000000043
+    title: Iza’s Ballad
+    authors:
+      - displayName: Magda Szabó
+        sortValue: Magda Szabó
+  - id: 01a2d000-0000-7044-8044-000000000044
+    title: Jacques, O Fatalista
+    authors:
+      - displayName: Denis Diderot
+        sortValue: Denis Diderot
+  - id: 01a2d000-0000-7045-8045-000000000045
+    title: Jerusalém
+    authors:
+      - displayName: Gonçalo M. Tavares
+        sortValue: Gonçalo M. Tavares
+  - id: 01a2d000-0000-7046-8046-000000000046
+    title: Jerusalém
+    authors:
+      - displayName: Mia Couto
+        sortValue: Mia Couto
+  - id: 01a2d000-0000-7047-8047-000000000047
+    title: Lavoura Arcaica
+    authors:
+      - displayName: Raduan Nassar
+        sortValue: Raduan Nassar
+  - id: 01a2d000-0000-7048-8048-000000000048
+    title: Livro do Desassossego
+    authors:
+      - displayName: Fernando Pessoa
+        sortValue: Fernando Pessoa
+  - id: 01a2d000-0000-7049-8049-000000000049
+    title: Léxico Familiar
+    authors:
+      - displayName: Natalia Ginzburg
+        sortValue: Natalia Ginzburg
+  - id: 01a2d000-0000-704a-804a-00000000004a
+    title: M Train
+    authors:
+      - displayName: Patti Smith
+        sortValue: Patti Smith
+  - id: 01a2d000-0000-704b-804b-00000000004b
+    title: Madrugada em Birkenau
+    authors:
+      - displayName: Simone Veil
+        sortValue: Simone Veil
+editions:
+  - id: 01a2d000-0000-704c-804c-00000000004c
+    bookId: 01a2d000-0000-7001-8001-000000000001
+    title: A Amiga Genial
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-704d-804d-00000000004d
+    bookId: 01a2d000-0000-7002-8002-000000000002
+    title: A Breve Vida das Flores
+    language: pt
+    format: paperback
+    publisher: Presença
+    inCollection: true
+  - id: 01a2d000-0000-704e-804e-00000000004e
+    bookId: 01a2d000-0000-7003-8003-000000000003
+    title: A Condição Humana
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-704f-804f-00000000004f
+    bookId: 01a2d000-0000-7004-8004-000000000004
+    title: A Década dos Psicopatas
+    language: pt
+    format: paperback
+    publisher: Tinta da China
+    inCollection: true
+  - id: 01a2d000-0000-7050-8050-000000000050
+    bookId: 01a2d000-0000-7005-8005-000000000005
+    title: A Fábrica do Absoluto
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7051-8051-000000000051
+    bookId: 01a2d000-0000-7006-8006-000000000006
+    title: A Fúria
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7052-8052-000000000052
+    bookId: 01a2d000-0000-7007-8007-000000000007
+    title: A Geração da Utopia
+    language: pt
+    format: paperback
+    publisher: Livros RTP
+    inCollection: true
+  - id: 01a2d000-0000-7053-8053-000000000053
+    bookId: 01a2d000-0000-7008-8008-000000000008
+    title: A Insustentável Leveza do Ser
+    language: pt
+    format: paperback
+    publisher: BIIS
+    inCollection: true
+  - id: 01a2d000-0000-7054-8054-000000000054
+    bookId: 01a2d000-0000-7009-8009-000000000009
+    title: A Invenção de Morel
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7055-8055-000000000055
+    bookId: 01a2d000-0000-700a-800a-00000000000a
+    title: A Laranja Mecânica
+    language: pt
+    format: paperback
+    publisher: Alfaguara
+    inCollection: true
+  - id: 01a2d000-0000-7056-8056-000000000056
+    bookId: 01a2d000-0000-700b-800b-00000000000b
+    title: A Man Called Ove
+    language: sv
+    format: paperback
+    publisher: Sceptre
+    inCollection: true
+  - id: 01a2d000-0000-7057-8057-000000000057
+    bookId: 01a2d000-0000-700c-800c-00000000000c
+    title: A Manual For Cleaning Women
+    language: en
+    format: ebook
+    publisher: Farrar Straus and Giroux
+    inCollection: true
+  - id: 01a2d000-0000-7058-8058-000000000058
+    bookId: 01a2d000-0000-700e-800e-00000000000e
+    title: A morte de Ivan Ilich
+    language: pt
+    format: paperback
+    publisher: Verbo
+    inCollection: true
+  - id: 01a2d000-0000-7059-8059-000000000059
+    bookId: 01a2d000-0000-700f-800f-00000000000f
+    title: A Moveable Feast
+    language: en
+    format: paperback
+    publisher: Vintage
+    inCollection: true
+  - id: 01a2d000-0000-705a-805a-00000000005a
+    bookId: 01a2d000-0000-7011-8011-000000000011
+    title: A Origem
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-705b-805b-00000000005b
+    bookId: 01a2d000-0000-7012-8012-000000000012
+    title: A Paixão segundo G.H.
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-705c-805c-00000000005c
+    bookId: 01a2d000-0000-7013-8013-000000000013
+    title: A Psicologia do Amor
+    language: pt
+    format: paperback
+    publisher: Saída de Emergência
+    inCollection: true
+  - id: 01a2d000-0000-705d-805d-00000000005d
+    bookId: 01a2d000-0000-7014-8014-000000000014
+    title: A Sociedade do Cansaço
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-705e-805e-00000000005e
+    bookId: 01a2d000-0000-7015-8015-000000000015
+    title: A Utilidade do Inútil
+    language: pt
+    format: paperback
+    publisher: Kalandraka
+    inCollection: true
+  - id: 01a2d000-0000-705f-805f-00000000005f
+    bookId: 01a2d000-0000-7016-8016-000000000016
+    title: A voz do dono
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7060-8060-000000000060
+    bookId: 01a2d000-0000-7017-8017-000000000017
+    title: Adoecer
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-7061-8061-000000000061
+    bookId: 01a2d000-0000-7018-8018-000000000018
+    title: Apenas Miúdos
+    language: pt
+    format: paperback
+    publisher: Quetzal
+    inCollection: true
+  - id: 01a2d000-0000-7062-8062-000000000062
+    bookId: 01a2d000-0000-7019-8019-000000000019
+    title: Apologia do Ócio
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7063-8063-000000000063
+    bookId: 01a2d000-0000-701a-801a-00000000001a
+    title: Aprender a Rezar na era da Técnica
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-7064-8064-000000000064
+    bookId: 01a2d000-0000-701b-801b-00000000001b
+    title: As Cores da Infâmia
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7065-8065-000000000065
+    bookId: 01a2d000-0000-701c-801c-00000000001c
+    title: As Intermitências da Morte
+    language: pt
+    format: paperback
+    publisher: Porto Editora
+    inCollection: true
+  - id: 01a2d000-0000-7066-8066-000000000066
+    bookId: 01a2d000-0000-701d-801d-00000000001d
+    title: As Malditas
+    language: pt
+    format: paperback
+    publisher: BCF
+    inCollection: true
+  - id: 01a2d000-0000-7067-8067-000000000067
+    bookId: 01a2d000-0000-701e-801e-00000000001e
+    title: As primas
+    language: pt
+    format: paperback
+    publisher: Alfaguara
+    inCollection: true
+  - id: 01a2d000-0000-7068-8068-000000000068
+    bookId: 01a2d000-0000-701f-801f-00000000001f
+    title: As Que não Morrem
+    language: pt
+    format: paperback
+    publisher: Tinta da China
+    inCollection: true
+  - id: 01a2d000-0000-7069-8069-000000000069
+    bookId: 01a2d000-0000-7020-8020-000000000020
+    title: Assim Lhes Fazemos a Guerra
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-706a-806a-00000000006a
+    bookId: 01a2d000-0000-7021-8021-000000000021
+    title: Atirar para o torto
+    language: pt
+    format: paperback
+    publisher: Tinta da China
+    inCollection: true
+  - id: 01a2d000-0000-706b-806b-00000000006b
+    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
+    title: Ballad for Sophie
+    language: en
+    format: paperback
+    inCollection: true
+  - id: 01a2d000-0000-706c-806c-00000000006c
+    bookId: 01a2d000-0000-7022-8022-000000000022
+    title: Beleza
+    language: pt
+    format: paperback
+    publisher: Guerra e Paz
+    inCollection: true
+  - id: 01a2d000-0000-706d-806d-00000000006d
+    bookId: 01a2d000-0000-7023-8023-000000000023
+    title: Beloved
+    language: en
+    format: paperback
+    publisher: Vintage
+    inCollection: true
+  - id: 01a2d000-0000-706e-806e-00000000006e
+    bookId: 01a2d000-0000-7024-8024-000000000024
+    title: Burnt Sugar
+    language: en
+    format: paperback
+    publisher: Penguin
+    inCollection: true
+  - id: 01a2d000-0000-706f-806f-00000000006f
+    bookId: 01a2d000-0000-7025-8025-000000000025
+    title: Cartas a um Jovem Poeta
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7070-8070-000000000070
+    bookId: 01a2d000-0000-7026-8026-000000000026
+    title: Castas
+    language: pt
+    format: paperback
+    publisher: Cultura
+    inCollection: true
+  - id: 01a2d000-0000-7071-8071-000000000071
+    bookId: 01a2d000-0000-7027-8027-000000000027
+    title: Cem anos de solidão
+    language: pt
+    format: paperback
+    publisher: BIIS
+    inCollection: true
+  - id: 01a2d000-0000-7072-8072-000000000072
+    bookId: 01a2d000-0000-7028-8028-000000000028
+    title: Como é Linda a Puta da Vida
+    language: pt
+    format: paperback
+    publisher: Porto Editora
+    inCollection: true
+  - id: 01a2d000-0000-7073-8073-000000000073
+    bookId: 01a2d000-0000-7029-8029-000000000029
+    title: Conduz o Teu Arado Sobre os Ossos dos Mortos
+    language: pt
+    format: paperback
+    publisher: Cavalo de Ferro
+    inCollection: true
+  - id: 01a2d000-0000-7074-8074-000000000074
+    bookId: 01a2d000-0000-702a-802a-00000000002a
+    title: Contos Exemplares
+    language: pt
+    format: paperback
+    publisher: Assírio e Alvim
+    inCollection: true
+  - id: 01a2d000-0000-7075-8075-000000000075
+    bookId: 01a2d000-0000-702c-802c-00000000002c
+    title: Coração tão branco
+    language: pt
+    format: paperback
+    publisher: Alfaguara
+    inCollection: true
+  - id: 01a2d000-0000-7076-8076-000000000076
+    bookId: 01a2d000-0000-702d-802d-00000000002d
+    title: Crime e Castigo
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-7077-8077-000000000077
+    bookId: 01a2d000-0000-702e-802e-00000000002e
+    title: Crítica da Razão Negra
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-7078-8078-000000000078
+    bookId: 01a2d000-0000-702f-802f-00000000002f
+    title: Cândido ou o Optimismo
+    language: pt
+    format: paperback
+    publisher: Tinta da China
+    inCollection: true
+  - id: 01a2d000-0000-7079-8079-000000000079
+    bookId: 01a2d000-0000-7030-8030-000000000030
+    title: De Olhos Fixos no Sol
+    language: pt
+    format: paperback
+    publisher: Saída de Emergência
+    inCollection: true
+  - id: 01a2d000-0000-707a-807a-00000000007a
+    bookId: 01a2d000-0000-7031-8031-000000000031
+    title: De Profundis, Valsa Lenta
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-707b-807b-00000000007b
+    bookId: 01a2d000-0000-7032-8032-000000000032
+    title: Dear Ijeawele
+    language: en
+    format: paperback
+    publisher: Fourth Estate
+    inCollection: true
+  - id: 01a2d000-0000-707c-807c-00000000007c
+    bookId: 01a2d000-0000-7033-8033-000000000033
+    title: Desobediência Civil/Defesa de John Brown
+    language: pt
+    format: paperback
+    publisher: Antígona
+    inCollection: true
+  - id: 01a2d000-0000-707d-807d-00000000007d
+    bookId: 01a2d000-0000-7034-8034-000000000034
+    title: Do Inconveniente de Ter Nascido
+    language: pt
+    format: paperback
+    publisher: Letra Livre
+    inCollection: true
+  - id: 01a2d000-0000-707e-807e-00000000007e
+    bookId: 01a2d000-0000-7035-8035-000000000035
+    title: Do Lado de Swann (vol. 1)
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-707f-807f-00000000007f
+    bookId: 01a2d000-0000-7036-8036-000000000036
+    title: Dor Fantasma
+    language: pt
+    format: paperback
+    publisher: Porto Editora
+    inCollection: true
+  - id: 01a2d000-0000-7080-8080-000000000080
+    bookId: 01a2d000-0000-7037-8037-000000000037
+    title: Ecologia
+    language: pt
+    format: paperback
+    publisher: Caminho
+    inCollection: true
+  - id: 01a2d000-0000-7081-8081-000000000081
+    bookId: 01a2d000-0000-7038-8038-000000000038
+    title: Elite Capture
+    language: en
+    format: ebook
+    publisher: Haymarket Books
+    inCollection: true
+  - id: 01a2d000-0000-7082-8082-000000000082
+    bookId: 01a2d000-0000-7039-8039-000000000039
+    title: Elogio da Loucura
+    language: pt
+    format: paperback
+    publisher: Nova Vega
+    inCollection: true
+  - id: 01a2d000-0000-7083-8083-000000000083
+    bookId: 01a2d000-0000-703a-803a-00000000003a
+    title: Ensaio Sobre a Cegueira
+    language: pt
+    format: paperback
+    publisher: Porto Editora
+    inCollection: true
+  - id: 01a2d000-0000-7084-8084-000000000084
+    bookId: 01a2d000-0000-703b-803b-00000000003b
+    title: Ficções
+    language: pt
+    format: paperback
+    publisher: Quetzal
+    inCollection: true
+  - id: 01a2d000-0000-7085-8085-000000000085
+    bookId: 01a2d000-0000-703c-803c-00000000003c
+    title: Filho da Mãe
+    language: pt
+    format: paperback
+    publisher: Companhia das Letras
+    inCollection: true
+  - id: 01a2d000-0000-7086-8086-000000000086
+    bookId: 01a2d000-0000-703d-803d-00000000003d
+    title: Fome
+    language: pt
+    format: paperback
+    publisher: Cavalo de Ferro
+    inCollection: true
+  - id: 01a2d000-0000-7087-8087-000000000087
+    bookId: 01a2d000-0000-703e-803e-00000000003e
+    title: Frankenstein
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-7088-8088-000000000088
+    bookId: 01a2d000-0000-703f-803f-00000000003f
+    title: Hamlet
+    language: pt
+    format: paperback
+    publisher: Verbo
+    inCollection: true
+  - id: 01a2d000-0000-7089-8089-000000000089
+    bookId: 01a2d000-0000-7040-8040-000000000040
+    title: 'Hip Hop Tuga: 40 anos de RAP em Portugal'
+    language: pt
+    format: paperback
+    publisher: Iguana
+    inCollection: true
+  - id: 01a2d000-0000-708a-808a-00000000008a
+    bookId: 01a2d000-0000-7041-8041-000000000041
+    title: Homo Deus
+    language: pt
+    format: paperback
+    publisher: Elsinore
+    inCollection: true
+  - id: 01a2d000-0000-708b-808b-00000000008b
+    bookId: 01a2d000-0000-7042-8042-000000000042
+    title: Húmus
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-708c-808c-00000000008c
+    bookId: 01a2d000-0000-7043-8043-000000000043
+    title: Iza’s Ballad
+    language: hu
+    format: paperback
+    publisher: Vintage
+    inCollection: true
+  - id: 01a2d000-0000-708d-808d-00000000008d
+    bookId: 01a2d000-0000-7044-8044-000000000044
+    title: Jacques, O Fatalista
+    language: pt
+    format: paperback
+    publisher: Tinta da China
+    inCollection: true
+  - id: 01a2d000-0000-708e-808e-00000000008e
+    bookId: 01a2d000-0000-7045-8045-000000000045
+    title: Jerusalém
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-708f-808f-00000000008f
+    bookId: 01a2d000-0000-7046-8046-000000000046
+    title: Jerusalém
+    language: pt
+    format: paperback
+    publisher: Livros RTP
+    inCollection: true
+  - id: 01a2d000-0000-7090-8090-000000000090
+    bookId: 01a2d000-0000-7047-8047-000000000047
+    title: Lavoura Arcaica
+    language: pt
+    format: paperback
+    publisher: Companhia das Letras
+    inCollection: true
+  - id: 01a2d000-0000-7091-8091-000000000091
+    bookId: 01a2d000-0000-7048-8048-000000000048
+    title: Livro do Desassossego
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-7092-8092-000000000092
+    bookId: 01a2d000-0000-7049-8049-000000000049
+    title: Léxico Familiar
+    language: pt
+    format: paperback
+    publisher: Relógio D’Água
+    inCollection: true
+  - id: 01a2d000-0000-7093-8093-000000000093
+    bookId: 01a2d000-0000-704b-804b-00000000004b
+    title: Madrugada em Birkenau
+    language: pt
+    format: paperback
+    publisher: Quetzal
+    inCollection: true
+readings:
+  - id: 01a2d000-0000-7094-8094-000000000094
+    bookId: 01a2d000-0000-7001-8001-000000000001
+    state: completed
+  - id: 01a2d000-0000-7095-8095-000000000095
+    bookId: 01a2d000-0000-7002-8002-000000000002
+    state: completed
+  - id: 01a2d000-0000-7096-8096-000000000096
+    bookId: 01a2d000-0000-7004-8004-000000000004
+    state: completed
+  - id: 01a2d000-0000-7097-8097-000000000097
+    bookId: 01a2d000-0000-7005-8005-000000000005
+    state: completed
+  - id: 01a2d000-0000-7098-8098-000000000098
+    bookId: 01a2d000-0000-7006-8006-000000000006
+    state: completed
+  - id: 01a2d000-0000-7099-8099-000000000099
+    bookId: 01a2d000-0000-7008-8008-000000000008
+    state: completed
+  - id: 01a2d000-0000-709a-809a-00000000009a
+    bookId: 01a2d000-0000-700b-800b-00000000000b
+    state: completed
+  - id: 01a2d000-0000-709b-809b-00000000009b
+    bookId: 01a2d000-0000-700c-800c-00000000000c
+    state: completed
+  - id: 01a2d000-0000-709c-809c-00000000009c
+    bookId: 01a2d000-0000-700d-800d-00000000000d
+    state: completed
+  - id: 01a2d000-0000-709d-809d-00000000009d
+    bookId: 01a2d000-0000-700e-800e-00000000000e
+    state: completed
+  - id: 01a2d000-0000-709e-809e-00000000009e
+    bookId: 01a2d000-0000-7010-8010-000000000010
+    state: completed
+  - id: 01a2d000-0000-709f-809f-00000000009f
+    bookId: 01a2d000-0000-7012-8012-000000000012
+    state: completed
+  - id: 01a2d000-0000-70a0-80a0-0000000000a0
+    bookId: 01a2d000-0000-7014-8014-000000000014
+    state: completed
+  - id: 01a2d000-0000-70a1-80a1-0000000000a1
+    bookId: 01a2d000-0000-7018-8018-000000000018
+    state: completed
+  - id: 01a2d000-0000-70a2-80a2-0000000000a2
+    bookId: 01a2d000-0000-701b-801b-00000000001b
+    state: completed
+  - id: 01a2d000-0000-70a3-80a3-0000000000a3
+    bookId: 01a2d000-0000-701c-801c-00000000001c
+    state: completed
+  - id: 01a2d000-0000-70a4-80a4-0000000000a4
+    bookId: 01a2d000-0000-701f-801f-00000000001f
+    state: completed
+  - id: 01a2d000-0000-70a5-80a5-0000000000a5
+    bookId: 01a2d000-0000-7020-8020-000000000020
+    state: completed
+  - id: 01a2d000-0000-70a6-80a6-0000000000a6
+    bookId: 01a2d000-0000-7021-8021-000000000021
+    state: completed
+  - id: 01a2d000-0000-70a7-80a7-0000000000a7
+    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
+    state: completed
+  - id: 01a2d000-0000-70a8-80a8-0000000000a8
+    bookId: 01a2d000-0000-7023-8023-000000000023
+    state: completed
+  - id: 01a2d000-0000-70a9-80a9-0000000000a9
+    bookId: 01a2d000-0000-7024-8024-000000000024
+    state: completed
+  - id: 01a2d000-0000-70aa-80aa-0000000000aa
+    bookId: 01a2d000-0000-7025-8025-000000000025
+    state: completed
+  - id: 01a2d000-0000-70ab-80ab-0000000000ab
+    bookId: 01a2d000-0000-7026-8026-000000000026
+    state: completed
+  - id: 01a2d000-0000-70ac-80ac-0000000000ac
+    bookId: 01a2d000-0000-7027-8027-000000000027
+    state: completed
+  - id: 01a2d000-0000-70ad-80ad-0000000000ad
+    bookId: 01a2d000-0000-7028-8028-000000000028
+    state: completed
+  - id: 01a2d000-0000-70ae-80ae-0000000000ae
+    bookId: 01a2d000-0000-7029-8029-000000000029
+    state: completed
+  - id: 01a2d000-0000-70af-80af-0000000000af
+    bookId: 01a2d000-0000-702c-802c-00000000002c
+    state: completed
+  - id: 01a2d000-0000-70b0-80b0-0000000000b0
+    bookId: 01a2d000-0000-702d-802d-00000000002d
+    state: completed
+  - id: 01a2d000-0000-70b1-80b1-0000000000b1
+    bookId: 01a2d000-0000-7030-8030-000000000030
+    state: completed
+  - id: 01a2d000-0000-70b2-80b2-0000000000b2
+    bookId: 01a2d000-0000-7032-8032-000000000032
+    state: completed
+  - id: 01a2d000-0000-70b3-80b3-0000000000b3
+    bookId: 01a2d000-0000-7038-8038-000000000038
+    state: completed
+  - id: 01a2d000-0000-70b4-80b4-0000000000b4
+    bookId: 01a2d000-0000-7039-8039-000000000039
+    state: completed
+  - id: 01a2d000-0000-70b5-80b5-0000000000b5
+    bookId: 01a2d000-0000-703a-803a-00000000003a
+    state: completed
+  - id: 01a2d000-0000-70b6-80b6-0000000000b6
+    bookId: 01a2d000-0000-703e-803e-00000000003e
+    state: completed
+  - id: 01a2d000-0000-70b7-80b7-0000000000b7
+    bookId: 01a2d000-0000-703f-803f-00000000003f
+    state: completed
+  - id: 01a2d000-0000-70b8-80b8-0000000000b8
+    bookId: 01a2d000-0000-7040-8040-000000000040
+    state: completed
+  - id: 01a2d000-0000-70b9-80b9-0000000000b9
+    bookId: 01a2d000-0000-7041-8041-000000000041
+    state: completed
+  - id: 01a2d000-0000-70ba-80ba-0000000000ba
+    bookId: 01a2d000-0000-7042-8042-000000000042
+    state: completed
+  - id: 01a2d000-0000-70bb-80bb-0000000000bb
+    bookId: 01a2d000-0000-7044-8044-000000000044
+    state: completed
+  - id: 01a2d000-0000-70bc-80bc-0000000000bc
+    bookId: 01a2d000-0000-7045-8045-000000000045
+    state: completed
+  - id: 01a2d000-0000-70bd-80bd-0000000000bd
+    bookId: 01a2d000-0000-7046-8046-000000000046
+    state: completed
+  - id: 01a2d000-0000-70be-80be-0000000000be
+    bookId: 01a2d000-0000-7049-8049-000000000049
+    state: completed
+favorites:
+  - 01a2d000-0000-7010-8010-000000000010
+  - 01a2d000-0000-702d-802d-00000000002d
+  - 01a2d000-0000-703e-803e-00000000003e
 reflections:
   - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483
     bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
