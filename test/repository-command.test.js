@@ -39,10 +39,15 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const validateScript = join(repositoryRoot, "scripts/validate.ts");
 const generateScript = join(repositoryRoot, "scripts/generate.ts");
 const validSite = await readFile(join(repositoryRoot, "content/site.yaml"), "utf8");
-const validLibrary = (await readFile(join(repositoryRoot, "content/library.yaml"), "utf8")).replace(
-  /reflections:\n[\s\S]*$/,
-  "",
-);
+const validLibrary = `books:
+  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
+    title: Ballad for Sophie
+    authors:
+      - displayName: Juan Cavia
+        sortValue: Cavia, Juan
+      - displayName: Filipe Melo
+        sortValue: Melo, Filipe
+`;
 const identifierScript = join(repositoryRoot, "scripts/identifier.ts");
 const boundaryScript = join(repositoryRoot, "scripts/check-frontend-boundary.ts");
 
@@ -198,7 +203,7 @@ test("validate accepts complete Editions and format-appropriate optional fields"
   const directory = await writeCatalog(
     context,
     validHome,
-    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Balada para Sophie\n    language: pt-PT\n    format: hardcover\n    publisher: Porto Editora\n    publicationDate: 2024-09\n    isbn: 978-3-16-148410-0\n    contributors:\n      - displayName: João Translator\n        role: translator\n    pageCount: 320\n    inCollection: true\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en-GB\n    format: ebook\n    pageCount: 300\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en\n    format: audiobook\n    durationMinutes: 600\n`,
+    `${validLibrary.trim()}\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Balada para Sophie\n    language: pt-PT\n    format: hardcover\n    publisher: Porto Editora\n    publicationDate: 2024-09\n    isbn: 978-3-16-148410-0\n    contributors:\n      - displayName: João Translator\n        role: translator\n    pageCount: 320\n    inCollection: true\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en-GB\n    format: ebook\n    pageCount: 300\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en\n    format: print-unspecified\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1486\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en\n    format: audiobook\n    durationMinutes: 600\n`,
   );
 
   const result = runValidate(directory, "content/library.yaml");
