@@ -2,6 +2,9 @@ import { Schema } from "effect";
 import { IsoPartialDate } from "./authored-fields.ts";
 
 const DurableIdentifierSchema = Schema.String.pipe(Schema.check(Schema.isUUID(7)));
+const BookIdentifierSchema = DurableIdentifierSchema.pipe(Schema.brand("BookIdentifier"));
+const EditionIdentifierSchema = DurableIdentifierSchema.pipe(Schema.brand("EditionIdentifier"));
+const ReadingIdentifierSchema = DurableIdentifierSchema.pipe(Schema.brand("ReadingIdentifier"));
 
 const AuthorCreditSchema = Schema.Struct({
   displayName: Schema.NonEmptyString,
@@ -9,7 +12,7 @@ const AuthorCreditSchema = Schema.Struct({
 });
 
 const BookSchema = Schema.Struct({
-  id: DurableIdentifierSchema,
+  id: BookIdentifierSchema,
   title: Schema.NonEmptyString,
   authors: Schema.NonEmptyArray(AuthorCreditSchema),
   alternateTitles: Schema.optionalKey(Schema.Array(Schema.NonEmptyString)),
@@ -34,8 +37,8 @@ const Bcp47LanguageSchema = Schema.NonEmptyString.pipe(
 const PositiveIntegerSchema = Schema.Int.pipe(Schema.check(Schema.isGreaterThan(0)));
 
 const EditionFields = {
-  id: DurableIdentifierSchema,
-  bookId: DurableIdentifierSchema,
+  id: EditionIdentifierSchema,
+  bookId: BookIdentifierSchema,
   title: Schema.NonEmptyString,
   language: Bcp47LanguageSchema,
   publisher: Schema.optionalKey(Schema.NonEmptyString),
@@ -66,9 +69,9 @@ const EditionSchema = Schema.Union([
 ]);
 
 const ReadingSchema = Schema.Struct({
-  id: DurableIdentifierSchema,
-  bookId: DurableIdentifierSchema,
-  editionIds: Schema.optionalKey(Schema.NonEmptyArray(DurableIdentifierSchema)),
+  id: ReadingIdentifierSchema,
+  bookId: BookIdentifierSchema,
+  editionIds: Schema.optionalKey(Schema.NonEmptyArray(EditionIdentifierSchema)),
   state: Schema.Literals(["active", "completed", "abandoned"]),
   startedOn: Schema.optionalKey(IsoPartialDate),
   endedOn: Schema.optionalKey(IsoPartialDate),
@@ -78,9 +81,9 @@ export const LibraryContentSchema = Schema.Struct({
   books: Schema.Array(BookSchema),
   editions: Schema.optionalKey(Schema.Array(EditionSchema)),
   readings: Schema.optionalKey(Schema.Array(ReadingSchema)),
-  wantToRead: Schema.optionalKey(Schema.Array(DurableIdentifierSchema)),
-  favorites: Schema.optionalKey(Schema.Array(DurableIdentifierSchema)),
-  nextReads: Schema.optionalKey(Schema.Array(DurableIdentifierSchema)),
+  wantToRead: Schema.optionalKey(Schema.Array(BookIdentifierSchema)),
+  favorites: Schema.optionalKey(Schema.Array(BookIdentifierSchema)),
+  nextReads: Schema.optionalKey(Schema.Array(BookIdentifierSchema)),
 }).check(
   Schema.makeFilter((library) => {
     const bookIds = new Set(library.books.map((book) => book.id));

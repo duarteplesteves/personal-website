@@ -16,8 +16,13 @@ const NavigationDataSchema = Schema.Struct({
   alternateSiteLanguage: Schema.Literals(["en", "pt"]),
 });
 
+const PublicBookIdentifierSchema = Schema.String.pipe(
+  Schema.check(Schema.isUUID(7)),
+  Schema.brand("BookIdentifier"),
+);
+
 const PublicBookIdentitySchema = Schema.Struct({
-  id: Schema.String.pipe(Schema.check(Schema.isUUID(7))),
+  id: PublicBookIdentifierSchema,
   title: Schema.NonEmptyString,
   authors: Schema.NonEmptyArray(
     Schema.Struct({ displayName: Schema.NonEmptyString, sortValue: Schema.NonEmptyString }),
@@ -44,7 +49,7 @@ export const HomePageDataSchema = Schema.Struct({
 });
 
 const PublicBookSchema = Schema.Struct({
-  id: Schema.String.pipe(Schema.check(Schema.isUUID(7))),
+  id: PublicBookIdentifierSchema,
   title: Schema.NonEmptyString,
   authors: Schema.NonEmptyArray(
     Schema.Struct({

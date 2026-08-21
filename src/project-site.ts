@@ -25,6 +25,16 @@ const projectNavigation = (site: SiteContent, publication: Publication) => {
   };
 };
 
+const deriveReadingStatus = (
+  completionCount: number,
+  active: boolean,
+  wantToRead: boolean,
+): "unread" | "wantToRead" | "reading" | "read" => {
+  if (completionCount > 0) return "read";
+  if (active) return "reading";
+  return wantToRead ? "wantToRead" : "unread";
+};
+
 const projectBooks = (library: LibraryContent) => {
   const readingsByBook = Map.groupBy(library.readings ?? [], (reading) => reading.bookId);
   return library.books.map((book) => {
@@ -38,14 +48,11 @@ const projectBooks = (library: LibraryContent) => {
         library.editions?.some(
           (edition) => edition.bookId === book.id && edition.inCollection === true,
         ) ?? false,
-      readingStatus:
-        completionCount > 0
-          ? ("read" as const)
-          : active
-            ? ("reading" as const)
-            : library.wantToRead?.includes(book.id) || library.nextReads?.includes(book.id)
-              ? ("wantToRead" as const)
-              : ("unread" as const),
+      readingStatus: deriveReadingStatus(
+        completionCount,
+        active,
+        Boolean(library.wantToRead?.includes(book.id) || library.nextReads?.includes(book.id)),
+      ),
       completionCount,
       rereading: active && completionCount > 0,
       favorite: library.favorites?.includes(book.id) ?? false,
