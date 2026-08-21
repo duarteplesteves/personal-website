@@ -6,3 +6,9 @@ books:
         sortValue: Cavia, Juan
       - displayName: Filipe Melo
         sortValue: Melo, Filipe
+reflections:
+  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483
+    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
+    text:
+      en: Friendship gives ambition a human scale.
+      pt: A amizade dá uma escala humana à ambição.

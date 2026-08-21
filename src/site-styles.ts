@@ -92,6 +92,13 @@ h1 {
   overflow-wrap: break-word;
 }
 .book-list cite { font-style: normal; }
+.book-list blockquote {
+  max-width: 58ch;
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-style: italic;
+}
+.book-list li + li { margin-block-start: 2rem; }
 .language-chooser { padding-block-start: clamp(4rem, 16vw, 9rem); }
 .language-chooser h1 { max-width: 15ch; font-size: clamp(2rem, 8vw, 4.25rem); }
 .chooser-options {
