@@ -1,10 +1,14 @@
 import { Schema } from "effect";
 import { IsoPartialDate } from "./authored-fields.ts";
+import { EquivalentTranslationSchema } from "./equivalent-translation.ts";
 
 const DurableIdentifierSchema = Schema.String.pipe(Schema.check(Schema.isUUID(7)));
 const BookIdentifierSchema = DurableIdentifierSchema.pipe(Schema.brand("BookIdentifier"));
 const EditionIdentifierSchema = DurableIdentifierSchema.pipe(Schema.brand("EditionIdentifier"));
 const ReadingIdentifierSchema = DurableIdentifierSchema.pipe(Schema.brand("ReadingIdentifier"));
+const ReflectionIdentifierSchema = DurableIdentifierSchema.pipe(
+  Schema.brand("ReflectionIdentifier"),
+);
 
 const AuthorCreditSchema = Schema.Struct({
   displayName: Schema.NonEmptyString,
@@ -77,10 +81,18 @@ const ReadingSchema = Schema.Struct({
   endedOn: Schema.optionalKey(IsoPartialDate),
 });
 
+const ReflectionSchema = Schema.Struct({
+  id: ReflectionIdentifierSchema,
+  bookId: BookIdentifierSchema,
+  readingId: Schema.optionalKey(ReadingIdentifierSchema),
+  text: EquivalentTranslationSchema,
+});
+
 export const LibraryContentSchema = Schema.Struct({
   books: Schema.Array(BookSchema),
   editions: Schema.optionalKey(Schema.Array(EditionSchema)),
   readings: Schema.optionalKey(Schema.Array(ReadingSchema)),
+  reflections: Schema.optionalKey(Schema.Array(ReflectionSchema)),
   wantToRead: Schema.optionalKey(Schema.Array(BookIdentifierSchema)),
   favorites: Schema.optionalKey(Schema.Array(BookIdentifierSchema)),
   nextReads: Schema.optionalKey(Schema.Array(BookIdentifierSchema)),
@@ -94,6 +106,7 @@ export const LibraryContentSchema = Schema.Struct({
       ["books", library.books],
       ["editions", library.editions ?? []],
       ["readings", library.readings ?? []],
+      ["reflections", library.reflections ?? []],
     ] as const) {
       records.forEach((record, index) => {
         if (seen.has(record.id)) {
@@ -150,6 +163,30 @@ export const LibraryContentSchema = Schema.Struct({
         }
       });
     });
+    const readings = new Map((library.readings ?? []).map((reading) => [reading.id, reading]));
+    library.reflections?.forEach((reflection, index) => {
+      if (!bookIds.has(reflection.bookId)) {
+        issues.push({
+          path: ["reflections", index, "bookId"],
+          issue: "referenced Book does not exist",
+        });
+      }
+      if (reflection.readingId !== undefined) {
+        const reading = readings.get(reflection.readingId);
+        if (!reading) {
+          issues.push({
+            path: ["reflections", index, "readingId"],
+            issue: "referenced Reading does not exist",
+          });
+        } else if (reading.bookId !== reflection.bookId) {
+          issues.push({
+            path: ["reflections", index, "readingId"],
+            issue: "referenced Reading belongs to a different Book",
+          });
+        }
+      }
+    });
+
     for (const [bookId, count] of activeByBook) {
       if (count > 1)
         issues.push({

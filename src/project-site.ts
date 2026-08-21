@@ -35,12 +35,15 @@ const deriveReadingStatus = (
   return wantToRead ? "wantToRead" : "unread";
 };
 
-const projectBooks = (library: LibraryContent) => {
+const projectBooks = (library: LibraryContent, siteLanguage?: "en" | "pt") => {
   const readingsByBook = Map.groupBy(library.readings ?? [], (reading) => reading.bookId);
   return library.books.map((book) => {
     const readings = readingsByBook.get(book.id) ?? [];
     const completionCount = readings.filter((reading) => reading.state === "completed").length;
     const active = readings.some((reading) => reading.state === "active");
+    const reflections = (library.reflections ?? [])
+      .filter((reflection) => reflection.bookId === book.id)
+      .toSorted((left, right) => left.id.localeCompare(right.id));
     return {
       ...book,
       alternateTitles: book.alternateTitles ?? [],
@@ -57,6 +60,9 @@ const projectBooks = (library: LibraryContent) => {
       rereading: active && completionCount > 0,
       favorite: library.favorites?.includes(book.id) ?? false,
       nextRead: library.nextReads?.includes(book.id) ?? false,
+      ...(siteLanguage !== undefined && reflections.length > 0
+        ? { reflections: reflections.map((reflection) => reflection.text[siteLanguage]) }
+        : {}),
     };
   });
 };
@@ -106,7 +112,7 @@ export const projectLibrary = (
   heading: site.library.heading[publication.siteLanguage],
   introduction: site.library.introduction[publication.siteLanguage],
   description: site.library.description[publication.siteLanguage],
-  books: projectBooks(library),
+  books: projectBooks(library, publication.siteLanguage),
   navigation: projectNavigation(site, publication),
 });
 

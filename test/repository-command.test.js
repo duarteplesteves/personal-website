@@ -20,7 +20,10 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const validateScript = join(repositoryRoot, "scripts/validate.ts");
 const generateScript = join(repositoryRoot, "scripts/generate.ts");
 const validSite = await readFile(join(repositoryRoot, "content/site.yaml"), "utf8");
-const validLibrary = await readFile(join(repositoryRoot, "content/library.yaml"), "utf8");
+const validLibrary = (await readFile(join(repositoryRoot, "content/library.yaml"), "utf8")).replace(
+  /reflections:\n[\s\S]*$/,
+  "",
+);
 const identifierScript = join(repositoryRoot, "scripts/identifier.ts");
 const boundaryScript = join(repositoryRoot, "scripts/check-frontend-boundary.ts");
 
@@ -229,6 +232,43 @@ test("validate rejects invalid Reading and curation relationships", async (conte
   assert.match(result.stderr, /active Reading cannot have an end date/i);
   assert.match(result.stderr, /referenced Edition does not exist/i);
   assert.match(result.stderr, /Next reads Book cannot have an active or completed Reading/i);
+});
+
+test("Reflections require Equivalent translations, valid Reading references, and UUID creation order", async (context) => {
+  const library = `${validLibrary.trim()}\nreadings:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    state: completed\nreflections:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1486\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    text:\n      en: Later reflection\n      pt: Reflexão posterior\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    readingId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    text:\n      en: Earlier reflection\n      pt: Reflexão anterior\n`;
+  const directory = await writeCatalog(context, validHome, library);
+
+  const generated = runScript(directory, generateScript);
+  assert.equal(generated.status, 0, generated.stderr);
+  const english = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
+  const portuguese = JSON.parse(await readFile(join(directory, ".generated/pt/library.json")));
+  assert.deepEqual(english.books[0].reflections, ["Earlier reflection", "Later reflection"]);
+  assert.deepEqual(portuguese.books[0].reflections, ["Reflexão anterior", "Reflexão posterior"]);
+  assert.equal(typeof english.books[0].reflections[0], "string");
+});
+
+test("validate rejects incomplete and cross-Book Reflection references", async (context) => {
+  const secondBook = validLibrary
+    .split("\n")
+    .slice(1)
+    .join("\n")
+    .replace("01a01fcd-0a4e-7c1c-9e31-8de4688c1482", "01a01fcd-0a4e-7c1c-9e31-8de4688c1483")
+    .replace("Ballad for Sophie", "Another Book");
+  const library = `${validLibrary.trim()}\n${secondBook}\nreadings:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    state: completed\nreflections:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    readingId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    text:\n      en: English reflection\n      pt: Reflexão portuguesa\n`;
+  const incomplete = await writeCatalog(
+    context,
+    validHome,
+    library.replace("      pt: Reflexão portuguesa\n", ""),
+  );
+  const crossBook = await writeCatalog(context, validHome, library);
+
+  const incompleteResult = runValidate(incomplete, "content/library.yaml");
+  const crossBookResult = runValidate(crossBook, "content/library.yaml");
+
+  assert.notEqual(incompleteResult.status, 0);
+  assert.match(incompleteResult.stderr, /Missing Portuguese Equivalent translation/);
+  assert.notEqual(crossBookResult.status, 0);
+  assert.match(crossBookResult.stderr, /referenced Reading belongs to a different Book/i);
 });
 
 test("validate rejects incomplete Editions and format-inappropriate extents", async (context) => {

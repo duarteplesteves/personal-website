@@ -15,6 +15,9 @@ export function Library({ content }: { content: LibraryPageData }) @{
             <cite>{book.title}</cite>
             <span aria-hidden="true"> — </span>
             <span>{book.authors.map((author) => author.displayName).join(", ")}</span>
+            {book.reflections?.map((reflection) => (
+              <blockquote>{reflection}</blockquote>
+            ))}
           </li>
         ))}
       </ol>

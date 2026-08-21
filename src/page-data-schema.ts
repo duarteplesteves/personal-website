@@ -64,6 +64,7 @@ const PublicBookSchema = Schema.Struct({
   rereading: Schema.Boolean,
   favorite: Schema.Boolean,
   nextRead: Schema.Boolean,
+  reflections: Schema.optionalKey(Schema.Array(Schema.NonEmptyString)),
 });
 
 export const LibraryPageDataSchema = Schema.Struct({
