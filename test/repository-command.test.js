@@ -14,6 +14,32 @@ introduction:
 description:
   en: English description
   pt: Descrição portuguesa
+work:
+  workingOn:
+    heading:
+      en: Working on
+      pt: A trabalhar em
+    items:
+      - title:
+          en: Active work
+          pt: Trabalho ativo
+        description:
+          en: English active work
+          pt: Trabalho ativo português
+  selected:
+    heading:
+      en: Selected work
+      pt: Trabalho selecionado
+    items:
+      - title:
+          en: Selected work
+          pt: Trabalho selecionado
+        context:
+          en: Independent work · Creator · 2026
+          pt: Trabalho Independente · Criador · 2026
+        description:
+          en: English selected work
+          pt: Trabalho selecionado português
 setup:
   heading:
     en: Setup and tools

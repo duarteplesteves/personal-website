@@ -85,6 +85,11 @@ h1 {
 }
 main section { margin-block-start: 5rem; }
 main section h2 { margin-block-end: 0.75rem; font-weight: 500; }
+.work-entry { max-width: 65ch; }
+.work-entry + .work-entry { margin-block-start: 2.5rem; }
+.work-entry h3 { margin-block: 1.5rem 0 0.5rem; font-size: 1.1rem; font-weight: 600; }
+.work-entry p { margin-block: 0; line-height: 1.6; text-wrap: pretty; }
+.work-entry .section-note { margin-block-end: 0.5rem; }
 main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
 .section-note { margin-block: 0 1rem; color: var(--muted); }
 .book-list {

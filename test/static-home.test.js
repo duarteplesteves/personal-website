@@ -47,6 +47,57 @@ test("localized Home artifacts include Setup and tools and direct contact destin
   }
 });
 
+test("localized Home artifacts present active and selected work honestly", async () => {
+  const localizedContent = {
+    en: {
+      workingOn: "Working on",
+      selectedWork: "Selected work",
+      betterSchedule: "Better Schedule",
+      mafaldaNutri: "Mafalda Nutri",
+      selectedTitles: [
+        "This personal home",
+        "Identity-provider operations platform",
+        "Pixelmatters website",
+        "Intellectual-property platform",
+      ],
+      betterScheduleState: "Private, unpublished",
+      mafaldaNutriState: "pre-production",
+    },
+    pt: {
+      workingOn: "A trabalhar em",
+      selectedWork: "Trabalho selecionado",
+      betterSchedule: "Better Schedule",
+      mafaldaNutri: "Mafalda Nutri",
+      selectedTitles: [
+        "Esta casa pessoal",
+        "Plataforma de operações de fornecedores de identidade",
+        "Website da Pixelmatters",
+        "Plataforma de propriedade intelectual",
+      ],
+      betterScheduleState: "privado e não publicado",
+      mafaldaNutriState: "pré-produção",
+    },
+  };
+
+  for (const siteLanguage of ["en", "pt"]) {
+    const html = await readFile(`dist/${siteLanguage}/index.html`, "utf8");
+    const expected = localizedContent[siteLanguage];
+
+    assert.match(html, new RegExp(`<h2[^>]*>${expected.workingOn}</h2>`));
+    assert.match(html, new RegExp(`<h2[^>]*>${expected.selectedWork}</h2>`));
+    assert.ok(html.includes(expected.betterScheduleState));
+    assert.ok(html.includes(expected.mafaldaNutriState));
+    for (const title of [
+      expected.betterSchedule,
+      expected.mafaldaNutri,
+      ...expected.selectedTitles,
+    ]) {
+      assert.match(html, new RegExp(`<h3>${title}</h3>`));
+      assert.doesNotMatch(html, new RegExp(`<h3><a[^>]*>${title}</a></h3>`));
+    }
+  }
+});
+
 test("the build emits the root and localized Home and Library routes", async () => {
   for (const file of [
     "dist/index.html",
