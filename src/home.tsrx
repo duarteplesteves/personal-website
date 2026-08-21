@@ -35,6 +35,25 @@ export function Home({ content }: { content: HomePageData }) @{
           <a href={content.libraryPreview.libraryPathname}>{content.libraryPreview.libraryLabel}</a>
         </section>
       )}
+      <section aria-labelledby="setup-heading">
+        <h2 id="setup-heading">{content.setup.heading}</h2>
+        <p class="section-note">{content.setup.updated}</p>
+        <ul role="list">
+          {content.setup.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </section>
+      <section aria-labelledby="contact-heading">
+        <h2 id="contact-heading">{content.contact.heading}</h2>
+        <ul role="list">
+          {content.contact.links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   </>;
 }

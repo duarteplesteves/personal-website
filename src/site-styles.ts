@@ -83,6 +83,10 @@ h1 {
   line-height: 1.6;
   text-wrap: pretty;
 }
+main section { margin-block-start: 5rem; }
+main section h2 { margin-block-end: 0.75rem; font-weight: 500; }
+main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
+.section-note { margin-block: 0 1rem; color: var(--muted); }
 .book-list {
   padding: 0;
   margin-block: 3rem 0;
