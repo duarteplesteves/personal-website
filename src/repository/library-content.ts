@@ -62,7 +62,7 @@ const EditionFields = {
 const EditionSchema = Schema.Union([
   Schema.Struct({
     ...EditionFields,
-    format: Schema.Literals(["hardcover", "paperback", "ebook"]),
+    format: Schema.Literals(["hardcover", "paperback", "print-unspecified", "ebook"]),
     pageCount: Schema.optionalKey(PositiveIntegerSchema),
   }),
   Schema.Struct({
