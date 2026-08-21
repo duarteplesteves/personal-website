@@ -9,6 +9,25 @@ export function Home({ content }: { content: HomePageData }) @{
     <main id="content">
       <h1>{content.title}</h1>
       <p class="introduction">{content.introduction}</p>
+      <section aria-labelledby="working-on-heading">
+        <h2 id="working-on-heading">{content.work.workingOn.heading}</h2>
+        {content.work.workingOn.items.map((item) => (
+          <article class="work-entry">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </section>
+      <section aria-labelledby="selected-work-heading">
+        <h2 id="selected-work-heading">{content.work.selected.heading}</h2>
+        {content.work.selected.items.map((item) => (
+          <article class="work-entry">
+            <h3>{item.title}</h3>
+            <p class="section-note">{item.context}</p>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </section>
       {(content.libraryPreview.currentlyReading ||
         content.libraryPreview.favorites ||
         content.libraryPreview.nextReads) && (

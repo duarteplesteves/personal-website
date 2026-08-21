@@ -87,6 +87,23 @@ export const projectHome = (
     title: home.title,
     introduction: home.introduction[siteLanguage],
     description: home.description[siteLanguage],
+    work: {
+      workingOn: {
+        heading: home.work.workingOn.heading[siteLanguage],
+        items: home.work.workingOn.items.map((item) => ({
+          title: item.title[siteLanguage],
+          description: item.description[siteLanguage],
+        })),
+      },
+      selected: {
+        heading: home.work.selected.heading[siteLanguage],
+        items: home.work.selected.items.map((item) => ({
+          title: item.title[siteLanguage],
+          context: item.context[siteLanguage],
+          description: item.description[siteLanguage],
+        })),
+      },
+    },
     setup: {
       heading: home.setup.heading[siteLanguage],
       updated: home.setup.updated[siteLanguage],

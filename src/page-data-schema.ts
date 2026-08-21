@@ -34,6 +34,27 @@ export const HomePageDataSchema = Schema.Struct({
   title: Schema.NonEmptyString,
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
+  work: Schema.Struct({
+    workingOn: Schema.Struct({
+      heading: Schema.NonEmptyString,
+      items: Schema.Array(
+        Schema.Struct({
+          title: Schema.NonEmptyString,
+          description: Schema.NonEmptyString,
+        }),
+      ),
+    }),
+    selected: Schema.Struct({
+      heading: Schema.NonEmptyString,
+      items: Schema.Array(
+        Schema.Struct({
+          title: Schema.NonEmptyString,
+          context: Schema.NonEmptyString,
+          description: Schema.NonEmptyString,
+        }),
+      ),
+    }),
+  }),
   setup: Schema.Struct({
     heading: Schema.NonEmptyString,
     updated: Schema.NonEmptyString,

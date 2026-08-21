@@ -16,6 +16,127 @@ description:
   en: Duarte Esteves explores software, ideas, learning, and reading.
   pt: Duarte Esteves explora software, ideias, aprendizagem e leitura.
 
+work:
+  workingOn:
+    heading:
+      en: Working on
+      pt: A trabalhar em
+    items:
+      - title:
+          en: Better Schedule
+          pt: Better Schedule
+        description:
+          en: >-
+            Private, unpublished Independent work exploring a better way to
+            plan a schedule. It is active development, not a public product or
+            release, so I am keeping its details private while I learn from the
+            work.
+          pt: >-
+            Trabalho Independente privado e não publicado que explora uma forma
+            melhor de planear uma agenda. Está em desenvolvimento ativo, não é
+            um produto ou lançamento público, por isso mantenho os detalhes
+            privados enquanto aprendo com o trabalho.
+      - title:
+          en: Mafalda Nutri
+          pt: Mafalda Nutri
+        description:
+          en: >-
+            Active pre-production Independent work for nutrition practice. I am
+            currently implementing its patient-plans module; earlier work
+            established other parts of the product. Any future demonstration
+            will use synthetic patient data, and nothing is available publicly
+            yet.
+          pt: >-
+            Trabalho Independente ativo em pré-produção para a prática de
+            nutrição. Estou a implementar o módulo de planos alimentares; o
+            trabalho anterior estabeleceu outras partes do produto. Qualquer
+            demonstração futura usará dados de pacientes sintéticos e nada está
+            ainda disponível publicamente.
+  selected:
+    heading:
+      en: Selected work
+      pt: Trabalho selecionado
+    items:
+      - title:
+          en: This personal home
+          pt: Esta casa pessoal
+        context:
+          en: Independent work · Creator · 2026–present
+          pt: Trabalho Independente · Criador · 2026–presente
+        description:
+          en: >-
+            I am building this bilingual personal home as a calm, content-led
+            place for software work, reading, and curiosity. I chose
+            repository-authored content and static delivery so the site can
+            stay small and direct; its accessibility, performance, and final
+            public details remain ongoing work.
+          pt: >-
+            Estou a criar esta casa pessoal bilingue como um espaço calmo,
+            guiado por conteúdo, para trabalho de software, leitura e
+            curiosidade. Escolhi conteúdo mantido no repositório e entrega
+            estática para manter o site pequeno e direto; a acessibilidade, o
+            desempenho e os detalhes públicos finais continuam em curso.
+      - title:
+          en: Identity-provider operations platform
+          pt: Plataforma de operações de fornecedores de identidade
+        context:
+          en: Pixelmatters · Frontend Engineer · 2025
+          pt: Pixelmatters · Engenheiro de Frontend · 2025
+        description:
+          en: >-
+            At Pixelmatters, I contributed frontend engineering to an internal
+            platform supporting high-stakes identity-provider operations. I
+            worked with the team on complex operational workflows while keeping
+            the client, delivery partners, and non-public details confidential.
+            The platform was shared work, not a product I delivered alone.
+          pt: >-
+            Na Pixelmatters, contribuí com engenharia de frontend para uma
+            plataforma interna que apoiava operações críticas de fornecedores
+            de identidade. Trabalhei com a equipa em fluxos operacionais
+            complexos, mantendo confidenciais o cliente, os parceiros de
+            entrega e os detalhes não públicos. A plataforma foi trabalho de
+            equipa, não um produto entregue apenas por mim.
+      - title:
+          en: Pixelmatters website
+          pt: Website da Pixelmatters
+        context:
+          en: Pixelmatters · Frontend Engineer · 2025–present
+          pt: Pixelmatters · Engenheiro de Frontend · 2025–presente
+        description:
+          en: >-
+            I contribute frontend engineering to the public Pixelmatters
+            website, working closely with design on its editorial presentation,
+            flexibility, and performance. The site is the result of shared
+            company work; my contribution sits alongside the team’s design,
+            content, and engineering decisions.
+          pt: >-
+            Contribuo com engenharia de frontend para o website público da
+            Pixelmatters, trabalhando de perto com design na apresentação
+            editorial, flexibilidade e desempenho. O site resulta de trabalho
+            partilhado na empresa; a minha contribuição junta-se às decisões de
+            design, conteúdo e engenharia da equipa.
+      - title:
+          en: Intellectual-property platform
+          pt: Plataforma de propriedade intelectual
+        context:
+          en: BEAM – Managed IT Solutions · Frontend Developer · 2024–2025
+          pt: BEAM – Managed IT Solutions · Desenvolvedor de Frontend · 2024–2025
+        description:
+          en: >-
+            At BEAM, I contributed frontend product engineering to a greenfield
+            intellectual-property platform in an unfamiliar domain. I helped
+            turn the team’s understanding of the product into usable interfaces
+            while learning the domain’s constraints. The client and product
+            details remain confidential, so this account stays deliberately
+            broad.
+          pt: >-
+            Na BEAM, contribuí com engenharia de produto frontend para uma
+            plataforma de propriedade intelectual criada de raiz, num domínio
+            que não conhecia. Ajudei a transformar a compreensão da equipa
+            sobre o produto em interfaces utilizáveis enquanto aprendia as
+            restrições do domínio. O cliente e os detalhes do produto mantêm-se
+            confidenciais, por isso este relato é deliberadamente amplo.
+
 setup:
   heading:
     en: Setup and tools
