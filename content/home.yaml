@@ -2,14 +2,55 @@ title: Duarte Esteves
 
 introduction:
   en: >-
-    I build software to explore ideas, solve useful problems, and keep learning.
-    Reading gives that curiosity another place to grow and often changes how I
-    approach the things I make.
+    I build software to explore ideas, understand problems, and turn possible
+    solutions into useful things while continuing to learn. Reading gives that
+    curiosity another place to grow, bringing new perspectives to how I think
+    about the things I make.
   pt: >-
-    Crio software para explorar ideias, resolver problemas úteis e continuar a
-    aprender. A leitura dá a essa curiosidade outro espaço para crescer e muda
-    frequentemente a forma como abordo aquilo que faço.
+    Crio software para explorar ideias, compreender problemas e transformar
+    possíveis soluções em coisas úteis, enquanto continuo a aprender. A leitura
+    dá a essa curiosidade outro espaço para crescer e traz novas perspetivas à
+    forma como penso sobre aquilo que faço.
 
 description:
   en: Duarte Esteves explores software, ideas, learning, and reading.
   pt: Duarte Esteves explora software, ideias, aprendizagem e leitura.
+
+setup:
+  heading:
+    en: Setup and tools
+    pt: Configuração e ferramentas
+  updated:
+    en: Updated February 2026
+    pt: Atualizado em fevereiro de 2026
+  items:
+    - en: MacBook Pro M5 Pro
+      pt: MacBook Pro M5 Pro
+    - en: Zed
+      pt: Zed
+    - en: Ghostty
+      pt: Ghostty
+    - en: Herdr
+      pt: Herdr
+    - en: Pi
+      pt: Pi
+    - en: Agent-workflow resources
+      pt: Recursos para fluxos de trabalho com agentes
+
+contact:
+  heading:
+    en: Contact
+    pt: Contacto
+  links:
+    - label:
+        en: Email
+        pt: Email
+      href: mailto:duarteplesteves@gmail.com
+    - label:
+        en: GitHub
+        pt: GitHub
+      href: https://github.com/duarteplesteves
+    - label:
+        en: LinkedIn
+        pt: LinkedIn
+      href: https://www.linkedin.com/in/duarteplesteves

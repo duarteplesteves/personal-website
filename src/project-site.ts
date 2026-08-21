@@ -87,6 +87,18 @@ export const projectHome = (
     title: home.title,
     introduction: home.introduction[siteLanguage],
     description: home.description[siteLanguage],
+    setup: {
+      heading: home.setup.heading[siteLanguage],
+      updated: home.setup.updated[siteLanguage],
+      items: home.setup.items.map((item) => item[siteLanguage]),
+    },
+    contact: {
+      heading: home.contact.heading[siteLanguage],
+      links: home.contact.links.map((link) => ({
+        label: link.label[siteLanguage],
+        href: link.href.href,
+      })),
+    },
     libraryPreview: {
       heading: site.library.heading[siteLanguage],
       currentlyReadingLabel: site.library.currentlyReading[siteLanguage],

@@ -14,6 +14,25 @@ introduction:
 description:
   en: English description
   pt: Descrição portuguesa
+setup:
+  heading:
+    en: Setup and tools
+    pt: Configuração e ferramentas
+  updated:
+    en: Updated February 2026
+    pt: Atualizado em fevereiro de 2026
+  items:
+    - en: Zed
+      pt: Zed
+contact:
+  heading:
+    en: Contact
+    pt: Contacto
+  links:
+    - label:
+        en: Email
+        pt: Email
+      href: mailto:duarteplesteves@gmail.com
 `;
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
