@@ -54,6 +54,21 @@ export const HomePageDataSchema = Schema.Struct({
         }),
       ),
     }),
+    experience: Schema.Struct({
+      heading: Schema.NonEmptyString,
+      items: Schema.Array(
+        Schema.Struct({
+          company: Schema.NonEmptyString,
+          roles: Schema.Array(
+            Schema.Struct({
+              title: Schema.NonEmptyString,
+              dates: Schema.NonEmptyString,
+            }),
+          ),
+          description: Schema.NonEmptyString,
+        }),
+      ),
+    }),
   }),
   setup: Schema.Struct({
     heading: Schema.NonEmptyString,

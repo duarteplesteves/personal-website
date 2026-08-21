@@ -25,6 +25,13 @@ const projectNavigation = (site: SiteContent, publication: Publication) => {
   };
 };
 
+const formatExperienceDate = (date: string, siteLanguage: "en" | "pt") =>
+  new Intl.DateTimeFormat(siteLanguage === "en" ? "en-GB" : "pt-PT", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${date}-01T00:00:00Z`));
+
 const deriveReadingStatus = (
   completionCount: number,
   active: boolean,
@@ -102,6 +109,28 @@ export const projectHome = (
           context: item.context[siteLanguage],
           description: item.description[siteLanguage],
         })),
+      },
+      experience: {
+        heading: home.work.experience.heading[siteLanguage],
+        items: home.work.experience.items
+          .toSorted((left, right) => {
+            const stintEnd = (entry: (typeof home.work.experience.items)[number]) =>
+              entry.roles.some((role) => role.current)
+                ? "9999"
+                : (entry.roles
+                    .map((role) => role.endedOn ?? "")
+                    .toSorted()
+                    .at(-1) ?? "");
+            return stintEnd(right).localeCompare(stintEnd(left));
+          })
+          .map((entry) => ({
+            company: entry.company,
+            roles: entry.roles.map((role) => ({
+              title: role.title[siteLanguage],
+              dates: `${formatExperienceDate(role.startedOn, siteLanguage)}–${role.current ? home.work.experience.present[siteLanguage] : formatExperienceDate(role.endedOn ?? role.startedOn, siteLanguage)}`,
+            })),
+            description: entry.description[siteLanguage],
+          })),
       },
     },
     setup: {

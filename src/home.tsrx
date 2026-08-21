@@ -28,6 +28,20 @@ export function Home({ content }: { content: HomePageData }) @{
           </article>
         ))}
       </section>
+      <section aria-labelledby="experience-heading">
+        <h2 id="experience-heading">{content.work.experience.heading}</h2>
+        {content.work.experience.items.map((item) => (
+          <article class="work-entry">
+            <h3>{item.company}</h3>
+            {item.roles.map((role) => (
+              <p class="section-note">
+                {role.title} <span aria-hidden="true">·</span> {role.dates}
+              </p>
+            ))}
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </section>
       {(content.libraryPreview.currentlyReading ||
         content.libraryPreview.favorites ||
         content.libraryPreview.nextReads) && (
