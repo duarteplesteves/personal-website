@@ -80,7 +80,7 @@ No contact introduction is required; direct, clearly labelled links are sufficie
 
 ## Home Library preview
 
-The reconciled public catalog is recorded in [`initial-library-catalog.csv`](./initial-library-catalog.csv), with its source mapping and safe conversion notes in [`initial-library-intake.md`](./initial-library-intake.md).
+The reconciled public catalog is now recorded in [`content/library.yaml`](../../content/library.yaml).
 
 The catalog contains **152 Books**, exceeding the 12-Book implementation-readiness minimum. Every selected Book has a non-empty stable title and ordered author credits. Its launch curation is:
 
@@ -95,7 +95,7 @@ The catalog contains **152 Books**, exceeding the 12-Book implementation-readine
 
 Preview entries require only their source-faithful Book title and ordered author credits. They require no cover, date, Reflection, commentary, ranking, or external destination. The Home preview links to the equivalent Standalone Library route in each Site language.
 
-**Readiness:** ready for implementation. Convert the reconciled intake into validated repository-managed Book files during implementation, and refresh Currently reading, Favorites, and Next reads before publication. Optional Edition gaps documented in the intake do not block implementation.
+**Readiness:** implemented. Refresh Currently reading, Favorites, and Next reads before publication.
 
 ## Authored passage plan
 
@@ -121,7 +121,6 @@ These tasks may be completed during implementation and do not reopen the specifi
 - refresh Setup and tools and its month-and-year marker;
 - test email, GitHub, LinkedIn, and Pixelmatters destinations;
 - refresh Currently reading, Favorites, and Next reads;
-- convert the reconciled Library selection into validated repository-managed files; and
 - optionally enrich Editions, dates, Reflections, and the Library beyond the reconciled selection.
 
 Publication remains blocked until all visitor-facing authored content and interface expressions have human-reviewed Equivalent translation pairs and every time-sensitive check above passes.
