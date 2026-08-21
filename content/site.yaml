@@ -42,3 +42,15 @@ library:
   introduction:
     en: A growing record of books I am reading, have read, or want to read.
     pt: Um registo em crescimento dos livros que estou a ler, já li ou quero ler.
+  currentlyReading:
+    en: Currently reading
+    pt: A ler atualmente
+  favorites:
+    en: Favorites
+    pt: Favoritos
+  nextReads:
+    en: Next reads
+    pt: Próximas leituras
+  viewLibrary:
+    en: View the Library
+    pt: Ver a Biblioteca
