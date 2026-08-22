@@ -1,6 +1,10 @@
 import { prerender } from "octane/static";
 import { Home } from "./home.tsrx";
-import { languageControlEnhancement, rootLanguageResolver } from "./inline-enhancements.ts";
+import {
+  languageControlEnhancement,
+  libraryEnhancement,
+  rootLanguageResolver,
+} from "./inline-enhancements.ts";
 import { Library } from "./library.tsrx";
 import type { HomePageData, LibraryPageData, PageData, RootPageData } from "./page-data-schema.ts";
 import type { Publication } from "./publication.ts";
@@ -21,7 +25,11 @@ async function renderHome(content: HomePageData, publication: Publication) {
 
 async function renderLibrary(content: LibraryPageData, publication: Publication) {
   const rendered = await prerender(Library, { content }, { headChannel: "separate" });
-  return htmlDocument(publication.documentLanguage, rendered, languageControlEnhancement);
+  return htmlDocument(
+    publication.documentLanguage,
+    rendered,
+    `${languageControlEnhancement}\n${libraryEnhancement}`,
+  );
 }
 
 export async function renderPage(content: PageData, publication: Publication) {
