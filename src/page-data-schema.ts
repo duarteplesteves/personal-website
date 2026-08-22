@@ -111,6 +111,7 @@ const PublicBookSchema = Schema.Struct({
   rereading: Schema.Boolean,
   favorite: Schema.Boolean,
   nextRead: Schema.Boolean,
+  relationship: Schema.optionalKey(Schema.NonEmptyString),
   reflections: Schema.optionalKey(Schema.Array(Schema.NonEmptyString)),
 });
 
@@ -121,6 +122,8 @@ export const LibraryPageDataSchema = Schema.Struct({
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
   books: Schema.Array(PublicBookSchema),
+  currentlyReading: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
+  currentlyReadingLabel: Schema.NonEmptyString,
   navigation: NavigationDataSchema,
 });
 

@@ -42,8 +42,9 @@ const deriveReadingStatus = (
   return wantToRead ? "wantToRead" : "unread";
 };
 
-const projectBooks = (library: LibraryContent, siteLanguage?: "en" | "pt") => {
+const projectBooks = (library: LibraryContent, site?: SiteContent, siteLanguage?: "en" | "pt") => {
   const readingsByBook = Map.groupBy(library.readings ?? [], (reading) => reading.bookId);
+  const relationshipLabels = site && siteLanguage ? site.library : undefined;
   return library.books.map((book) => {
     const readings = readingsByBook.get(book.id) ?? [];
     const completionCount = readings.filter((reading) => reading.state === "completed").length;
@@ -67,6 +68,30 @@ const projectBooks = (library: LibraryContent, siteLanguage?: "en" | "pt") => {
       rereading: active && completionCount > 0,
       favorite: library.favorites?.includes(book.id) ?? false,
       nextRead: library.nextReads?.includes(book.id) ?? false,
+      ...(relationshipLabels && siteLanguage
+        ? (() => {
+            const parts = [
+              (library.favorites?.includes(book.id) ?? false) &&
+                relationshipLabels.favorite[siteLanguage],
+              active && relationshipLabels.currentlyReading[siteLanguage],
+              active && completionCount > 0 && relationshipLabels.rereading[siteLanguage],
+              !active &&
+                completionCount > 1 &&
+                relationshipLabels.readTimes[siteLanguage].replace(
+                  "{count}",
+                  String(completionCount),
+                ),
+              (library.editions?.some(
+                (edition) => edition.bookId === book.id && edition.inCollection === true,
+              ) ??
+                false) &&
+                relationshipLabels.inCollection[siteLanguage],
+              (library.nextReads?.includes(book.id) ?? false) &&
+                relationshipLabels.nextReads[siteLanguage],
+            ].filter((part): part is string => typeof part === "string");
+            return parts.length > 0 ? { relationship: parts.join(" · ") } : {};
+          })()
+        : {}),
       ...(siteLanguage !== undefined && reflections.length > 0
         ? { reflections: reflections.map((reflection) => reflection.text[siteLanguage]) }
         : {}),
@@ -164,15 +189,35 @@ export const projectLibrary = (
   library: LibraryContent,
   site: SiteContent,
   publication: Publication,
-): LibraryPageData => ({
-  page: "library",
-  title: `${site.library.heading[publication.siteLanguage]} — ${site.root.title}`,
-  heading: site.library.heading[publication.siteLanguage],
-  introduction: site.library.introduction[publication.siteLanguage],
-  description: site.library.description[publication.siteLanguage],
-  books: projectBooks(library, publication.siteLanguage),
-  navigation: projectNavigation(site, publication),
-});
+): LibraryPageData => {
+  const { siteLanguage } = publication;
+  const collator = new Intl.Collator(siteLanguage === "en" ? "en-GB" : "pt-PT");
+  const books = projectBooks(library, site, siteLanguage).toSorted(
+    (left, right) =>
+      collator.compare(left.title, right.title) ||
+      collator.compare(left.authors[0].sortValue, right.authors[0].sortValue) ||
+      left.id.localeCompare(right.id),
+  );
+  const identities = ({ id, title, authors }: (typeof books)[number]) => ({
+    id,
+    title,
+    authors,
+  });
+  const currentlyReading = books
+    .filter((book) => book.readingStatus === "reading" || book.rereading)
+    .map(identities);
+  return {
+    page: "library",
+    title: `${site.library.heading[siteLanguage]} — ${site.root.title}`,
+    heading: site.library.heading[siteLanguage],
+    introduction: site.library.introduction[siteLanguage],
+    description: site.library.description[siteLanguage],
+    books,
+    ...(currentlyReading.length > 0 ? { currentlyReading } : {}),
+    currentlyReadingLabel: site.library.currentlyReading[siteLanguage],
+    navigation: projectNavigation(site, publication),
+  };
+};
 
 export const projectPage = (
   home: HomeContent,
