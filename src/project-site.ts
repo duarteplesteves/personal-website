@@ -42,9 +42,8 @@ const deriveReadingStatus = (
   return wantToRead ? "wantToRead" : "unread";
 };
 
-const projectBooks = (library: LibraryContent, site?: SiteContent, siteLanguage?: "en" | "pt") => {
+const projectBooks = (library: LibraryContent, siteLanguage?: "en" | "pt") => {
   const readingsByBook = Map.groupBy(library.readings ?? [], (reading) => reading.bookId);
-  const relationshipLabels = site && siteLanguage ? site.library : undefined;
   return library.books.map((book) => {
     const readings = readingsByBook.get(book.id) ?? [];
     const completionCount = readings.filter((reading) => reading.state === "completed").length;
@@ -68,30 +67,6 @@ const projectBooks = (library: LibraryContent, site?: SiteContent, siteLanguage?
       rereading: active && completionCount > 0,
       favorite: library.favorites?.includes(book.id) ?? false,
       nextRead: library.nextReads?.includes(book.id) ?? false,
-      ...(relationshipLabels && siteLanguage
-        ? (() => {
-            const parts = [
-              (library.favorites?.includes(book.id) ?? false) &&
-                relationshipLabels.favorite[siteLanguage],
-              active && relationshipLabels.currentlyReading[siteLanguage],
-              active && completionCount > 0 && relationshipLabels.rereading[siteLanguage],
-              !active &&
-                completionCount > 1 &&
-                relationshipLabels.readTimes[siteLanguage].replace(
-                  "{count}",
-                  String(completionCount),
-                ),
-              (library.editions?.some(
-                (edition) => edition.bookId === book.id && edition.inCollection === true,
-              ) ??
-                false) &&
-                relationshipLabels.inCollection[siteLanguage],
-              (library.nextReads?.includes(book.id) ?? false) &&
-                relationshipLabels.nextReads[siteLanguage],
-            ].filter((part): part is string => typeof part === "string");
-            return parts.length > 0 ? { relationship: parts.join(" · ") } : {};
-          })()
-        : {}),
       ...(siteLanguage !== undefined && reflections.length > 0
         ? { reflections: reflections.map((reflection) => reflection.text[siteLanguage]) }
         : {}),
@@ -191,30 +166,41 @@ export const projectLibrary = (
   publication: Publication,
 ): LibraryPageData => {
   const { siteLanguage } = publication;
+  const text = site.library;
   const collator = new Intl.Collator(siteLanguage === "en" ? "en-GB" : "pt-PT");
-  const books = projectBooks(library, site, siteLanguage).toSorted(
-    (left, right) =>
-      collator.compare(left.title, right.title) ||
-      collator.compare(left.authors[0].sortValue, right.authors[0].sortValue) ||
-      left.id.localeCompare(right.id),
-  );
-  const identities = ({ id, title, authors }: (typeof books)[number]) => ({
-    id,
-    title,
-    authors,
-  });
+  const books = projectBooks(library, siteLanguage)
+    .map((book) => {
+      const active = book.readingStatus === "reading" || book.rereading;
+      const parts = [
+        book.favorite && text.favorite[siteLanguage],
+        active && text.currentlyReading[siteLanguage],
+        book.rereading && text.rereading[siteLanguage],
+        !active &&
+          book.completionCount > 1 &&
+          text.readTimes[siteLanguage].replace("{count}", String(book.completionCount)),
+        book.inCollection && text.inCollection[siteLanguage],
+        book.nextRead && text.nextReads[siteLanguage],
+      ].filter((part): part is string => typeof part === "string");
+      return parts.length > 0 ? { ...book, relationship: parts.join(" · ") } : book;
+    })
+    .toSorted(
+      (left, right) =>
+        collator.compare(left.title, right.title) ||
+        collator.compare(left.authors[0].sortValue, right.authors[0].sortValue) ||
+        left.id.localeCompare(right.id),
+    );
   const currentlyReading = books
     .filter((book) => book.readingStatus === "reading" || book.rereading)
-    .map(identities);
+    .map(({ id, title, authors }) => ({ id, title, authors }));
   return {
     page: "library",
-    title: `${site.library.heading[siteLanguage]} — ${site.root.title}`,
-    heading: site.library.heading[siteLanguage],
-    introduction: site.library.introduction[siteLanguage],
-    description: site.library.description[siteLanguage],
+    title: `${text.heading[siteLanguage]} — ${site.root.title}`,
+    heading: text.heading[siteLanguage],
+    introduction: text.introduction[siteLanguage],
+    description: text.description[siteLanguage],
     books,
     ...(currentlyReading.length > 0 ? { currentlyReading } : {}),
-    currentlyReadingLabel: site.library.currentlyReading[siteLanguage],
+    currentlyReadingLabel: text.currentlyReading[siteLanguage],
     navigation: projectNavigation(site, publication),
   };
 };
