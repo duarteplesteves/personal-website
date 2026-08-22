@@ -137,6 +137,77 @@ work:
             restrições do domínio. O cliente e os detalhes do produto mantêm-se
             confidenciais, por isso este relato é deliberadamente amplo.
 
+  experience:
+    heading:
+      en: Experience
+      pt: Experiência
+    present:
+      en: present
+      pt: presente
+    items:
+      - company: Pixelmatters
+        roles:
+          - title:
+              en: Frontend Engineer
+              pt: Engenheiro de Frontend
+            startedOn: 2025-09
+            current: true
+        description:
+          en: >-
+            I work across client product work and Pixelmatters’ public website,
+            translating design into thoughtful, maintainable frontend
+            experiences. I collaborate closely with designers and engineers,
+            contributing to the team’s shared delivery while keeping each
+            product’s needs clear.
+          pt: >-
+            Trabalho em produtos para clientes e no website público da
+            Pixelmatters, transformando design em experiências de frontend
+            ponderadas e sustentáveis. Colaboro de perto com designers e
+            engenheiros, contribuindo para a entrega partilhada pela equipa e
+            mantendo claras as necessidades de cada produto.
+      - company: BEAM – Managed IT Solutions
+        roles:
+          - title:
+              en: Frontend Developer
+              pt: Desenvolvedor de Frontend
+            startedOn: 2024-06
+            endedOn: 2025-09
+            current: false
+        description:
+          en: >-
+            I built frontend product experiences in greenfield and client work,
+            learning unfamiliar domains quickly and helping teams turn their
+            understanding into clear, usable interfaces. I worked through
+            changing requirements with colleagues while keeping the product
+            experience grounded in the people using it.
+          pt: >-
+            Criei experiências de produto frontend em trabalho de raiz e para
+            clientes, aprendendo rapidamente domínios desconhecidos e ajudando
+            equipas a transformar a sua compreensão em interfaces claras e
+            utilizáveis. Trabalhei com colegas perante requisitos em mudança,
+            mantendo a experiência de produto focada nas pessoas que a usam.
+      - company: Bliss Applications
+        roles:
+          - title:
+              en: Frontend Developer
+              pt: Desenvolvedor de Frontend
+            startedOn: 2022-06
+            endedOn: 2024-01
+            current: false
+        description:
+          en: >-
+            I delivered frontend work for complex e-commerce and event
+            experiences, collaborating with colleagues to turn varied product
+            requirements into dependable interfaces. I balanced the practical
+            needs of each delivery with careful implementation, helping the
+            team ship work people could rely on.
+          pt: >-
+            Desenvolvi trabalho frontend para experiências complexas de
+            comércio eletrónico e eventos, colaborando com colegas para
+            transformar requisitos de produto variados em interfaces fiáveis.
+            Equilibrei as necessidades práticas de cada entrega com uma
+            implementação cuidada, ajudando a equipa a criar trabalho fiável.
+
 setup:
   heading:
     en: Setup and tools

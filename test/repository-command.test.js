@@ -40,6 +40,24 @@ work:
         description:
           en: English selected work
           pt: Trabalho selecionado português
+  experience:
+    heading:
+      en: Experience
+      pt: Experiência
+    present:
+      en: present
+      pt: presente
+    items:
+      - company: Example company
+        roles:
+          - title:
+              en: Frontend Developer
+              pt: Desenvolvedor de Frontend
+            startedOn: 2024-01
+            current: true
+        description:
+          en: English experience
+          pt: Experiência portuguesa
 setup:
   heading:
     en: Setup and tools
@@ -362,6 +380,34 @@ test("validate rejects references to Books that do not exist", async (context) =
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /\[\$\.editions\[0\]\.bookId\].*referenced Book does not exist/i);
+});
+
+test("validate enforces consistent Experience role periods", async (context) => {
+  const currentWithEnd = await validateSource(
+    context,
+    validHome.replace(
+      "            current: true\n",
+      "            endedOn: 2025-01\n            current: true\n",
+    ),
+  );
+  const formerWithoutEnd = await validateSource(
+    context,
+    validHome.replace("            current: true\n", "            current: false\n"),
+  );
+  const reversedDates = await validateSource(
+    context,
+    validHome.replace(
+      "            current: true\n",
+      "            endedOn: 2023-12\n            current: false\n",
+    ),
+  );
+
+  assert.notEqual(currentWithEnd.status, 0);
+  assert.match(currentWithEnd.stderr, /current role cannot have an end date/i);
+  assert.notEqual(formerWithoutEnd.status, 0);
+  assert.match(formerWithoutEnd.stderr, /former role requires an end date/i);
+  assert.notEqual(reversedDates.status, 0);
+  assert.match(reversedDates.stderr, /end date must not precede start date/i);
 });
 
 test("validate rejects unknown Home fields", async (context) => {

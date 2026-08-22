@@ -98,6 +98,45 @@ test("localized Home artifacts present active and selected work honestly", async
   }
 });
 
+test("localized Home artifacts present derived Experience without résumé treatment", async () => {
+  const localizedContent = {
+    en: {
+      heading: "Experience",
+      entries: [
+        ["Pixelmatters", "Frontend Engineer", "September 2025–present"],
+        ["BEAM – Managed IT Solutions", "Frontend Developer", "June 2024–September 2025"],
+        ["Bliss Applications", "Frontend Developer", "June 2022–January 2024"],
+      ],
+    },
+    pt: {
+      heading: "Experiência",
+      entries: [
+        ["Pixelmatters", "Engenheiro de Frontend", "setembro de 2025–presente"],
+        [
+          "BEAM – Managed IT Solutions",
+          "Desenvolvedor de Frontend",
+          "junho de 2024–setembro de 2025",
+        ],
+        ["Bliss Applications", "Desenvolvedor de Frontend", "junho de 2022–janeiro de 2024"],
+      ],
+    },
+  };
+
+  for (const siteLanguage of ["en", "pt"]) {
+    const html = await readFile(`dist/${siteLanguage}/index.html`, "utf8");
+    const expected = localizedContent[siteLanguage];
+
+    assert.match(html, new RegExp(`<h2[^>]*>${expected.heading}</h2>`));
+    for (const [company, role, dates] of expected.entries) {
+      assert.match(html, new RegExp(`<h3>${company}</h3>`));
+      assert.ok(html.includes(role));
+      assert.ok(html.includes(dates));
+    }
+    assert.ok(html.indexOf("Pixelmatters") < html.indexOf("BEAM – Managed IT Solutions"));
+    assert.ok(html.indexOf("BEAM – Managed IT Solutions") < html.indexOf("Bliss Applications"));
+  }
+});
+
 test("the build emits the root and localized Home and Library routes", async () => {
   for (const file of [
     "dist/index.html",
