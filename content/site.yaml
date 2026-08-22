@@ -45,6 +45,18 @@ library:
   currentlyReading:
     en: Currently reading
     pt: A ler atualmente
+  favorite:
+    en: Favorite
+    pt: Favorito
+  rereading:
+    en: Rereading
+    pt: A reler
+  readTimes:
+    en: Read {count} times
+    pt: Lido {count} vezes
+  inCollection:
+    en: In collection
+    pt: Na coleção
   favorites:
     en: Favorites
     pt: Favoritos
