@@ -101,6 +101,7 @@ main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
   overflow-wrap: break-word;
 }
 .book-list cite { font-style: normal; }
+.book-list .relationship { display: block; color: var(--muted); font-size: 0.9rem; }
 .book-list blockquote {
   max-width: 58ch;
   margin: 0.75rem 0 0;

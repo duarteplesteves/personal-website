@@ -127,6 +127,12 @@
       "skillPath": "skills/engineering/prototype/SKILL.md",
       "computedHash": "73862de6cd32acf30799bfb2220357b96c1a58ab0e3d01126b769fd659d6555a"
     },
+    "simplify": {
+      "source": "bholmesdev/skills",
+      "sourceType": "github",
+      "skillPath": "skills/simplify/SKILL.md",
+      "computedHash": "5fbcd24a47d3de5b0166a5a446cce4f2f979266f34f6a44fee4a1ed7d7c62e48"
+    },
     "tdd": {
       "source": "mattpocock/skills",
       "sourceType": "github",

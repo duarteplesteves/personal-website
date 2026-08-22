@@ -164,15 +164,46 @@ export const projectLibrary = (
   library: LibraryContent,
   site: SiteContent,
   publication: Publication,
-): LibraryPageData => ({
-  page: "library",
-  title: `${site.library.heading[publication.siteLanguage]} — ${site.root.title}`,
-  heading: site.library.heading[publication.siteLanguage],
-  introduction: site.library.introduction[publication.siteLanguage],
-  description: site.library.description[publication.siteLanguage],
-  books: projectBooks(library, publication.siteLanguage),
-  navigation: projectNavigation(site, publication),
-});
+): LibraryPageData => {
+  const { siteLanguage } = publication;
+  const text = site.library;
+  const collator = new Intl.Collator(siteLanguage === "en" ? "en-GB" : "pt-PT");
+  const books = projectBooks(library, siteLanguage)
+    .map((book) => {
+      const active = book.readingStatus === "reading" || book.rereading;
+      const parts = [
+        book.favorite && text.favorite[siteLanguage],
+        active && text.currentlyReading[siteLanguage],
+        book.rereading && text.rereading[siteLanguage],
+        !active &&
+          book.completionCount > 1 &&
+          text.readTimes[siteLanguage].replace("{count}", String(book.completionCount)),
+        book.inCollection && text.inCollection[siteLanguage],
+        book.nextRead && text.nextReads[siteLanguage],
+      ].filter((part): part is string => typeof part === "string");
+      return parts.length > 0 ? { ...book, relationship: parts.join(" · ") } : book;
+    })
+    .toSorted(
+      (left, right) =>
+        collator.compare(left.title, right.title) ||
+        collator.compare(left.authors[0].sortValue, right.authors[0].sortValue) ||
+        left.id.localeCompare(right.id),
+    );
+  const currentlyReading = books
+    .filter((book) => book.readingStatus === "reading" || book.rereading)
+    .map(({ id, title, authors }) => ({ id, title, authors }));
+  return {
+    page: "library",
+    title: `${text.heading[siteLanguage]} — ${site.root.title}`,
+    heading: text.heading[siteLanguage],
+    introduction: text.introduction[siteLanguage],
+    description: text.description[siteLanguage],
+    books,
+    ...(currentlyReading.length > 0 ? { currentlyReading } : {}),
+    currentlyReadingLabel: text.currentlyReading[siteLanguage],
+    navigation: projectNavigation(site, publication),
+  };
+};
 
 export const projectPage = (
   home: HomeContent,
