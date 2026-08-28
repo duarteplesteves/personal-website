@@ -40,11 +40,6 @@ export const sitePublication: ReadonlyArray<Publication> = [
   },
 ];
 
-export const generatedRootPath = "root.json";
-
-export const generatedPagePath = (publication: Publication) =>
-  `${publication.siteLanguage}/${publication.page}.json`;
-
 export const findPublication = (page: Page, siteLanguage: SiteLanguage): Publication => {
   const publication = sitePublication.find(
     (candidate) => candidate.page === page && candidate.siteLanguage === siteLanguage,

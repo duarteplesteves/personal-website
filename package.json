@@ -4,9 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nub run generate && nub run boundary:check && vite build && nub scripts/build.ts",
-    "generate": "nub scripts/generate.ts",
-    "dev:content": "nub scripts/generate.ts --watch",
+    "build": "nub run boundary:check && vite build && nub scripts/build.ts",
     "identifier": "nub scripts/identifier.ts",
     "boundary:check": "nub scripts/check-frontend-boundary.ts",
     "validate": "nub scripts/validate.ts",

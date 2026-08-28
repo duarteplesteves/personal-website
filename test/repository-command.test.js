@@ -81,7 +81,7 @@ contact:
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const validateScript = join(repositoryRoot, "scripts/validate.ts");
-const generateScript = join(repositoryRoot, "scripts/generate.ts");
+const buildScript = join(repositoryRoot, "scripts/build.ts");
 const validSite = await readFile(join(repositoryRoot, "content/site.yaml"), "utf8");
 const validLibrary = `books:
   - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
@@ -115,7 +115,7 @@ const validateSource = async (context, contents) => {
   return runValidate(directory);
 };
 
-test("validate accepts the complete authored catalog without generating output", async (context) => {
+test("validate accepts the complete authored catalog without writing output", async (context) => {
   const directory = await writeCatalog(context, validHome);
 
   const result = runValidate(directory);
@@ -251,44 +251,33 @@ test("validate accepts complete Editions and format-appropriate optional fields"
   );
 
   const result = runValidate(directory, "content/library.yaml");
+  const built = runScript(directory, buildScript);
+  const html = await readFile(join(directory, "dist/en/library/index.html"), "utf8");
 
   assert.equal(result.status, 0, result.stderr);
-  const generated = runScript(directory, generateScript);
-  assert.equal(generated.status, 0, generated.stderr);
-  const page = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
-  assert.equal(page.books[0].inCollection, true);
-  assert.ok(!("editions" in page));
+  assert.equal(built.status, 0, built.stderr);
+  assert.match(html, /Ballad for Sophie(?:(?!<\/li>).)*In collection/s);
+  assert.doesNotMatch(html, /Balada para Sophie/);
 });
 
 test("Readings and curation derive public Library and Home relationships", async (context) => {
   const library = `${validLibrary.trim()}\n    alternateTitles:\n      - Balada para Sophie\neditions:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    title: Ballad for Sophie\n    language: en\n    format: hardcover\nreadings:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    editionIds:\n      - 01a01fcd-0a4e-7c1c-9e31-8de4688c1483\n    state: completed\n    startedOn: 2024-01\n    endedOn: 2024-02\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    state: active\nfavorites:\n  - 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n`;
   const directory = await writeCatalog(context, validHome, library);
 
-  assert.equal(runValidate(directory).status, 0);
-  const generated = runScript(directory, generateScript);
-  assert.equal(generated.status, 0, generated.stderr);
-  const libraryPage = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
-  const homePage = JSON.parse(await readFile(join(directory, ".generated/en/home.json")));
+  const validated = runValidate(directory);
+  const built = runScript(directory, buildScript);
+  const libraryHtml = await readFile(join(directory, "dist/en/library/index.html"), "utf8");
+  const homeHtml = await readFile(join(directory, "dist/en/index.html"), "utf8");
 
-  assert.deepEqual(
-    {
-      readingStatus: libraryPage.books[0].readingStatus,
-      completionCount: libraryPage.books[0].completionCount,
-      rereading: libraryPage.books[0].rereading,
-      favorite: libraryPage.books[0].favorite,
-      nextRead: libraryPage.books[0].nextRead,
-    },
-    { readingStatus: "read", completionCount: 1, rereading: true, favorite: true, nextRead: false },
+  assert.equal(validated.status, 0, validated.stderr);
+  assert.equal(built.status, 0, built.stderr);
+  assert.match(
+    libraryHtml,
+    /Ballad for Sophie(?:(?!<\/li>).)*Favorite · Currently reading · Rereading/s,
   );
-  assert.deepEqual(homePage.libraryPreview.currentlyReading, [
-    {
-      id: libraryPage.books[0].id,
-      title: "Ballad for Sophie",
-      authors: libraryPage.books[0].authors,
-    },
-  ]);
-  assert.equal(homePage.libraryPreview.favorites.length, 1);
-  assert.ok(!("nextReads" in homePage.libraryPreview));
+  assert.match(homeHtml, /Currently reading(?:(?!<\/section>).)*Ballad for Sophie/s);
+  assert.match(homeHtml, /Favorites(?:(?!<\/section>).)*Ballad for Sophie/s);
+  assert.doesNotMatch(homeHtml, /Next reads/);
 });
 
 test("validate rejects invalid Reading and curation relationships", async (context) => {
@@ -306,13 +295,13 @@ test("Reflections require Equivalent translations, valid Reading references, and
   const library = `${validLibrary.trim()}\nreadings:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    state: completed\nreflections:\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1486\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    text:\n      en: Later reflection\n      pt: Reflexão posterior\n  - id: 01a01fcd-0a4e-7c1c-9e31-8de4688c1485\n    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482\n    readingId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1484\n    text:\n      en: Earlier reflection\n      pt: Reflexão anterior\n`;
   const directory = await writeCatalog(context, validHome, library);
 
-  const generated = runScript(directory, generateScript);
-  assert.equal(generated.status, 0, generated.stderr);
-  const english = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
-  const portuguese = JSON.parse(await readFile(join(directory, ".generated/pt/library.json")));
-  assert.deepEqual(english.books[0].reflections, ["Earlier reflection", "Later reflection"]);
-  assert.deepEqual(portuguese.books[0].reflections, ["Reflexão anterior", "Reflexão posterior"]);
-  assert.equal(typeof english.books[0].reflections[0], "string");
+  const built = runScript(directory, buildScript);
+  const english = await readFile(join(directory, "dist/en/library/index.html"), "utf8");
+  const portuguese = await readFile(join(directory, "dist/pt/library/index.html"), "utf8");
+
+  assert.equal(built.status, 0, built.stderr);
+  assert.ok(english.indexOf("Earlier reflection") < english.indexOf("Later reflection"));
+  assert.ok(portuguese.indexOf("Reflexão anterior") < portuguese.indexOf("Reflexão posterior"));
 });
 
 test("validate rejects incomplete and cross-Book Reflection references", async (context) => {
@@ -416,88 +405,12 @@ test("validate rejects unknown Home fields", async (context) => {
   assert.match(result.stderr, /\[\$\.unknown\].*Unexpected key/i);
 });
 
-test("generate atomically replaces deterministic route-level plain data", async (context) => {
+test("a failed build preserves the complete previous output", async (context) => {
   const directory = await writeCatalog(context, validHome);
-
-  const first = runScript(directory, generateScript);
+  const first = runScript(directory, buildScript);
   assert.equal(first.status, 0, first.stderr);
-  const englishPath = join(directory, ".generated/en/home.json");
-  const portuguesePath = join(directory, ".generated/pt/home.json");
-  const firstEnglish = await readFile(englishPath, "utf8");
-  const firstPortuguese = await readFile(portuguesePath, "utf8");
-  const firstEnglishPage = JSON.parse(firstEnglish);
-  const firstPortuguesePage = JSON.parse(firstPortuguese);
-
-  assert.deepEqual(
-    {
-      title: firstEnglishPage.title,
-      introduction: firstEnglishPage.introduction,
-      description: firstEnglishPage.description,
-    },
-    {
-      title: "Duarte Esteves",
-      introduction: "English introduction",
-      description: "English description",
-    },
-  );
-  assert.deepEqual(
-    {
-      title: firstPortuguesePage.title,
-      introduction: firstPortuguesePage.introduction,
-      description: firstPortuguesePage.description,
-    },
-    {
-      title: "Duarte Esteves",
-      introduction: "Introdução portuguesa",
-      description: "Descrição portuguesa",
-    },
-  );
-  const englishLibrary = JSON.parse(await readFile(join(directory, ".generated/en/library.json")));
-  const portugueseLibrary = JSON.parse(
-    await readFile(join(directory, ".generated/pt/library.json")),
-  );
-  assert.equal(englishLibrary.heading, "Library");
-  assert.equal(portugueseLibrary.heading, "Biblioteca");
-  assert.deepEqual(englishLibrary.books, portugueseLibrary.books);
-  assert.deepEqual(englishLibrary.books, [
-    {
-      id: "01a01fcd-0a4e-7c1c-9e31-8de4688c1482",
-      title: "Ballad for Sophie",
-      authors: [
-        { displayName: "Juan Cavia", sortValue: "Cavia, Juan" },
-        { displayName: "Filipe Melo", sortValue: "Melo, Filipe" },
-      ],
-      alternateTitles: [],
-      inCollection: false,
-      readingStatus: "unread",
-      completionCount: 0,
-      rereading: false,
-      favorite: false,
-      nextRead: false,
-    },
-  ]);
-  assert.equal(
-    JSON.parse(await readFile(join(directory, ".generated/root.json"))).languages.pt,
-    "Português",
-  );
-  assert.equal(englishLibrary.books[0].inCollection, false);
-  assert.ok(!("editions" in englishLibrary));
-  await writeFile(join(directory, ".generated/stale.json"), "stale\n");
-
-  const second = runScript(directory, generateScript);
-  assert.equal(second.status, 0, second.stderr);
-  assert.equal(await readFile(englishPath, "utf8"), firstEnglish);
-  assert.equal(await readFile(portuguesePath, "utf8"), firstPortuguese);
-  await assert.rejects(readFile(join(directory, ".generated/stale.json"), "utf8"), {
-    code: "ENOENT",
-  });
-});
-
-test("failed production generation preserves the complete previous output", async (context) => {
-  const directory = await writeCatalog(context, validHome);
-  assert.equal(runScript(directory, generateScript).status, 0);
-  const englishPath = join(directory, ".generated/en/home.json");
-  const portuguesePath = join(directory, ".generated/pt/home.json");
+  const englishPath = join(directory, "dist/en/index.html");
+  const portuguesePath = join(directory, "dist/pt/index.html");
   const previousEnglish = await readFile(englishPath, "utf8");
   const previousPortuguese = await readFile(portuguesePath, "utf8");
   await writeFile(
@@ -505,27 +418,11 @@ test("failed production generation preserves the complete previous output", asyn
     validHome.replace("  pt: Introdução portuguesa\n", ""),
   );
 
-  const result = runScript(directory, generateScript);
+  const result = runScript(directory, buildScript);
 
   assert.notEqual(result.status, 0);
   assert.equal(await readFile(englishPath, "utf8"), previousEnglish);
   assert.equal(await readFile(portuguesePath, "utf8"), previousPortuguese);
-});
-
-test("invalid development generation removes stale generated output", async (context) => {
-  const directory = await writeCatalog(context, validHome);
-  assert.equal(runScript(directory, generateScript).status, 0);
-  await writeFile(
-    join(directory, "content/home.yaml"),
-    validHome.replace("  pt: Introdução portuguesa\n", ""),
-  );
-
-  const result = runScript(directory, generateScript, "--development");
-
-  assert.notEqual(result.status, 0);
-  await assert.rejects(readFile(join(directory, ".generated/en/home.json"), "utf8"), {
-    code: "ENOENT",
-  });
 });
 
 test("identifier emits a UUIDv7 through the project command", () => {

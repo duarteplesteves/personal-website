@@ -1,7 +1,8 @@
 import { NodeFileSystem, NodePath, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
-import { loadGeneratedPage, loadGeneratedRoot } from "../src/load-generated-site.ts";
-import { sitePublication, type Publication } from "../src/publication.ts";
+import { compileSite } from "../src/compile-site.ts";
+import type { PageData, RootPageData } from "../src/page-data-schema.ts";
+import type { Publication } from "../src/publication.ts";
 
 interface Renderers {
   readonly renderPage: typeof import("../src/render-site.ts").renderPage;
@@ -42,14 +43,16 @@ const cleanupStaging = Effect.gen(function* () {
 const renderLocalized = Effect.fn("renderLocalized")(function* (
   renderers: Renderers,
   publication: Publication,
+  content: PageData,
 ) {
-  const content = yield* loadGeneratedPage(publication);
   const html = yield* Effect.tryPromise(() => renderers.renderPage(content, publication));
   yield* writePage(`${staging}/${publication.outputPath}`, html);
 });
 
-const renderRootPage = Effect.fn("renderRootPage")(function* (renderers: Renderers) {
-  const content = yield* loadGeneratedRoot();
+const renderRootPage = Effect.fn("renderRootPage")(function* (
+  renderers: Renderers,
+  content: RootPageData,
+) {
   const html = yield* Effect.tryPromise(() => renderers.renderRoot(content));
   yield* writePage(`${staging}/index.html`, html);
 });
@@ -57,12 +60,13 @@ const renderRootPage = Effect.fn("renderRootPage")(function* (renderers: Rendere
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const renderers = yield* loadRenderers;
+  const site = yield* compileSite();
 
   yield* cleanupStaging;
   yield* Effect.all(
     [
-      ...sitePublication.map((publication) => renderLocalized(renderers, publication)),
-      renderRootPage(renderers),
+      ...site.pages.map(({ publication, data }) => renderLocalized(renderers, publication, data)),
+      renderRootPage(renderers, site.root),
     ],
     { concurrency: "unbounded" },
   );

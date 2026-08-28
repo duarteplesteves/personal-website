@@ -9,7 +9,6 @@ The site publishes a useful root language chooser and bilingual, fully static Ho
 ```sh
 nub install --frozen-lockfile
 nub run validate
-nub run generate
 nub run boundary:check
 nub run typecheck
 nub run lint
@@ -18,7 +17,7 @@ nub run build
 nub run test
 ```
 
-Site content is authored as constrained YAML and validated with Effect. Generation projects it into ignored, disposable route data under `.generated/`; production generation replaces the complete output only after every source and page contract passes. `nub run dev:content` watches authored YAML and removes stale output after an invalid edit. The production build generates content and checks the Effect-free frontend boundary automatically before Vite compiles the native TSRX server entry through Octane. The static generator writes the root chooser plus localized Home and Library documents under `dist/`.
+Site content is authored as constrained YAML and validated with Effect. The production build loads it once, projects typed route data in memory, and passes those values directly to the renderer. Production checks the Effect-free frontend boundary before Vite compiles the native TSRX server entry through Octane, then atomically writes the root chooser plus localized Home and Library documents under `dist/`.
 
 Use `nub run identifier` to produce a UUIDv7 for durable authored records. Published documents contain no application runtime; small inline scripts progressively enhance language selection. Oxc provides repository linting and formatting, including native `.tsrx` support.
 
