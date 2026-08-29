@@ -69,6 +69,7 @@ const enhanceLibrary = () => {
   clear.addEventListener("click", () => {
     input.value = "";
     update();
+    announce();
     input.focus();
   });
 

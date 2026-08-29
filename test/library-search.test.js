@@ -132,6 +132,8 @@ test("clear restores the full listing and returns focus to the search control", 
   env.input.dispatch("input");
   assert.equal(env.count.textContent, "1 of 2 Books");
   assert.equal(env.empty.hidden, true);
+  await new Promise((resolve) => setTimeout(resolve, 350));
+  assert.equal(env.announcement.textContent, "1 of 2 Books");
 
   env.clear.dispatch("click");
 
@@ -139,6 +141,8 @@ test("clear restores the full listing and returns focus to the search control", 
   assert.equal(env.count.textContent, "2 Books");
   assert.equal(env.empty.hidden, true);
   assert.equal(env.input.focused, true);
+  await new Promise((resolve) => setTimeout(resolve, 350));
+  assert.equal(env.announcement.textContent, "2 Books");
 });
 
 test("search announcements are polite and debounced", async () => {
