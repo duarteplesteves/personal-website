@@ -3,11 +3,12 @@ import { fileURLToPath } from "node:url";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
 import { compileSite } from "../src/compile-site.ts";
 import type { PageData, RootPageData } from "../src/page-data-schema.ts";
-import type { Publication } from "../src/publication.ts";
+import { productionOrigin, sitePublication, type Publication } from "../src/publication.ts";
 
 interface Renderers {
   readonly renderPage: typeof import("../src/render-site.ts").renderPage;
   readonly renderRoot: typeof import("../src/render-site.ts").renderRoot;
+  readonly renderMissing: typeof import("../src/render-site.ts").renderMissing;
 }
 
 const output = "dist";
@@ -57,6 +58,31 @@ const renderRootPage = Effect.fn("renderRootPage")(function* (
 ) {
   const html = yield* Effect.try(() => renderers.renderRoot(content));
   yield* writePage(`${staging}/index.html`, html);
+  yield* Effect.forEach(
+    [
+      ["404.html", undefined],
+      ["en/404.html", "en"],
+      ["pt/404.html", "pt"],
+    ] as const,
+    ([file, siteLanguage]) =>
+      writePage(`${staging}/${file}`, renderers.renderMissing(content, siteLanguage)),
+  );
+});
+
+const renderDiscoveryArtifacts = Effect.fn("renderDiscoveryArtifacts")(function* () {
+  const urls = ["/", ...sitePublication.map(({ pathname }) => pathname)];
+  yield* writePage(
+    `${staging}/sitemap.xml`,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((url) => `  <url><loc>${productionOrigin}${url}</loc></url>`).join("\n")}\n</urlset>\n`,
+  );
+  yield* writePage(
+    `${staging}/robots.txt`,
+    `User-agent: *\nAllow: /\nSitemap: ${productionOrigin}/sitemap.xml\n`,
+  );
+  yield* writePage(
+    `${staging}/_redirects`,
+    "/en/* /en/404.html 404\n/pt/* /pt/404.html 404\n/* /404.html 404\n",
+  );
 });
 
 const program = Effect.gen(function* () {
@@ -71,6 +97,7 @@ const program = Effect.gen(function* () {
     [
       ...site.pages.map(({ publication, data }) => renderLocalized(renderers, publication, data)),
       renderRootPage(renderers, site.root),
+      renderDiscoveryArtifacts(),
     ],
     { concurrency: "unbounded" },
   );

@@ -32,6 +32,20 @@ root:
     en: Continue to the personal website in British English.
     pt: Continue para o site pessoal em português de Portugal.
 
+missingPage:
+  title:
+    en: Page not found — Duarte Esteves
+    pt: Página não encontrada — Duarte Esteves
+  heading:
+    en: Page not found
+    pt: Página não encontrada
+  description:
+    en: The requested page does not exist. Return to the Home page.
+    pt: A página pedida não existe. Regresse à página inicial.
+  homeLabel:
+    en: Return Home
+    pt: Regressar ao início
+
 library:
   heading:
     en: Library
