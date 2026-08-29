@@ -14,7 +14,7 @@ export const siteStyles = `
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { background: var(--background); color: var(--text); }
-body { margin: 0; min-width: 20rem; }
+body { margin: 0; }
 a {
   color: var(--link);
   text-decoration-thickness: from-font;
