@@ -1,0 +1,56 @@
+name: Pull request
+
+on:
+  pull_request:
+
+concurrency:
+  group: pull-request-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  required-checks:
+    name: Required checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: npm
+      - run: npm install --global @nubjs/nub@0.7.5
+      - run: nub ci
+      - run: nub run validate
+      - run: nub run typecheck
+      - run: nub run lint
+      - run: nub run format:check
+      - run: nub run test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: static-site
+          path: dist
+          if-no-files-found: error
+
+  preview:
+    name: Cloudflare preview
+    needs: required-checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: dist
+      - id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }} --branch=pr-${{ github.event.pull_request.number }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify preview indexing exclusion
+        env:
+          PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-all-errors --head "$PREVIEW_URL" | grep -qi '^x-robots-tag: *noindex'
