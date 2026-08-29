@@ -1,7 +1,5 @@
 node_modules/
 dist/
 .dist-temporary/
-.generated/
-.generated-previous/
-.generated-temporary/
 .vite-ssg/
+.vite-browser/

@@ -124,6 +124,12 @@ export const LibraryPageDataSchema = Schema.Struct({
   books: Schema.Array(PublicBookSchema),
   currentlyReading: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
   currentlyReadingLabel: Schema.NonEmptyString,
+  searchLabel: Schema.NonEmptyString,
+  searchPlaceholder: Schema.NonEmptyString,
+  clearSearchLabel: Schema.NonEmptyString,
+  resultCountLabel: Schema.NonEmptyString,
+  matchingResultCountLabel: Schema.NonEmptyString,
+  emptyStateLabel: Schema.NonEmptyString,
   navigation: NavigationDataSchema,
 });
 

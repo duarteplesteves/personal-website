@@ -7,7 +7,9 @@ for (const siteLanguage of ["en", "pt"]) {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
 
     const listing = html.slice(html.indexOf('<ol class="book-list"'));
-    const titles = [...listing.matchAll(/<li><cite>([^<]+)<\/cite>/g)].map((match) => match[1]);
+    const titles = [...listing.matchAll(/<li[^>]*><cite>([^<]+)<\/cite>/g)].map(
+      (match) => match[1],
+    );
     assert.equal(titles.length, 152);
     const collator = new Intl.Collator(siteLanguage === "en" ? "en-GB" : "pt-PT");
     assert.deepEqual(
@@ -48,9 +50,24 @@ for (const siteLanguage of ["en", "pt"]) {
     assert.match(
       html,
       new RegExp(
-        `<li><cite>Ballad for Sophie</cite>(?:(?!</li>).)*<span>Juan Cavia, Filipe Melo</span>(?:(?!</li>).)*<blockquote>${reflection}</blockquote>`,
+        `<li[^>]*><cite>Ballad for Sophie</cite>(?:(?!</li>).)*<span>Juan Cavia, Filipe Melo</span>(?:(?!</li>).)*<blockquote>${reflection}</blockquote>`,
         "s",
       ),
     );
+  });
+
+  test(`/${siteLanguage}/library keeps search hidden without JavaScript and embeds searchable text`, async () => {
+    const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
+
+    assert.match(html, /<section class="library-controls"[^>]*hidden/);
+    assert.match(html, /<input type="search"[^>]*data-library-search/);
+    assert.match(
+      html,
+      new RegExp(
+        `<p class="result-count"[^>]*>${siteLanguage === "en" ? "152 Books" : "152 livros"}</p>`,
+      ),
+    );
+    assert.match(html, /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo">/);
+    assert.match(html, /<script type="module" src="\/assets\/library\.js"><\/script>/);
   });
 }

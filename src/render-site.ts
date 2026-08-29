@@ -1,4 +1,4 @@
-import { prerender } from "octane/static";
+import { renderToStaticMarkup } from "octane/server";
 import { Home } from "./home.tsrx";
 import { languageControlEnhancement, rootLanguageResolver } from "./inline-enhancements.ts";
 import { Library } from "./library.tsrx";
@@ -9,28 +9,34 @@ import { siteStyles } from "./site-styles.ts";
 
 const htmlDocument = (
   language: string,
-  rendered: Awaited<ReturnType<typeof prerender>>,
+  rendered: ReturnType<typeof renderToStaticMarkup>,
   enhancement: string,
+  browserModule?: string,
 ) =>
-  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${rendered.head ?? ""}${rendered.css}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script></body></html>`;
+  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${rendered.head ?? ""}${rendered.css}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
 
-async function renderHome(content: HomePageData, publication: Publication) {
-  const rendered = await prerender(Home, { content }, { headChannel: "separate" });
+function renderHome(content: HomePageData, publication: Publication) {
+  const rendered = renderToStaticMarkup(Home, { content }, { headChannel: "separate" });
   return htmlDocument(publication.documentLanguage, rendered, languageControlEnhancement);
 }
 
-async function renderLibrary(content: LibraryPageData, publication: Publication) {
-  const rendered = await prerender(Library, { content }, { headChannel: "separate" });
-  return htmlDocument(publication.documentLanguage, rendered, languageControlEnhancement);
+function renderLibrary(content: LibraryPageData, publication: Publication) {
+  const rendered = renderToStaticMarkup(Library, { content }, { headChannel: "separate" });
+  return htmlDocument(
+    publication.documentLanguage,
+    rendered,
+    languageControlEnhancement,
+    "/assets/library.js",
+  );
 }
 
-export async function renderPage(content: PageData, publication: Publication) {
+export function renderPage(content: PageData, publication: Publication) {
   return content.page === "home"
     ? renderHome(content, publication)
     : renderLibrary(content, publication);
 }
 
-export async function renderRoot(content: RootPageData) {
-  const rendered = await prerender(Root, { content }, { headChannel: "separate" });
+export function renderRoot(content: RootPageData) {
+  const rendered = renderToStaticMarkup(Root, { content }, { headChannel: "separate" });
   return htmlDocument("en", rendered, rootLanguageResolver(content.homePathnames));
 }

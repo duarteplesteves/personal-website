@@ -45,6 +45,24 @@ library:
   currentlyReading:
     en: Currently reading
     pt: A ler atualmente
+  searchLabel:
+    en: Search the Library
+    pt: Pesquisar a Biblioteca
+  searchPlaceholder:
+    en: Search by title or author
+    pt: Pesquisar por título ou autor
+  clearSearchLabel:
+    en: Clear search
+    pt: Limpar pesquisa
+  resultCountLabel:
+    en: "{count} Books"
+    pt: "{count} livros"
+  matchingResultCountLabel:
+    en: "{matching} of {total} Books"
+    pt: "{matching} de {total} livros"
+  emptyStateLabel:
+    en: No Books match your search.
+    pt: Nenhum livro corresponde à pesquisa.
   favorite:
     en: Favorite
     pt: Favorito

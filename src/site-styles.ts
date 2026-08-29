@@ -12,6 +12,7 @@ export const siteStyles = `
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { background: var(--background); color: var(--text); }
 body { margin: 0; min-width: 20rem; }
 a {
@@ -109,6 +110,52 @@ main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
   font-style: italic;
 }
 .book-list li + li { margin-block-start: 2rem; }
+.library-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-block-start: 3rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.95rem;
+}
+.library-controls label { color: var(--muted); }
+.library-controls input {
+  min-width: 0;
+  flex: 1 1 14rem;
+  padding: 0.5rem 0.65rem;
+  border: 0.07rem solid var(--muted);
+  background: var(--background);
+  color: var(--text);
+  font: inherit;
+}
+.library-controls input:focus-visible {
+  outline: 0.15rem solid var(--focus);
+  outline-offset: 0.1rem;
+}
+.library-controls button {
+  padding: 0.5rem 0.7rem;
+  border: 0.07rem solid var(--muted);
+  background: var(--background);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.library-controls button:hover { border-color: var(--link); color: var(--link); }
+.library-controls button:focus-visible {
+  outline: 0.15rem solid var(--focus);
+  outline-offset: 0.1rem;
+}
+.result-count {
+  margin-block: 1rem 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.empty-state {
+  margin-block: 2rem 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
 .language-chooser { padding-block-start: clamp(4rem, 16vw, 9rem); }
 .language-chooser h1 { max-width: 15ch; font-size: clamp(2rem, 8vw, 4.25rem); }
 .chooser-options {

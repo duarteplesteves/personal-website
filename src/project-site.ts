@@ -201,6 +201,12 @@ export const projectLibrary = (
     books,
     ...(currentlyReading.length > 0 ? { currentlyReading } : {}),
     currentlyReadingLabel: text.currentlyReading[siteLanguage],
+    searchLabel: text.searchLabel[siteLanguage],
+    searchPlaceholder: text.searchPlaceholder[siteLanguage],
+    clearSearchLabel: text.clearSearchLabel[siteLanguage],
+    resultCountLabel: text.resultCountLabel[siteLanguage],
+    matchingResultCountLabel: text.matchingResultCountLabel[siteLanguage],
+    emptyStateLabel: text.emptyStateLabel[siteLanguage],
     navigation: projectNavigation(site, publication),
   };
 };

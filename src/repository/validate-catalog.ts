@@ -1,33 +1,19 @@
-import { Effect, FileSystem, Result } from "effect";
-import { loadHome } from "./load-home.ts";
-import { loadLibrary } from "./load-library.ts";
-import { loadSite } from "./load-site.ts";
-import {
-  type ContentValidationError,
-  contentValidationError,
-  sourceValidationError,
-} from "./load-yaml.ts";
-
-export interface CatalogEntry {
-  readonly source: string;
-  readonly validate: (
-    source: string,
-  ) => Effect.Effect<unknown, ContentValidationError, FileSystem.FileSystem>;
-}
-
-export const authoredCatalog: ReadonlyArray<CatalogEntry> = [
-  { source: "content/home.yaml", validate: loadHome },
-  { source: "content/library.yaml", validate: loadLibrary },
-  { source: "content/site.yaml", validate: loadSite },
-];
+import { Effect, Result } from "effect";
+import { authoredCatalog, type CatalogEntry } from "./catalog.ts";
+import { contentValidationError, sourceValidationError } from "./load-yaml.ts";
 
 export const selectCatalogEntries = Effect.fn("selectCatalogEntries")(function* (
   sources: ReadonlyArray<string>,
 ) {
   if (sources.length === 0) return authoredCatalog;
 
-  const entries = sources.map((source) => authoredCatalog.find((entry) => entry.source === source));
-  const unknownSources = sources.filter((_, index) => entries[index] === undefined);
+  const entries: Array<CatalogEntry> = [];
+  const unknownSources: Array<string> = [];
+  for (const source of sources) {
+    const entry = authoredCatalog.find((candidate) => candidate.source === source);
+    if (entry === undefined) unknownSources.push(source);
+    else entries.push(entry);
+  }
   if (unknownSources.length > 0) {
     return yield* contentValidationError(
       unknownSources.map((source) =>
@@ -35,7 +21,7 @@ export const selectCatalogEntries = Effect.fn("selectCatalogEntries")(function* 
       ),
     );
   }
-  return entries as ReadonlyArray<CatalogEntry>;
+  return entries;
 });
 
 export const validateCatalog = Effect.fn("validateCatalog")(function* (
@@ -43,7 +29,7 @@ export const validateCatalog = Effect.fn("validateCatalog")(function* (
 ) {
   const results = yield* Effect.forEach(
     entries,
-    ({ source, validate }) => Effect.result(validate(source)),
+    ({ source, load }) => Effect.result(load(source)),
     { concurrency: "unbounded" },
   );
   const diagnostics = results.flatMap((result) =>

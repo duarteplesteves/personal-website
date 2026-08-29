@@ -118,7 +118,10 @@ test("the language control saves the explicit choice and preserves Library query
   };
   let saved;
   const context = {
-    document: { querySelector: () => control },
+    document: {
+      querySelector: (selector) => (selector === "[data-language-control]" ? control : null),
+      querySelectorAll: () => [],
+    },
     localStorage: { setItem: (key, value) => (saved = [key, value]) },
     location: {
       href: "https://example.test/en/library?q=effect&show=read",
