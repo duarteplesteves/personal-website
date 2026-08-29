@@ -1511,7 +1511,7 @@ editions:
     format: paperback
     publisher: D. Quixote
     inCollection: true
-    isbn: 9789722048828
+    isbn: "9789722048828"
     publicationDate: 2012-01-01
     pageCount: 287
   - id: 01a2d000-0000-712d-812d-00000000012d

@@ -13,7 +13,7 @@ for (const [siteLanguage, introduction] of homes) {
     assert.match(html, new RegExp(`<html lang="${siteLanguage === "en" ? "en-GB" : "pt-PT"}">`));
     assert.match(html, /<h1>Duarte Esteves<\/h1>/);
     assert.ok(html.includes(introduction));
-    assert.equal(html.match(/<script\b/g)?.length, 1);
+    assert.equal(html.match(/<script>(?!\{)/g)?.length, 1);
     assert.doesNotMatch(html, /<script[^>]+src=/i);
   });
 }

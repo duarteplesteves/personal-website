@@ -1,6 +1,12 @@
 export type SiteLanguage = "en" | "pt";
 export type Page = "home" | "library";
 
+/** Absolute origin used by generated discovery artifacts. */
+export const productionOrigin = (process.env.SITE_ORIGIN ?? "https://duarteesteves.com").replace(
+  /\/$/,
+  "",
+);
+
 export interface Publication {
   readonly page: Page;
   readonly siteLanguage: SiteLanguage;

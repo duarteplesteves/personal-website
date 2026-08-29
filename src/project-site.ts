@@ -240,4 +240,5 @@ export const projectRoot = (site: SiteContent): RootPageData => ({
     en: findPublication("home", "en").pathname,
     pt: findPublication("home", "pt").pathname,
   },
+  missingPage: site.missingPage,
 });

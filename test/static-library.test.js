@@ -80,6 +80,11 @@ for (const siteLanguage of ["en", "pt"]) {
       /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo" data-views="read in-collection" data-title="Ballad for Sophie" data-author-sort="Juan Cavia"/,
     );
     assert.match(html, /<script type="module" src="\/assets\/library\.js"><\/script>/);
-    assert.match(html, new RegExp(`<link rel="canonical" href="/${siteLanguage}/library"`));
+    assert.match(
+      html,
+      new RegExp(
+        `<link rel="canonical" href="https://duarteesteves\\.com/${siteLanguage}/library"`,
+      ),
+    );
   });
 }

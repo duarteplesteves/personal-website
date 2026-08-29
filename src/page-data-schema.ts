@@ -151,6 +151,12 @@ export const RootPageDataSchema = Schema.Struct({
   introduction: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
   languages: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
   homePathnames: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
+  missingPage: Schema.Struct({
+    title: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
+    heading: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
+    description: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
+    homeLabel: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
+  }),
 });
 
 export type HomePageData = typeof HomePageDataSchema.Type;
