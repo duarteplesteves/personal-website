@@ -56,18 +56,29 @@ for (const siteLanguage of ["en", "pt"]) {
     );
   });
 
-  test(`/${siteLanguage}/library keeps search hidden without JavaScript and embeds searchable text`, async () => {
+  test(`/${siteLanguage}/library keeps browsing controls hidden without JavaScript and embeds browser data`, async () => {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
 
     assert.match(html, /<section class="library-controls"[^>]*hidden/);
     assert.match(html, /<input type="search"[^>]*data-library-search/);
+    assert.match(html, /<fieldset><legend>[^<]+<\/legend>/);
+    assert.match(html, /<input type="radio" name="library-show" value="all" checked/);
+    assert.match(html, /<input type="radio" name="library-order" value="title" checked/);
+    assert.match(html, /<input type="radio" name="library-order" value="author"/);
+    assert.match(html, /<input type="radio" name="library-show" value="read"/);
+    assert.match(html, /<input type="radio" name="library-show" value="favorites"/);
+    assert.match(html, /<input type="radio" name="library-show" value="in-collection"/);
+    assert.doesNotMatch(html, /<input type="radio" name="library-show" value="next-reads"/);
     assert.match(
       html,
       new RegExp(
         `<p class="result-count"[^>]*>${siteLanguage === "en" ? "152 Books" : "152 livros"}</p>`,
       ),
     );
-    assert.match(html, /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo">/);
+    assert.match(
+      html,
+      /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo" data-views="read in-collection" data-title="Ballad for Sophie" data-author-sort="Juan Cavia"/,
+    );
     assert.match(html, /<script type="module" src="\/assets\/library\.js"><\/script>/);
   });
 }

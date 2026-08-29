@@ -111,16 +111,19 @@ main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
 }
 .book-list li + li { margin-block-start: 2rem; }
 .library-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
   margin-block-start: 3rem;
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-size: 0.95rem;
 }
-.library-controls label { color: var(--muted); }
-.library-controls input {
+.library-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+.library-search label,
+.library-controls legend { color: var(--muted); }
+.library-search input {
   min-width: 0;
   flex: 1 1 14rem;
   padding: 0.5rem 0.65rem;
@@ -129,11 +132,11 @@ main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
   color: var(--text);
   font: inherit;
 }
-.library-controls input:focus-visible {
+.library-controls :focus-visible {
   outline: 0.15rem solid var(--focus);
   outline-offset: 0.1rem;
 }
-.library-controls button {
+.library-search button {
   padding: 0.5rem 0.7rem;
   border: 0.07rem solid var(--muted);
   background: var(--background);
@@ -141,10 +144,46 @@ main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
   font: inherit;
   cursor: pointer;
 }
-.library-controls button:hover { border-color: var(--link); color: var(--link); }
-.library-controls button:focus-visible {
+.library-search button:hover { border-color: var(--link); color: var(--link); }
+.library-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  margin-block-start: 1.5rem;
+}
+.library-options fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
+.library-options legend { padding: 0; }
+.library-choices { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+.library-choice {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  cursor: pointer;
+}
+.library-choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.library-choice span {
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.18em;
+}
+.library-choice input:focus-visible + span {
   outline: 0.15rem solid var(--focus);
-  outline-offset: 0.1rem;
+  outline-offset: 0.15rem;
+}
+.library-choice input:checked + span {
+  color: var(--text);
+  font-weight: 650;
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
 }
 .result-count {
   margin-block: 1rem 0;
@@ -191,6 +230,8 @@ main section ul { padding-inline-start: 1.25rem; line-height: 1.7; }
   main { padding-block-start: 2.5rem; }
 }
 @media (forced-colors: active) {
-  a:focus-visible { outline-color: Highlight; }
+  a:focus-visible,
+  .library-controls :focus-visible,
+  .library-choice input:focus-visible + span { outline-color: Highlight; }
 }
 `;

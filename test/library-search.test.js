@@ -26,8 +26,18 @@ const element = (properties = {}) => {
   };
 };
 
-const runLibraryScript = (script, searchTexts) => {
-  const items = searchTexts.map((search) => element({ dataset: { search } }));
+const runLibraryScript = (script, books) => {
+  const items = books.map((book, index) => {
+    const data = typeof book === "string" ? { search: book, title: book } : book;
+    return element({
+      dataset: {
+        views: "",
+        authorSort: data.title,
+        bookId: String(index),
+        ...data,
+      },
+    });
+  });
   const controls = element({ hidden: true });
   const input = element();
   const clear = element();
@@ -39,7 +49,19 @@ const runLibraryScript = (script, searchTexts) => {
   });
   const announcement = element();
   const empty = element({ hidden: true });
-  const list = element({ querySelectorAll: () => items });
+  const list = element({
+    order: [],
+    querySelectorAll: () => items,
+    append(...ordered) {
+      this.order = ordered;
+    },
+  });
+  const showChoices = ["all", "read", "favorites", "next-reads", "in-collection"].map((value) =>
+    element({ value, checked: value === "all" }),
+  );
+  const orderChoices = ["title", "author"].map((value) =>
+    element({ value, checked: value === "title" }),
+  );
 
   const selectors = {
     "[data-library-controls]": controls,
@@ -52,12 +74,28 @@ const runLibraryScript = (script, searchTexts) => {
   };
 
   vm.runInNewContext(script, {
-    document: { querySelector: (selector) => selectors[selector] ?? null },
+    document: {
+      documentElement: { lang: "en-GB" },
+      querySelector: (selector) => selectors[selector] ?? null,
+      querySelectorAll: (selector) =>
+        selector === 'input[name="library-show"]' ? showChoices : orderChoices,
+    },
     setTimeout,
     clearTimeout,
   });
 
-  return { controls, input, clear, count, announcement, empty, items };
+  return {
+    controls,
+    input,
+    clear,
+    count,
+    announcement,
+    empty,
+    items,
+    list,
+    showChoices,
+    orderChoices,
+  };
 };
 
 test("search reveals controls, normalizes case, diacritics, and punctuation, and requires every token", async () => {
@@ -161,4 +199,83 @@ test("search announcements are polite and debounced", async () => {
 
   await new Promise((resolve) => setTimeout(resolve, 350));
   assert.equal(env.announcement.textContent, "1 of 2 Books");
+});
+
+const choose = (choices, value) => {
+  for (const choice of choices) choice.checked = choice.value === value;
+  choices.find((choice) => choice.checked)?.dispatch("change");
+};
+
+test("Show combines with search and All directly restores the complete catalog", async () => {
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, [
+    { search: "Alpha Ada", title: "Alpha", authorSort: "Ada", bookId: "1", views: "read" },
+    {
+      search: "Beta Bob",
+      title: "Beta",
+      authorSort: "Bob",
+      bookId: "2",
+      views: "favorites",
+    },
+    {
+      search: "Gamma Ada",
+      title: "Gamma",
+      authorSort: "Ada",
+      bookId: "3",
+      views: "read favorites",
+    },
+  ]);
+
+  const favorites = env.showChoices.find((choice) => choice.value === "favorites");
+  favorites.focused = true;
+  choose(env.showChoices, "favorites");
+  assert.deepEqual(
+    env.items.map((item) => item.hidden),
+    [true, false, false],
+  );
+  assert.equal(env.count.textContent, "2 of 3 Books");
+  assert.equal(favorites.focused, true, "updating results retains radio focus");
+
+  env.input.value = "gamma";
+  env.input.dispatch("input");
+  assert.deepEqual(
+    env.items.map((item) => item.hidden),
+    [true, true, false],
+  );
+  assert.equal(env.count.textContent, "1 of 3 Books");
+
+  env.input.value = "";
+  choose(env.showChoices, "all");
+  assert.deepEqual(
+    env.items.map((item) => item.hidden),
+    [false, false, false],
+  );
+  assert.equal(env.count.textContent, "3 Books");
+});
+
+test("Order by uses locale collation and deterministic title, author, and identifier ties", async () => {
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, [
+    { search: "Zulu Able", title: "Zulu", authorSort: "Able", bookId: "3" },
+    { search: "Alpha Zed", title: "Alpha", authorSort: "Zed", bookId: "2" },
+    { search: "Alpha Able", title: "Alpha", authorSort: "Able", bookId: "1" },
+    { search: "Alpha Able", title: "Alpha", authorSort: "Able", bookId: "0" },
+  ]);
+
+  assert.deepEqual(
+    env.list.order.map((item) => item.dataset.bookId),
+    ["0", "1", "2", "3"],
+  );
+
+  choose(env.orderChoices, "author");
+  assert.deepEqual(
+    env.list.order.map((item) => item.dataset.bookId),
+    ["0", "1", "3", "2"],
+  );
+
+  choose(env.orderChoices, "title");
+  assert.deepEqual(
+    env.list.order.map((item) => item.dataset.bookId),
+    ["0", "1", "2", "3"],
+  );
 });
