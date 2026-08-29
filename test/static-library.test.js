@@ -68,5 +68,6 @@ for (const siteLanguage of ["en", "pt"]) {
       ),
     );
     assert.match(html, /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo">/);
+    assert.match(html, /<script type="module" src="\/assets\/library\.js"><\/script>/);
   });
 }

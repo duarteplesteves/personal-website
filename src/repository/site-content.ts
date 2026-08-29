@@ -1,5 +1,25 @@
 import { Schema } from "effect";
-import { EquivalentTranslationSchema } from "./equivalent-translation.ts";
+import {
+  EquivalentTranslationSchema,
+  makeEquivalentTranslationSchema,
+} from "./equivalent-translation.ts";
+
+const countLabel = (...placeholders: ReadonlyArray<string>) =>
+  Schema.NonEmptyString.pipe(
+    Schema.check(
+      Schema.makeFilter(
+        (value) => placeholders.every((placeholder) => value.includes(`{${placeholder}}`)),
+        {
+          expected: `text containing ${placeholders.map((placeholder) => `{${placeholder}}`).join(" and ")}`,
+        },
+      ),
+    ),
+  );
+
+const ResultCountTranslationSchema = makeEquivalentTranslationSchema(countLabel("count"));
+const MatchingResultCountTranslationSchema = makeEquivalentTranslationSchema(
+  countLabel("matching", "total"),
+);
 
 export const SiteContentSchema = Schema.Struct({
   navigation: Schema.Struct({
@@ -28,8 +48,8 @@ export const SiteContentSchema = Schema.Struct({
     searchLabel: EquivalentTranslationSchema,
     searchPlaceholder: EquivalentTranslationSchema,
     clearSearchLabel: EquivalentTranslationSchema,
-    resultCountLabel: EquivalentTranslationSchema,
-    matchingResultCountLabel: EquivalentTranslationSchema,
+    resultCountLabel: ResultCountTranslationSchema,
+    matchingResultCountLabel: MatchingResultCountTranslationSchema,
     emptyStateLabel: EquivalentTranslationSchema,
     favorite: EquivalentTranslationSchema,
     rereading: EquivalentTranslationSchema,

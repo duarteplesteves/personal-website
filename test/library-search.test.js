@@ -3,13 +3,7 @@ import vm from "node:vm";
 import assert from "node:assert/strict";
 import test from "node:test";
 
-const readArtifact = (path) => readFile(`dist${path}`, "utf8");
-
-const libraryScript = (html) => {
-  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
-  assert.equal(scripts.length, 1, "expected one inline enhancement script");
-  return scripts[0][1];
-};
+const readLibraryScript = () => readFile("dist/assets/library.js", "utf8");
 
 const element = (properties = {}) => {
   const listeners = {};
@@ -32,7 +26,7 @@ const element = (properties = {}) => {
   };
 };
 
-const runLibraryScript = (html, searchTexts) => {
+const runLibraryScript = (script, searchTexts) => {
   const items = searchTexts.map((search) => element({ dataset: { search } }));
   const controls = element({ hidden: true });
   const input = element();
@@ -57,7 +51,7 @@ const runLibraryScript = (html, searchTexts) => {
     "[data-library-empty]": empty,
   };
 
-  vm.runInNewContext(libraryScript(html), {
+  vm.runInNewContext(script, {
     document: { querySelector: (selector) => selectors[selector] ?? null },
     setTimeout,
     clearTimeout,
@@ -67,8 +61,8 @@ const runLibraryScript = (html, searchTexts) => {
 };
 
 test("search reveals controls, normalizes case, diacritics, and punctuation, and requires every token", async () => {
-  const html = await readArtifact("/en/library/index.html");
-  const env = runLibraryScript(html, [
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, [
     "The Brothers Karamazov Fyodor Dostoevsky",
     "Cien Años de Soledad Gabriel García Márquez",
     "Tender Is the Night—A Romance F. Scott Fitzgerald",
@@ -117,9 +111,19 @@ test("search reveals controls, normalizes case, diacritics, and punctuation, and
   assert.equal(env.empty.hidden, false);
 });
 
+test("search matches an ASCII query against Polish ł", async () => {
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, ["Solaris Stanisław Lem"]);
+
+  env.input.value = "stanislaw";
+  env.input.dispatch("input");
+
+  assert.equal(env.items[0].hidden, false);
+});
+
 test("clear restores the full listing and returns focus to the search control", async () => {
-  const html = await readArtifact("/en/library/index.html");
-  const env = runLibraryScript(html, [
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, [
     "A Study in Scarlet Arthur Conan Doyle",
     "Solaris Stanisław Lem",
   ]);
@@ -138,8 +142,8 @@ test("clear restores the full listing and returns focus to the search control", 
 });
 
 test("search announcements are polite and debounced", async () => {
-  const html = await readArtifact("/en/library/index.html");
-  const env = runLibraryScript(html, [
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, [
     "A Study in Scarlet Arthur Conan Doyle",
     "Solaris Stanisław Lem",
   ]);

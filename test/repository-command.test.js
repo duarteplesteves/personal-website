@@ -139,6 +139,22 @@ test("validate rejects a missing Equivalent translation", async (context) => {
   assert.match(result.stderr, /Missing Portuguese Equivalent translation/);
 });
 
+test("validate rejects Library count labels without their placeholders", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+  await writeFile(
+    join(directory, "content/site.yaml"),
+    validSite
+      .replace('    en: "{count} Books"', "    en: Books")
+      .replace('    pt: "{matching} de {total} livros"', '    pt: "{matching} livros"'),
+  );
+
+  const result = runValidate(directory, "content/site.yaml");
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /\$\.library\.resultCountLabel\.en.*\{count\}/);
+  assert.match(result.stderr, /\$\.library\.matchingResultCountLabel\.pt.*\{total\}/);
+});
+
 test("validate rejects duplicate YAML keys", async (context) => {
   const result = await validateSource(context, `${validHome}title: Another title\n`);
   assert.notEqual(result.status, 0);
@@ -405,7 +421,7 @@ test("validate rejects unknown Home fields", async (context) => {
   assert.match(result.stderr, /\[\$\.unknown\].*Unexpected key/i);
 });
 
-test("a failed build preserves the complete previous output", async (context) => {
+test("invalid content preserves the previous build output", async (context) => {
   const directory = await writeCatalog(context, validHome);
   const first = runScript(directory, buildScript);
   assert.equal(first.status, 0, first.stderr);

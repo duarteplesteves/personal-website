@@ -1,10 +1,15 @@
 import { Schema } from "effect";
 
-export const EquivalentTranslationSchema = Schema.Struct({
-  en: Schema.NonEmptyString.pipe(
-    Schema.annotateKey({ messageMissingKey: "Missing English Equivalent translation" }),
-  ),
-  pt: Schema.NonEmptyString.pipe(
-    Schema.annotateKey({ messageMissingKey: "Missing Portuguese Equivalent translation" }),
-  ),
-});
+/** Build an Equivalent translation schema for a text schema. */
+export const makeEquivalentTranslationSchema = <S extends Schema.Top>(text: S) =>
+  Schema.Struct({
+    en: text.pipe(
+      Schema.annotateKey({ messageMissingKey: "Missing English Equivalent translation" }),
+    ),
+    pt: text.pipe(
+      Schema.annotateKey({ messageMissingKey: "Missing Portuguese Equivalent translation" }),
+    ),
+  });
+
+/** A required non-empty English and Portuguese Equivalent translation. */
+export const EquivalentTranslationSchema = makeEquivalentTranslationSchema(Schema.NonEmptyString);

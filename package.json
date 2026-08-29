@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nub run boundary:check && vite build && nub scripts/build.ts",
+    "build": "nub run boundary:check && vite build && vite build --config scripts/vite-browser.config.ts && nub scripts/build.ts",
     "identifier": "nub scripts/identifier.ts",
     "boundary:check": "nub scripts/check-frontend-boundary.ts",
     "validate": "nub scripts/validate.ts",

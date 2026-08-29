@@ -1,4 +1,5 @@
 import { NodeFileSystem, NodePath, NodeRuntime } from "@effect/platform-node";
+import { fileURLToPath } from "node:url";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
 import { compileSite } from "../src/compile-site.ts";
 import type { PageData, RootPageData } from "../src/page-data-schema.ts";
@@ -12,6 +13,7 @@ interface Renderers {
 const output = "dist";
 const staging = ".dist-temporary";
 const rendererEntry = "../.vite-ssg/render-site.js";
+const libraryBrowserEntry = fileURLToPath(new URL("../.vite-browser/library.js", import.meta.url));
 
 class RendererLoadError extends Schema.TaggedError<RendererLoadError>()("RendererLoadError", {
   cause: Schema.Defect(),
@@ -45,7 +47,7 @@ const renderLocalized = Effect.fn("renderLocalized")(function* (
   publication: Publication,
   content: PageData,
 ) {
-  const html = yield* Effect.tryPromise(() => renderers.renderPage(content, publication));
+  const html = yield* Effect.try(() => renderers.renderPage(content, publication));
   yield* writePage(`${staging}/${publication.outputPath}`, html);
 });
 
@@ -53,7 +55,7 @@ const renderRootPage = Effect.fn("renderRootPage")(function* (
   renderers: Renderers,
   content: RootPageData,
 ) {
-  const html = yield* Effect.tryPromise(() => renderers.renderRoot(content));
+  const html = yield* Effect.try(() => renderers.renderRoot(content));
   yield* writePage(`${staging}/index.html`, html);
 });
 
@@ -63,6 +65,8 @@ const program = Effect.gen(function* () {
   const site = yield* compileSite();
 
   yield* cleanupStaging;
+  yield* fs.makeDirectory(`${staging}/assets`, { recursive: true });
+  yield* fs.copyFile(libraryBrowserEntry, `${staging}/assets/library.js`);
   yield* Effect.all(
     [
       ...site.pages.map(({ publication, data }) => renderLocalized(renderers, publication, data)),
