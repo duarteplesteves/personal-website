@@ -52,4 +52,5 @@ jobs:
       - name: Verify preview indexing exclusion
         env:
           PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
-        run: curl --fail --silent --show-error --retry 5 --retry-all-errors --head "$PREVIEW_URL" | grep -qi '^x-robots-tag: *noindex'
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-all-errors --head "$PREVIEW_URL" | grep -qi '^x-robots-tag: *noindex'
