@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 22.22.2
           cache: npm
-      - run: npm install --global nub@0.7.5
+      - run: npm install --global @nubjs/nub@0.7.5
       - run: nub ci
       - run: nub run validate
       - run: nub run typecheck
