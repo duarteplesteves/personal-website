@@ -26,7 +26,7 @@ const element = (properties = {}) => {
   };
 };
 
-const runLibraryScript = (script, books) => {
+const runLibraryScript = (script, books, search = "") => {
   const items = books.map((book, index) => {
     const data = typeof book === "string" ? { search: book, title: book } : book;
     return element({
@@ -73,6 +73,8 @@ const runLibraryScript = (script, books) => {
     "[data-library-empty]": empty,
   };
 
+  const history = [];
+  const location = { href: `https://example.test/en/library${search}`, search };
   vm.runInNewContext(script, {
     document: {
       documentElement: { lang: "en-GB" },
@@ -80,11 +82,24 @@ const runLibraryScript = (script, books) => {
       querySelectorAll: (selector) =>
         selector === 'input[name="library-show"]' ? showChoices : orderChoices,
     },
+    location,
+    history: {
+      replaceState(_state, _unused, url) {
+        const destination = new URL(url, location.href);
+        location.href = destination.toString();
+        location.search = destination.search;
+        history.push(destination.search);
+      },
+    },
+    URL,
+    URLSearchParams,
     setTimeout,
     clearTimeout,
   });
 
   return {
+    history,
+    location,
     controls,
     input,
     clear,
@@ -251,6 +266,50 @@ test("Show combines with search and All directly restores the complete catalog",
     [false, false, false],
   );
   assert.equal(env.count.textContent, "3 Books");
+});
+
+test("readable URL state restores controls and unsupported or default values are omitted", async () => {
+  const script = await readLibraryScript();
+  const env = runLibraryScript(
+    script,
+    [
+      { search: "Alpha Ada", title: "Alpha", authorSort: "Ada", views: "read" },
+      { search: "Beta Bob", title: "Beta", authorSort: "Bob" },
+    ],
+    "?q=Alpha%20Ada&show=read&order=author&unsupported=value",
+  );
+
+  assert.equal(env.input.value, "Alpha Ada");
+  assert.equal(env.showChoices.find((choice) => choice.checked)?.value, "read");
+  assert.equal(env.orderChoices.find((choice) => choice.checked)?.value, "author");
+  assert.equal(env.location.search, "?q=Alpha+Ada&show=read&order=author");
+  assert.deepEqual(
+    env.items.map((item) => item.hidden),
+    [false, true],
+  );
+
+  const defaults = runLibraryScript(script, ["Alpha"], "?q=&show=all&order=title");
+  assert.equal(defaults.location.search, "");
+});
+
+test("live Library changes replace the current history entry", async () => {
+  const script = await readLibraryScript();
+  const env = runLibraryScript(script, [
+    { search: "Alpha Ada", title: "Alpha", authorSort: "Ada", views: "favorites" },
+  ]);
+
+  env.input.value = "Alpha Ada";
+  env.input.dispatch("input");
+  choose(env.showChoices, "favorites");
+  choose(env.orderChoices, "author");
+  env.clear.dispatch("click");
+
+  assert.deepEqual(env.history.slice(-4), [
+    "?q=Alpha+Ada",
+    "?q=Alpha+Ada&show=favorites",
+    "?q=Alpha+Ada&show=favorites&order=author",
+    "?show=favorites&order=author",
+  ]);
 });
 
 test("Order by uses locale collation and deterministic title, author, and identifier ties", async () => {

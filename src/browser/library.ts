@@ -44,6 +44,17 @@ const enhanceLibrary = () => {
   const collator = new Intl.Collator(document.documentElement.lang);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
+  const replaceUrl = () => {
+    const parameters = new URLSearchParams();
+    if (input.value !== "") parameters.set("q", input.value);
+    const show = showChoices.find((choice) => choice.checked)?.value;
+    const order = orderChoices.find((choice) => choice.checked)?.value;
+    if (show !== undefined && show !== "all") parameters.set("show", show);
+    if (order !== undefined && order !== "title") parameters.set("order", order);
+    const query = parameters.toString();
+    history.replaceState(null, "", query === "" ? location.href.split("?")[0] : `?${query}`);
+  };
+
   const update = () => {
     const tokens = tokensOf(input.value);
     const show = showChoices.find((choice) => choice.checked)?.value ?? "all";
@@ -86,27 +97,43 @@ const enhanceLibrary = () => {
 
   input.addEventListener("input", () => {
     update();
+    replaceUrl();
     announce(300);
   });
   input.addEventListener("search", () => {
     update();
+    replaceUrl();
     announce(300);
   });
   clear.addEventListener("click", () => {
     input.value = "";
     update();
+    replaceUrl();
     announce();
     input.focus();
   });
   for (const choice of [...showChoices, ...orderChoices]) {
     choice.addEventListener("change", () => {
       update();
+      replaceUrl();
       announce();
     });
   }
 
+  const parameters = new URLSearchParams(location.search);
+  input.value = parameters.get("q") ?? "";
+  const show = showChoices.find((choice) => choice.value === parameters.get("show"));
+  if (show !== undefined && show.value !== "all") {
+    for (const choice of showChoices) choice.checked = choice === show;
+  }
+  const order = orderChoices.find((choice) => choice.value === parameters.get("order"));
+  if (order !== undefined && order.value !== "title") {
+    for (const choice of orderChoices) choice.checked = choice === order;
+  }
+
   controls.hidden = false;
   update();
+  replaceUrl();
 };
 
 enhanceLibrary();
