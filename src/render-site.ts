@@ -12,8 +12,9 @@ const htmlDocument = (
   rendered: ReturnType<typeof renderToStaticMarkup>,
   enhancement: string,
   browserModule?: string,
+  canonicalPathname?: string,
 ) =>
-  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${rendered.head ?? ""}${rendered.css}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
+  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${rendered.head ?? ""}${canonicalPathname === undefined ? "" : `<link rel="canonical" href="${canonicalPathname}">`}${rendered.css}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
 
 function renderHome(content: HomePageData, publication: Publication) {
   const rendered = renderToStaticMarkup(Home, { content }, { headChannel: "separate" });
@@ -27,6 +28,7 @@ function renderLibrary(content: LibraryPageData, publication: Publication) {
     rendered,
     languageControlEnhancement,
     "/assets/library.js",
+    publication.pathname,
   );
 }
 
