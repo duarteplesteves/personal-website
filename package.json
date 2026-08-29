@@ -6,6 +6,8 @@
   "scripts": {
     "build": "nub run boundary:check && vite build && vite build --config scripts/vite-browser.config.ts && nub scripts/build.ts",
     "identifier": "nub scripts/identifier.ts",
+    "add:book": "nub scripts/add-book.ts",
+    "import:isbn": "nub scripts/import-isbn.ts",
     "boundary:check": "nub scripts/check-frontend-boundary.ts",
     "validate": "nub scripts/validate.ts",
     "typecheck": "tsrx-tsc --noEmit",
@@ -16,6 +18,7 @@
   },
   "dependencies": {
     "effect": "4.0.0-rc.109",
+    "fast-xml-parser": "5.11.1",
     "octane": "0.1.39",
     "yaml": "2.9.0"
   },

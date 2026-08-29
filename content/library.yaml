@@ -1506,11 +1506,14 @@ editions:
     inCollection: true
   - id: 01a2d000-0000-712c-812c-00000000012c
     bookId: 01a2d000-0000-70e0-80e0-0000000000e0
-    title: O Som e a Fúria
+    title: O som e a fúria
     language: pt
     format: paperback
-    publisher: Dom Quixote
+    publisher: D. Quixote
     inCollection: true
+    isbn: 9789722048828
+    publicationDate: 2012-01-01
+    pageCount: 287
   - id: 01a2d000-0000-712d-812d-00000000012d
     bookId: 01a2d000-0000-70e1-80e1-0000000000e1
     title: O Tacão de Ferro

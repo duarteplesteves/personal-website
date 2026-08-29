@@ -94,6 +94,8 @@ const validLibrary = `books:
 `;
 const identifierScript = join(repositoryRoot, "scripts/identifier.ts");
 const boundaryScript = join(repositoryRoot, "scripts/check-frontend-boundary.ts");
+const importIsbnScript = join(repositoryRoot, "scripts/import-isbn.ts");
+const addBookScript = join(repositoryRoot, "scripts/add-book.ts");
 
 const runScript = (directory, script, ...arguments_) =>
   spawnSync("nub", [script, ...arguments_], { cwd: directory, encoding: "utf8" });
@@ -439,6 +441,106 @@ test("invalid content preserves the previous build output", async (context) => {
   assert.notEqual(result.status, 0);
   assert.equal(await readFile(englishPath, "utf8"), previousEnglish);
   assert.equal(await readFile(portuguesePath, "utf8"), previousPortuguese);
+});
+
+test("ISBN import rejects an invalid checksum before network access", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+  const result = runScript(
+    directory,
+    importIsbnScript,
+    "9783161484101",
+    "--book",
+    "01a01fcd-0a4e-7c1c-9e31-8de4688c1482",
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /invalid ISBN-13 checksum/i);
+});
+
+test("ISBN import replaces an existing Edition without creating a duplicate", async (context) => {
+  const sourceLibrary = `${validLibrary}editions:
+  - id: 01a01fcd-0a4e-712c-812c-8de4688c1482
+    bookId: 01a01fcd-0a4e-7c1c-9e31-8de4688c1482
+    title: Old title
+    language: pt-PT
+    format: paperback
+    publisher: Old publisher
+`;
+  const directory = await writeCatalog(context, validHome, sourceLibrary);
+  const mods = `<?xml version="1.0"?><modsCollection xmlns="http://www.loc.gov/mods/v3"><mods><identifier type="isbn">978-972-20-4882-8</identifier><titleInfo><title>&#x98;O &#x9c;som e a fúria</title><subtitle>romance</subtitle></titleInfo><originInfo><publisher>D. Quixote</publisher><dateIssued>2012-01-01</dateIssued></originInfo><physicalDescription><extent>287 p. ; 24 cm</extent></physicalDescription></mods></modsCollection>`;
+  const result = spawnSync(
+    "nub",
+    [
+      importIsbnScript,
+      "9789722048828",
+      "--edition",
+      "01a01fcd-0a4e-712c-812c-8de4688c1482",
+      "--accept",
+    ],
+    {
+      cwd: directory,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        ISBN_BNP_URL: `data:application/xml,${encodeURIComponent(mods)}`,
+        ISBN_OPEN_LIBRARY_URL: `data:application/json,${encodeURIComponent(JSON.stringify({}))}`,
+      },
+    },
+  );
+  const library = await readFile(join(directory, "content/library.yaml"), "utf8");
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /title: O som e a fúria: romance \(BNP\)/);
+  assert.match(library, /pageCount: 287/);
+  assert.doesNotMatch(library, /Old title|Old publisher/);
+  assert.equal(library.match(/01a01fcd-0a4e-712c-812c-8de4688c1482/g)?.length, 1);
+});
+
+test("add Book prompts for its title and author, then prints its identifier", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+  const result = spawnSync("nub", [addBookScript], {
+    cwd: directory,
+    encoding: "utf8",
+    input: "New Book\nJane Doe\n\nyes\n",
+  });
+  const library = await readFile(join(directory, "content/library.yaml"), "utf8");
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Created Book [0-9a-f-]{36}/);
+  assert.match(library, /title: New Book/);
+  assert.match(library, /displayName: Jane Doe/);
+  assert.match(library, /sortValue: Jane Doe/);
+});
+
+test("ISBN import falls back, reports provenance, and atomically accepts a reviewed Edition", async (context) => {
+  const directory = await writeCatalog(context, validHome);
+  const environment = {
+    ...process.env,
+    ISBN_BNP_URL: `data:application/xml,${encodeURIComponent("<urn-response><error>Registo inexistente</error></urn-response>")}`,
+    ISBN_OPEN_LIBRARY_URL: `data:application/json,${encodeURIComponent(JSON.stringify({ ISBN: "9783161484100", title: "Reviewed title", publishers: ["Example Press"], publish_date: "2024", number_of_pages: 240 }))}`,
+  };
+
+  const result = spawnSync(
+    "nub",
+    [
+      importIsbnScript,
+      "978-3-16-148410-0",
+      "--book",
+      "01a01fcd-0a4e-7c1c-9e31-8de4688c1482",
+      "--language",
+      "pt-PT",
+      "--format",
+      "paperback",
+    ],
+    { cwd: directory, encoding: "utf8", env: environment, input: "yes\n" },
+  );
+  const library = await readFile(join(directory, "content/library.yaml"), "utf8");
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /title: Reviewed title \(Open Library\)/);
+  assert.match(result.stdout, /Accept this Edition\? \[y\/N\]/);
+  assert.match(library, /title: Reviewed title/);
+  assert.match(library, /isbn: "?9783161484100"?/);
 });
 
 test("identifier emits a UUIDv7 through the project command", () => {
