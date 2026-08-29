@@ -54,6 +54,24 @@ library:
   clearSearchLabel:
     en: Clear search
     pt: Limpar pesquisa
+  showLabel:
+    en: Show
+    pt: Mostrar
+  allBooksLabel:
+    en: All
+    pt: Todos
+  readLabel:
+    en: Read
+    pt: Lidos
+  orderByLabel:
+    en: Order by
+    pt: Ordenar por
+  titleOrderLabel:
+    en: Title
+    pt: Título
+  authorOrderLabel:
+    en: Author
+    pt: Autor
   resultCountLabel:
     en: "{count} Books"
     pt: "{count} livros"

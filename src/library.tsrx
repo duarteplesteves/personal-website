@@ -25,26 +25,76 @@ export function Library({ content }: { content: LibraryPageData }) @{
       )}
       <section
         class="library-controls"
-        aria-labelledby="library-search-heading"
+        aria-labelledby="library-controls-heading"
         data-library-controls
         hidden
       >
-        <h2 id="library-search-heading" class="visually-hidden">
+        <h2 id="library-controls-heading" class="visually-hidden">
           {content.searchLabel}
         </h2>
-        <label for="library-search">{content.searchLabel}</label>
-        <input
-          type="search"
-          id="library-search"
-          data-library-search
-          autocomplete="off"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder={content.searchPlaceholder}
-        />
-        <button type="button" data-library-clear>
-          {content.clearSearchLabel}
-        </button>
+        <div class="library-search">
+          <label for="library-search">{content.searchLabel}</label>
+          <input
+            type="search"
+            id="library-search"
+            data-library-search
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder={content.searchPlaceholder}
+          />
+          <button type="button" data-library-clear>
+            {content.clearSearchLabel}
+          </button>
+        </div>
+        <div class="library-options">
+          <fieldset>
+            <legend>{content.showLabel}</legend>
+            <div class="library-choices">
+              <label class="library-choice">
+                <input type="radio" name="library-show" value="all" checked />
+                <span>{content.allBooksLabel}</span>
+              </label>
+              {content.books.some((book) => book.completionCount > 0) && (
+                <label class="library-choice">
+                  <input type="radio" name="library-show" value="read" />
+                  <span>{content.readLabel}</span>
+                </label>
+              )}
+              {content.books.some((book) => book.favorite) && (
+                <label class="library-choice">
+                  <input type="radio" name="library-show" value="favorites" />
+                  <span>{content.favoritesLabel}</span>
+                </label>
+              )}
+              {content.books.some((book) => book.nextRead) && (
+                <label class="library-choice">
+                  <input type="radio" name="library-show" value="next-reads" />
+                  <span>{content.nextReadsLabel}</span>
+                </label>
+              )}
+              {content.books.some((book) => book.inCollection) && (
+                <label class="library-choice">
+                  <input type="radio" name="library-show" value="in-collection" />
+                  <span>{content.inCollectionLabel}</span>
+                </label>
+              )}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>{content.orderByLabel}</legend>
+            <div class="library-choices">
+              <label class="library-choice">
+                <input type="radio" name="library-order" value="title" checked />
+                <span>{content.titleOrderLabel}</span>
+              </label>
+              <label class="library-choice">
+                <input type="radio" name="library-order" value="author" />
+                <span>{content.authorOrderLabel}</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
       </section>
       <p
         class="result-count"
@@ -68,6 +118,17 @@ export function Library({ content }: { content: LibraryPageData }) @{
               ...book.alternateTitles,
               ...book.authors.map((author) => author.displayName),
             ].join(" ")}
+            data-views={[
+              book.completionCount > 0 && "read",
+              book.favorite && "favorites",
+              book.nextRead && "next-reads",
+              book.inCollection && "in-collection",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            data-title={book.title}
+            data-author-sort={book.authors[0].sortValue}
+            data-book-id={book.id}
           >
             <cite>{book.title}</cite>
             <span aria-hidden="true"> — </span>
