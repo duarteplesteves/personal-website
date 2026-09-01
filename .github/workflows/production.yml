@@ -1,0 +1,67 @@
+name: Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      rollback_deployment_id:
+        description: Existing Cloudflare Pages deployment ID to promote
+        required: true
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: npm
+      - run: npm install --global @nubjs/nub@0.7.5
+      - run: nub ci
+      - run: nub run validate
+      - run: nub run typecheck
+      - run: nub run lint
+      - run: nub run format:check
+      - run: nub run test
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }} --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify production responses
+        run: |
+          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/ > headers
+          grep -qi '^referrer-policy: *strict-origin-when-cross-origin' headers
+          grep -qi '^x-content-type-options: *nosniff' headers
+          grep -qi '^cache-control: *public, max-age=0, must-revalidate' headers
+          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/assets/library.js | grep -qi '^cache-control: *public, max-age=86400'
+          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://www.duarteesteves.com/ | grep -qi '^location: *https://duarteesteves.com/'
+
+  rollback:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Promote existing deployment without rebuilding
+        env:
+          API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }}
+          DEPLOYMENT_ID: ${{ inputs.rollback_deployment_id }}
+        run: |
+          curl --fail --silent --show-error --request POST \
+            --header "Authorization: Bearer $API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT/deployments/$DEPLOYMENT_ID/rollback"
+          echo "Promoted existing deployment \`$DEPLOYMENT_ID\` without rebuilding." >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify rollback
+        run: curl --fail --silent --show-error --retry 10 --retry-all-errors https://duarteesteves.com/ > /dev/null

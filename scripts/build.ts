@@ -85,10 +85,16 @@ const renderDiscoveryArtifacts = Effect.fn("renderDiscoveryArtifacts")(function*
     `${staging}/robots.txt`,
     `User-agent: *\nAllow: /\nSitemap: ${productionOrigin}/sitemap.xml\n`,
   );
-  yield* writePage(
-    `${staging}/_redirects`,
-    "/en/* /en/404.html 404\n/pt/* /pt/404.html 404\n/* /404.html 404\n",
-  );
+  yield* Effect.all([
+    writePage(
+      `${staging}/_redirects`,
+      "/en/* /en/404.html 404\n/pt/* /pt/404.html 404\n/* /404.html 404\n",
+    ),
+    writePage(
+      `${staging}/_headers`,
+      "/*\n  Cache-Control: public, max-age=0, must-revalidate\n  Permissions-Policy: camera=(), geolocation=(), microphone=()\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n\n/assets/*\n  Cache-Control: public, max-age=86400\n",
+    ),
+  ]);
 });
 
 const program = Effect.gen(function* () {

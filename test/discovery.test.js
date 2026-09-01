@@ -118,4 +118,5 @@ test("missing pages are localized, noindex, and excluded from discovery metadata
     await readFile("dist/_redirects", "utf8"),
     "/en/* /en/404.html 404\n/pt/* /pt/404.html 404\n/* /404.html 404\n",
   );
+  assert.match(await readFile("dist/_headers", "utf8"), /X-Content-Type-Options: nosniff/);
 });
