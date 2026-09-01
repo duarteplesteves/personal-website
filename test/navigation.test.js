@@ -105,7 +105,7 @@ for (const route of localizedRoutes) {
 test("the current-language label is separated from its value for screen readers", async () => {
   const html = await readArtifact("/en/index.html");
 
-  assert.ok(html.includes("Current Site language:</span> <span>English</span>"));
+  assert.ok(html.includes("Site language:</span> <span>English</span>"));
 });
 
 test("the language control saves the explicit choice and preserves Library query state", async () => {

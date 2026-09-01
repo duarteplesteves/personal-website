@@ -5,12 +5,15 @@ import { EquivalentTranslationSchema } from "./equivalent-translation.ts";
 const WorkingOnEntrySchema = Schema.Struct({
   title: EquivalentTranslationSchema,
   description: EquivalentTranslationSchema,
+  technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
 });
 
 const SelectedWorkEntrySchema = Schema.Struct({
   title: EquivalentTranslationSchema,
   context: EquivalentTranslationSchema,
-  description: EquivalentTranslationSchema,
+  points: Schema.NonEmptyArray(EquivalentTranslationSchema),
+  technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
+  link: Schema.optionalKey(Schema.Struct({ label: EquivalentTranslationSchema, href: SafeUrl })),
 });
 
 const ExperienceMonthSchema = IsoPartialDate.pipe(Schema.check(Schema.isPattern(/^\d{4}-\d{2}$/)));
@@ -59,6 +62,7 @@ export const HomeContentSchema = Schema.Struct({
   introduction: EquivalentTranslationSchema,
   description: EquivalentTranslationSchema,
   work: Schema.Struct({
+    technologiesLabel: EquivalentTranslationSchema,
     workingOn: Schema.Struct({
       heading: EquivalentTranslationSchema,
       items: Schema.NonEmptyArray(WorkingOnEntrySchema),

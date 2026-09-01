@@ -7,6 +7,7 @@ import {
   equivalentPublication,
   findPublication,
   productionOrigin,
+  socialPreviewImage,
   type Publication,
   type SiteLanguage,
 } from "./publication.ts";
@@ -15,8 +16,14 @@ import { siteStyles } from "./site-styles.ts";
 
 const absolute = (pathname: string) => `${productionOrigin}${pathname}`;
 
-const socialMetadata = (title: string, description: string, url: string, language?: string) =>
-  `<meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${url}"><meta property="og:type" content="website"><meta property="og:site_name" content="Duarte Esteves">${language === undefined ? "" : `<meta property="og:locale" content="${language.replace("-", "_")}">`}<meta name="twitter:card" content="summary"><meta name="twitter:title" content="${title}"><meta name="twitter:description" content="${description}">`;
+const socialMetadata = (
+  title: string,
+  description: string,
+  url: string,
+  imageAlt: string,
+  language?: string,
+) =>
+  `<meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${url}"><meta property="og:type" content="website"><meta property="og:site_name" content="Duarte Esteves">${language === undefined ? "" : `<meta property="og:locale" content="${language.replace("-", "_")}">`}<meta property="og:image" content="${absolute(socialPreviewImage.pathname)}"><meta property="og:image:type" content="${socialPreviewImage.type}"><meta property="og:image:width" content="${socialPreviewImage.width}"><meta property="og:image:height" content="${socialPreviewImage.height}"><meta property="og:image:alt" content="${imageAlt}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${title}"><meta name="twitter:description" content="${description}"><meta name="twitter:image" content="${absolute(socialPreviewImage.pathname)}"><meta name="twitter:image:alt" content="${imageAlt}">`;
 
 const localizedDiscovery = (content: PageData, publication: Publication) => {
   const equivalent = equivalentPublication(publication);
@@ -39,7 +46,7 @@ const localizedDiscovery = (content: PageData, publication: Publication) => {
           },
         })}</script>`
       : "";
-  return `<link rel="canonical" href="${absolute(publication.pathname)}"><link rel="alternate" hreflang="en-GB" href="${absolute(english.pathname)}"><link rel="alternate" hreflang="pt-PT" href="${absolute(portuguese.pathname)}">${publication.page === "home" ? `<link rel="alternate" hreflang="x-default" href="${absolute("/")}">` : ""}${socialMetadata(content.title, content.description, absolute(publication.pathname), publication.documentLanguage)}<meta property="og:locale:alternate" content="${equivalent.documentLanguage.replace("-", "_")}">${structuredData}`;
+  return `<link rel="canonical" href="${absolute(publication.pathname)}"><link rel="alternate" hreflang="en-GB" href="${absolute(english.pathname)}"><link rel="alternate" hreflang="pt-PT" href="${absolute(portuguese.pathname)}">${publication.page === "home" ? `<link rel="alternate" hreflang="x-default" href="${absolute("/")}">` : ""}${socialMetadata(content.title, content.description, absolute(publication.pathname), content.socialPreviewImageAlt, publication.documentLanguage)}<meta property="og:locale:alternate" content="${equivalent.documentLanguage.replace("-", "_")}">${structuredData}`;
 };
 
 const htmlDocument = (
@@ -80,7 +87,7 @@ export function renderPage(content: PageData, publication: Publication) {
 
 export function renderRoot(content: RootPageData) {
   const rendered = renderToStaticMarkup(Root, { content }, { headChannel: "separate" });
-  const discovery = `<link rel="canonical" href="${absolute("/")}"><link rel="alternate" hreflang="en-GB" href="${absolute(content.homePathnames.en)}"><link rel="alternate" hreflang="pt-PT" href="${absolute(content.homePathnames.pt)}"><link rel="alternate" hreflang="x-default" href="${absolute("/")}">${socialMetadata(content.title, content.description, absolute("/"))}<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "Duarte Esteves", url: absolute("/") })}</script>`;
+  const discovery = `<link rel="canonical" href="${absolute("/")}"><link rel="alternate" hreflang="en-GB" href="${absolute(content.homePathnames.en)}"><link rel="alternate" hreflang="pt-PT" href="${absolute(content.homePathnames.pt)}"><link rel="alternate" hreflang="x-default" href="${absolute("/")}">${socialMetadata(content.title, content.description, absolute("/"), content.socialPreviewImageAlt.en)}<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "Duarte Esteves", url: absolute("/") })}</script>`;
   return htmlDocument("en", rendered, rootLanguageResolver(content.homePathnames), discovery);
 }
 

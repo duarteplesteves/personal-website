@@ -4,14 +4,38 @@ import test from "node:test";
 
 const origin = "https://duarteesteves.com";
 const routes = [
-  ["", "en", "Duarte Esteves", "/"],
-  ["en", "en-GB", "Duarte Esteves", "/en"],
-  ["pt", "pt-PT", "Duarte Esteves", "/pt"],
-  ["en/library", "en-GB", "Library — Duarte Esteves", "/en/library"],
-  ["pt/library", "pt-PT", "Biblioteca — Duarte Esteves", "/pt/library"],
+  ["", "en", "Duarte Esteves", "/", "The name Duarte Esteves on a warm, off-white background."],
+  [
+    "en",
+    "en-GB",
+    "Duarte Esteves",
+    "/en",
+    "The name Duarte Esteves on a warm, off-white background.",
+  ],
+  [
+    "pt",
+    "pt-PT",
+    "Duarte Esteves",
+    "/pt",
+    "O nome Duarte Esteves sobre um fundo claro, de tom quente.",
+  ],
+  [
+    "en/library",
+    "en-GB",
+    "Library — Duarte Esteves",
+    "/en/library",
+    "The name Duarte Esteves on a warm, off-white background.",
+  ],
+  [
+    "pt/library",
+    "pt-PT",
+    "Biblioteca — Duarte Esteves",
+    "/pt/library",
+    "O nome Duarte Esteves sobre um fundo claro, de tom quente.",
+  ],
 ];
 
-for (const [directory, language, title, pathname] of routes) {
+for (const [directory, language, title, pathname, imageAlt] of routes) {
   test(`${pathname} publishes absolute discovery metadata`, async () => {
     const html = await readFile(`dist/${directory ? `${directory}/` : ""}index.html`, "utf8");
     const head = html.match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? "";
@@ -20,10 +44,27 @@ for (const [directory, language, title, pathname] of routes) {
     assert.ok(head.includes(`<link rel="canonical" href="${origin}${pathname}">`));
     assert.ok(head.includes(`<meta property="og:url" content="${origin}${pathname}">`));
     assert.ok(head.includes(`<meta property="og:type" content="website">`));
-    assert.ok(head.includes(`<meta name="twitter:card" content="summary">`));
-    assert.doesNotMatch(head, /(?:og:image|twitter:image)/);
+    assert.ok(
+      head.includes(`<meta property="og:image" content="${origin}/assets/social-preview.png">`),
+    );
+    assert.ok(head.includes(`<meta property="og:image:type" content="image/png">`));
+    assert.ok(head.includes(`<meta property="og:image:width" content="1200">`));
+    assert.ok(head.includes(`<meta property="og:image:height" content="630">`));
+    assert.ok(head.includes(`<meta property="og:image:alt" content="${imageAlt}">`));
+    assert.ok(head.includes(`<meta name="twitter:card" content="summary_large_image">`));
+    assert.ok(
+      head.includes(`<meta name="twitter:image" content="${origin}/assets/social-preview.png">`),
+    );
+    assert.ok(head.includes(`<meta name="twitter:image:alt" content="${imageAlt}">`));
   });
 }
+
+test("the social-preview asset is a 1200×630 PNG", async () => {
+  const image = await readFile("dist/assets/social-preview.png");
+  assert.deepEqual(image.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  assert.equal(image.readUInt32BE(16), 1200);
+  assert.equal(image.readUInt32BE(20), 630);
+});
 
 test("localized routes publish reciprocal language alternates", async () => {
   for (const route of ["en", "pt", "en/library", "pt/library"]) {
