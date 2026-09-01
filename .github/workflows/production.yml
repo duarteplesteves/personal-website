@@ -33,20 +33,42 @@ jobs:
       - run: nub run lint
       - run: nub run format:check
       - run: nub run test
-      - uses: cloudflare/wrangler-action@v3
+      - id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }} --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Wait for production deployment
+        env:
+          API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }}
+          DEPLOYMENT_ID: ${{ steps.deploy.outputs.pages-deployment-id }}
+        run: |
+          test -n "$DEPLOYMENT_ID"
+          for _ in {1..12}; do
+            if response=$(curl --fail --silent --show-error \
+              --header "Authorization: Bearer $API_TOKEN" \
+              "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT"); then
+              canonical_deployment_id=$(jq -r '.result.canonical_deployment.id // empty' <<< "$response")
+              test "$canonical_deployment_id" = "$DEPLOYMENT_ID" && exit 0
+            fi
+            sleep 5
+          done
+          echo "Deployment $DEPLOYMENT_ID did not become canonical." >&2
+          exit 1
       - name: Verify production responses
         run: |
-          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/ > headers
-          grep -qi '^referrer-policy: *strict-origin-when-cross-origin' headers
-          grep -qi '^x-content-type-options: *nosniff' headers
-          grep -qi '^cache-control: *public, max-age=0, must-revalidate' headers
-          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/assets/library.js | grep -qi '^cache-control: *public, max-age=86400'
-          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://www.duarteesteves.com/ | grep -qi '^location: *https://duarteesteves.com/'
+          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/ | tr -d '\r' > headers
+          grep -Fqix 'referrer-policy: strict-origin-when-cross-origin' headers
+          grep -Fqix 'x-content-type-options: nosniff' headers
+          grep -Fqix 'cache-control: public, max-age=0, must-revalidate' headers
+          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/assets/library.js | tr -d '\r' > asset-headers
+          grep -Fqix 'cache-control: public, max-age=86400' asset-headers
+          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://www.duarteesteves.com/ | tr -d '\r' > redirect-headers
+          grep -Fqix 'location: https://duarteesteves.com/' redirect-headers
 
   rollback:
     if: github.event_name == 'workflow_dispatch'
@@ -59,9 +81,20 @@ jobs:
           PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }}
           DEPLOYMENT_ID: ${{ inputs.rollback_deployment_id }}
         run: |
-          curl --fail --silent --show-error --request POST \
+          response=$(curl --fail --silent --show-error --request POST \
             --header "Authorization: Bearer $API_TOKEN" \
-            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT/deployments/$DEPLOYMENT_ID/rollback"
+            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT/deployments/$DEPLOYMENT_ID/rollback")
+          test "$(jq -r '.result.id // empty' <<< "$response")" = "$DEPLOYMENT_ID"
+          for _ in {1..12}; do
+            if response=$(curl --fail --silent --show-error \
+              --header "Authorization: Bearer $API_TOKEN" \
+              "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT"); then
+              canonical_deployment_id=$(jq -r '.result.canonical_deployment.id // empty' <<< "$response")
+              test "$canonical_deployment_id" = "$DEPLOYMENT_ID" && break
+            fi
+            sleep 5
+          done
+          test "$canonical_deployment_id" = "$DEPLOYMENT_ID"
           echo "Promoted existing deployment \`$DEPLOYMENT_ID\` without rebuilding." >> "$GITHUB_STEP_SUMMARY"
       - name: Verify rollback
         run: curl --fail --silent --show-error --retry 10 --retry-all-errors https://duarteesteves.com/ > /dev/null

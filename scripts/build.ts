@@ -92,7 +92,7 @@ const renderDiscoveryArtifacts = Effect.fn("renderDiscoveryArtifacts")(function*
     ),
     writePage(
       `${staging}/_headers`,
-      "/*\n  Cache-Control: public, max-age=0, must-revalidate\n  Permissions-Policy: camera=(), geolocation=(), microphone=()\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n\n/assets/*\n  Cache-Control: public, max-age=86400\n",
+      "/*\n  Permissions-Policy: camera=(), geolocation=(), microphone=()\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n\n/assets/*\n  Cache-Control: public, max-age=86400\n",
     ),
   ]);
 });
