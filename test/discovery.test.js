@@ -119,3 +119,10 @@ test("missing pages are localized, noindex, and excluded from discovery metadata
     "/en/* /en/404.html 404\n/pt/* /pt/404.html 404\n/* /404.html 404\n",
   );
 });
+
+test("Cloudflare Pages configures security and cache headers", async () => {
+  assert.equal(
+    await readFile("dist/_headers", "utf8"),
+    "/*\n  Permissions-Policy: camera=(), geolocation=(), microphone=()\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n\n/assets/*\n  Cache-Control: public, max-age=86400\n",
+  );
+});

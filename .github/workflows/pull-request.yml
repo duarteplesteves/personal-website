@@ -49,8 +49,16 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT || 'personal-website' }} --branch=pr-${{ github.event.pull_request.number }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Verify preview indexing exclusion
+      - name: Verify preview responses
         env:
           PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: |
-          curl --fail --silent --show-error --retry 5 --retry-all-errors --head "$PREVIEW_URL" | grep -qi '^x-robots-tag: *noindex'
+          curl --fail --silent --show-error --retry 5 --retry-all-errors --head "$PREVIEW_URL" | tr -d '\r' > headers
+          grep -Fqix 'cache-control: public, max-age=0, must-revalidate' headers
+          grep -Fqix 'permissions-policy: camera=(), geolocation=(), microphone=()' headers
+          grep -Fqix 'referrer-policy: strict-origin-when-cross-origin' headers
+          grep -Fqix 'x-content-type-options: nosniff' headers
+          grep -Fqix 'x-frame-options: DENY' headers
+          grep -Fqix 'x-robots-tag: noindex' headers
+          curl --fail --silent --show-error --retry 5 --retry-all-errors --head "$PREVIEW_URL/assets/library.js" | tr -d '\r' > asset-headers
+          grep -Fqix 'cache-control: public, max-age=86400' asset-headers
