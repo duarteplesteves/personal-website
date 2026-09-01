@@ -15,6 +15,9 @@ description:
   en: English description
   pt: Descrição portuguesa
 work:
+  technologiesLabel:
+    en: Technologies
+    pt: Tecnologias
   workingOn:
     heading:
       en: Working on
@@ -26,6 +29,8 @@ work:
         description:
           en: English active work
           pt: Trabalho ativo português
+        technologies:
+          - TypeScript
   selected:
     heading:
       en: Selected work
@@ -37,9 +42,11 @@ work:
         context:
           en: Independent work · Creator · 2026
           pt: Trabalho Independente · Criador · 2026
-        description:
-          en: English selected work
-          pt: Trabalho selecionado português
+        points:
+          - en: English selected work
+            pt: Trabalho selecionado português
+        technologies:
+          - TypeScript
   experience:
     heading:
       en: Experience
@@ -291,10 +298,10 @@ test("Readings and curation derive public Library and Home relationships", async
   assert.equal(built.status, 0, built.stderr);
   assert.match(
     libraryHtml,
-    /Ballad for Sophie(?:(?!<\/li>).)*Favorite · Currently reading · Rereading/s,
+    /Ballad for Sophie(?:(?!<\/li>).)*Favourite · Currently reading · Rereading/s,
   );
   assert.match(homeHtml, /Currently reading(?:(?!<\/section>).)*Ballad for Sophie/s);
-  assert.match(homeHtml, /Favorites(?:(?!<\/section>).)*Ballad for Sophie/s);
+  assert.match(homeHtml, /Favourites(?:(?!<\/section>).)*Ballad for Sophie/s);
   assert.doesNotMatch(homeHtml, /Next reads/);
 });
 

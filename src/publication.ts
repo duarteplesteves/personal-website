@@ -7,6 +7,14 @@ export const productionOrigin = (process.env.SITE_ORIGIN ?? "https://duarteestev
   "",
 );
 
+/** Shared image used by generated social-preview metadata. */
+export const socialPreviewImage = {
+  pathname: "/assets/social-preview.png",
+  type: "image/png",
+  width: 1200,
+  height: 630,
+} as const;
+
 export interface Publication {
   readonly page: Page;
   readonly siteLanguage: SiteLanguage;

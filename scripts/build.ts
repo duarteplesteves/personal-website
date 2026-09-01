@@ -3,7 +3,12 @@ import { fileURLToPath } from "node:url";
 import { Console, Effect, FileSystem, Layer, Path, Schema } from "effect";
 import { compileSite } from "../src/compile-site.ts";
 import type { PageData, RootPageData } from "../src/page-data-schema.ts";
-import { productionOrigin, sitePublication, type Publication } from "../src/publication.ts";
+import {
+  productionOrigin,
+  sitePublication,
+  socialPreviewImage,
+  type Publication,
+} from "../src/publication.ts";
 
 interface Renderers {
   readonly renderPage: typeof import("../src/render-site.ts").renderPage;
@@ -15,6 +20,7 @@ const output = "dist";
 const staging = ".dist-temporary";
 const rendererEntry = "../.vite-ssg/render-site.js";
 const libraryBrowserEntry = fileURLToPath(new URL("../.vite-browser/library.js", import.meta.url));
+const socialPreviewEntry = fileURLToPath(new URL("../assets/social-preview.png", import.meta.url));
 
 class RendererLoadError extends Schema.TaggedError<RendererLoadError>()("RendererLoadError", {
   cause: Schema.Defect(),
@@ -92,7 +98,10 @@ const program = Effect.gen(function* () {
 
   yield* cleanupStaging;
   yield* fs.makeDirectory(`${staging}/assets`, { recursive: true });
-  yield* fs.copyFile(libraryBrowserEntry, `${staging}/assets/library.js`);
+  yield* Effect.all([
+    fs.copyFile(libraryBrowserEntry, `${staging}/assets/library.js`),
+    fs.copyFile(socialPreviewEntry, `${staging}${socialPreviewImage.pathname}`),
+  ]);
   yield* Effect.all(
     [
       ...site.pages.map(({ publication, data }) => renderLocalized(renderers, publication, data)),

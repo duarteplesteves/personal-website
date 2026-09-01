@@ -15,6 +15,9 @@ export function Home({ content }: { content: HomePageData }) @{
           <article class="work-entry">
             <h3>{item.title}</h3>
             <p>{item.description}</p>
+            <p class="section-note technologies">
+              {content.work.technologiesLabel}: {item.technologies.join(", ")}
+            </p>
           </article>
         ))}
       </section>
@@ -24,7 +27,19 @@ export function Home({ content }: { content: HomePageData }) @{
           <article class="work-entry">
             <h3>{item.title}</h3>
             <p class="section-note">{item.context}</p>
-            <p>{item.description}</p>
+            <ul role="list">
+              {item.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+            <p class="section-note technologies">
+              {content.work.technologiesLabel}: {item.technologies.join(", ")}
+            </p>
+            {item.link && (
+              <p class="work-link">
+                <a href={item.link.href}>{item.link.label}</a>
+              </p>
+            )}
           </article>
         ))}
       </section>

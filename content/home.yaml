@@ -2,21 +2,22 @@ title: Duarte Esteves
 
 introduction:
   en: >-
-    I build software to explore ideas, understand problems, and turn possible
-    solutions into useful things while continuing to learn. Reading gives that
-    curiosity another place to grow, bringing new perspectives to how I think
-    about the things I make.
+    Much of what I do starts with curiosity. I build software for the challenge
+    of turning ideas into useful things, and read because books keep changing
+    how I see the world.
   pt: >-
-    Crio software para explorar ideias, compreender problemas e transformar
-    possíveis soluções em coisas úteis, enquanto continuo a aprender. A leitura
-    dá a essa curiosidade outro espaço para crescer e traz novas perspetivas à
-    forma como penso sobre aquilo que faço.
+    Grande parte do que faço nasce da curiosidade. Crio software pelo desafio de
+    transformar ideias em coisas úteis e leio porque os livros continuam a
+    mudar a forma como vejo o mundo.
 
 description:
-  en: Duarte Esteves explores software, ideas, learning, and reading.
-  pt: Duarte Esteves explora software, ideias, aprendizagem e leitura.
+  en: Software, work, books, and tools from Duarte Esteves.
+  pt: Software, trabalho, livros e ferramentas de Duarte Esteves.
 
 work:
+  technologiesLabel:
+    en: Technologies
+    pt: Tecnologias
   workingOn:
     heading:
       en: Working on
@@ -27,115 +28,114 @@ work:
           pt: Better Schedule
         description:
           en: >-
-            Private, unpublished Independent work exploring a better way to
-            plan a schedule. It is active development, not a public product or
-            release, so I am keeping its details private while I learn from the
-            work.
+            I kept finding scheduling rules that were harder to express than
+            they should be. I started building a small library to make that work
+            simpler. It is active, but not published yet.
           pt: >-
-            Trabalho Independente privado e não publicado que explora uma forma
-            melhor de planear uma agenda. Está em desenvolvimento ativo, não é
-            um produto ou lançamento público, por isso mantenho os detalhes
-            privados enquanto aprendo com o trabalho.
+            Fui encontrando regras de horários e marcações mais difíceis de
+            exprimir do que deviam. Comecei a criar uma pequena biblioteca para
+            simplificar esse trabalho. Está em desenvolvimento, mas ainda não
+            foi publicada.
+        technologies:
+          - TypeScript
+          - Temporal
+          - fast-check
       - title:
           en: Mafalda Nutri
           pt: Mafalda Nutri
         description:
           en: >-
-            Active pre-production Independent work for nutrition practice. I am
-            currently implementing its patient-plans module; earlier work
-            established other parts of the product. Any future demonstration
-            will use synthetic patient data, and nothing is available publicly
-            yet.
+            This is a private product I am building around the day-to-day work
+            of a nutritionist. Right now, I am focused on patient plans. It is
+            still in pre-production.
           pt: >-
-            Trabalho Independente ativo em pré-produção para a prática de
-            nutrição. Estou a implementar o módulo de planos alimentares; o
-            trabalho anterior estabeleceu outras partes do produto. Qualquer
-            demonstração futura usará dados de pacientes sintéticos e nada está
-            ainda disponível publicamente.
+            Este é um produto privado que estou a criar a pensar no dia a dia de
+            uma nutricionista. Neste momento, estou focado no módulo de planos
+            alimentares. Ainda está em pré-produção.
+        technologies:
+          - Next.js
+          - Elysia
+          - Prisma
+          - Neon
+          - Better Auth
   selected:
     heading:
       en: Selected work
-      pt: Trabalho selecionado
+      pt: Projetos selecionados
     items:
       - title:
-          en: This personal home
-          pt: Esta casa pessoal
+          en: This site
+          pt: Este site
         context:
           en: Independent work · Creator · 2026–present
-          pt: Trabalho Independente · Criador · 2026–presente
-        description:
-          en: >-
-            I am building this bilingual personal home as a calm, content-led
-            place for software work, reading, and curiosity. I chose
-            repository-authored content and static delivery so the site can
-            stay small and direct; its accessibility, performance, and final
-            public details remain ongoing work.
-          pt: >-
-            Estou a criar esta casa pessoal bilingue como um espaço calmo,
-            guiado por conteúdo, para trabalho de software, leitura e
-            curiosidade. Escolhi conteúdo mantido no repositório e entrega
-            estática para manter o site pequeno e direto; a acessibilidade, o
-            desempenho e os detalhes públicos finais continuam em curso.
+          pt: Trabalho independente · Autor · 2026–presente
+        points:
+          - en: I wanted a small, quiet place for my work, books, and other curiosities.
+            pt: Queria um lugar pequeno e tranquilo para o meu trabalho, os meus livros e outras curiosidades.
+          - en: Static pages keep it quick and let the Library remain readable without JavaScript.
+            pt: As páginas estáticas mantêm o site rápido e permitem consultar a Biblioteca sem JavaScript.
+        technologies:
+          - Octane
+          - Effect
+          - Vite
       - title:
           en: Identity-provider operations platform
           pt: Plataforma de operações de fornecedores de identidade
         context:
           en: Pixelmatters · Frontend Engineer · 2025
-          pt: Pixelmatters · Engenheiro de Frontend · 2025
-        description:
-          en: >-
-            At Pixelmatters, I contributed frontend engineering to an internal
-            platform supporting high-stakes identity-provider operations. I
-            worked with the team on complex operational workflows while keeping
-            the client, delivery partners, and non-public details confidential.
-            The platform was shared work, not a product I delivered alone.
-          pt: >-
-            Na Pixelmatters, contribuí com engenharia de frontend para uma
-            plataforma interna que apoiava operações críticas de fornecedores
-            de identidade. Trabalhei com a equipa em fluxos operacionais
-            complexos, mantendo confidenciais o cliente, os parceiros de
-            entrega e os detalhes não públicos. A plataforma foi trabalho de
-            equipa, não um produto entregue apenas por mim.
+          pt: Pixelmatters · Engenheiro frontend · 2025
+        points:
+          - en: I worked on interfaces for identity-provider operations, with complex workflows that had to stay clear and dependable.
+            pt: Trabalhei em interfaces para operações de fornecedores de identidade, com fluxos de trabalho complexos que tinham de ser claros e fiáveis.
+          - en: I shaped those workflows with the product and engineering team.
+            pt: Trabalhei com a equipa de produto e engenharia para lhes dar forma.
+          - en: I cannot share the client name or product details.
+            pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
+        technologies:
+          - TanStack Router
+          - TanStack Query
+          - TanStack Table
+          - TanStack Form
+          - Tailwind CSS
+          - WorkOS
       - title:
           en: Pixelmatters website
-          pt: Website da Pixelmatters
+          pt: Site da Pixelmatters
         context:
           en: Pixelmatters · Frontend Engineer · 2025–present
-          pt: Pixelmatters · Engenheiro de Frontend · 2025–presente
-        description:
-          en: >-
-            I contribute frontend engineering to the public Pixelmatters
-            website, working closely with design on its editorial presentation,
-            flexibility, and performance. The site is the result of shared
-            company work; my contribution sits alongside the team’s design,
-            content, and engineering decisions.
-          pt: >-
-            Contribuo com engenharia de frontend para o website público da
-            Pixelmatters, trabalhando de perto com design na apresentação
-            editorial, flexibilidade e desempenho. O site resulta de trabalho
-            partilhado na empresa; a minha contribuição junta-se às decisões de
-            design, conteúdo e engenharia da equipa.
+          pt: Pixelmatters · Engenheiro frontend · 2025–presente
+        points:
+          - en: I turn the design team's work into code for pages that rarely share the same shape.
+            pt: Transformo o trabalho da equipa de design em código para páginas que raramente têm a mesma forma.
+          - en: Much of my work is in the details — layout, motion, content flexibility, and speed.
+            pt: Grande parte do meu trabalho está nos pormenores — estrutura, animação, flexibilidade do conteúdo e rapidez.
+        technologies:
+          - Next.js
+          - Payload CMS
+          - Tailwind CSS
+          - Motion
+        link:
+          label:
+            en: Visit the Pixelmatters website
+            pt: Visitar o site da Pixelmatters
+          href: https://www.pixelmatters.com/
       - title:
           en: Intellectual-property platform
           pt: Plataforma de propriedade intelectual
         context:
           en: BEAM – Managed IT Solutions · Frontend Developer · 2024–2025
-          pt: BEAM – Managed IT Solutions · Desenvolvedor de Frontend · 2024–2025
-        description:
-          en: >-
-            At BEAM, I contributed frontend product engineering to a greenfield
-            intellectual-property platform in an unfamiliar domain. I helped
-            turn the team’s understanding of the product into usable interfaces
-            while learning the domain’s constraints. The client and product
-            details remain confidential, so this account stays deliberately
-            broad.
-          pt: >-
-            Na BEAM, contribuí com engenharia de produto frontend para uma
-            plataforma de propriedade intelectual criada de raiz, num domínio
-            que não conhecia. Ajudei a transformar a compreensão da equipa
-            sobre o produto em interfaces utilizáveis enquanto aprendia as
-            restrições do domínio. O cliente e os detalhes do produto mantêm-se
-            confidenciais, por isso este relato é deliberadamente amplo.
+          pt: BEAM – Managed IT Solutions · Programador frontend · 2024–2025
+        points:
+          - en: I joined this project knowing almost nothing about intellectual property.
+            pt: Entrei neste projeto sem saber quase nada sobre propriedade intelectual.
+          - en: The interfaces changed as the team and I learned how the domain worked.
+            pt: As interfaces foram mudando à medida que percebíamos melhor o domínio.
+          - en: I cannot share the client name or product details.
+            pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
+        technologies:
+          - Next.js
+          - Ant Design
+          - Tailwind CSS
 
   experience:
     heading:
@@ -149,72 +149,42 @@ work:
         roles:
           - title:
               en: Frontend Engineer
-              pt: Engenheiro de Frontend
+              pt: Engenheiro frontend
             startedOn: 2025-09
             current: true
         description:
-          en: >-
-            I work across client product work and Pixelmatters’ public website,
-            translating design into thoughtful, maintainable frontend
-            experiences. I collaborate closely with designers and engineers,
-            contributing to the team’s shared delivery while keeping each
-            product’s needs clear.
-          pt: >-
-            Trabalho em produtos para clientes e no website público da
-            Pixelmatters, transformando design em experiências de frontend
-            ponderadas e sustentáveis. Colaboro de perto com designers e
-            engenheiros, contribuindo para a entrega partilhada pela equipa e
-            mantendo claras as necessidades de cada produto.
+          en: I work on client products and the Pixelmatters website, usually close to designers.
+          pt: Trabalho em produtos para clientes e no site da Pixelmatters, quase sempre lado a lado com designers.
       - company: BEAM – Managed IT Solutions
         roles:
           - title:
               en: Frontend Developer
-              pt: Desenvolvedor de Frontend
+              pt: Programador frontend
             startedOn: 2024-06
             endedOn: 2025-09
             current: false
         description:
-          en: >-
-            I built frontend product experiences in greenfield and client work,
-            learning unfamiliar domains quickly and helping teams turn their
-            understanding into clear, usable interfaces. I worked through
-            changing requirements with colleagues while keeping the product
-            experience grounded in the people using it.
-          pt: >-
-            Criei experiências de produto frontend em trabalho de raiz e para
-            clientes, aprendendo rapidamente domínios desconhecidos e ajudando
-            equipas a transformar a sua compreensão em interfaces claras e
-            utilizáveis. Trabalhei com colegas perante requisitos em mudança,
-            mantendo a experiência de produto focada nas pessoas que a usam.
+          en: I moved between client projects and unfamiliar domains, learning each one as I worked.
+          pt: Passei por projetos para clientes e domínios que não conhecia, aprendendo cada um enquanto trabalhava nele.
       - company: Bliss Applications
         roles:
           - title:
               en: Frontend Developer
-              pt: Desenvolvedor de Frontend
+              pt: Programador frontend
             startedOn: 2022-06
             endedOn: 2024-01
             current: false
         description:
-          en: >-
-            I delivered frontend work for complex e-commerce and event
-            experiences, collaborating with colleagues to turn varied product
-            requirements into dependable interfaces. I balanced the practical
-            needs of each delivery with careful implementation, helping the
-            team ship work people could rely on.
-          pt: >-
-            Desenvolvi trabalho frontend para experiências complexas de
-            comércio eletrónico e eventos, colaborando com colegas para
-            transformar requisitos de produto variados em interfaces fiáveis.
-            Equilibrei as necessidades práticas de cada entrega com uma
-            implementação cuidada, ajudando a equipa a criar trabalho fiável.
+          en: I worked on large e-commerce and event projects in a bigger frontend team.
+          pt: Trabalhei em grandes projetos de comércio eletrónico e eventos, integrado numa equipa de frontend maior.
 
 setup:
   heading:
     en: Setup and tools
     pt: Configuração e ferramentas
   updated:
-    en: Updated February 2026
-    pt: Atualizado em fevereiro de 2026
+    en: Updated September 2026
+    pt: Atualizado em setembro de 2026
   items:
     - en: MacBook Pro M5 Pro
       pt: MacBook Pro M5 Pro
@@ -226,8 +196,8 @@ setup:
       pt: Herdr
     - en: Pi
       pt: Pi
-    - en: Agent-workflow resources
-      pt: Recursos para fluxos de trabalho com agentes
+    - en: Agent resources
+      pt: Recursos para agentes
 
 contact:
   heading:

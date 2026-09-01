@@ -12,11 +12,11 @@ navigation:
     en: Skip to content
     pt: Saltar para o conteúdo
   currentLanguageLabel:
-    en: "Current Site language:"
-    pt: "Idioma atual do site:"
+    en: "Site language:"
+    pt: "Idioma do site:"
   switchLanguageLabel:
-    en: Change the Site language to Portuguese
-    pt: Alterar o idioma do site para inglês
+    en: Change language to Portuguese
+    pt: Mudar o idioma para inglês
 
 languages:
   en: English
@@ -29,8 +29,13 @@ root:
     en: Choose a language
     pt: Escolha o idioma
   introduction:
-    en: Continue to the personal website in British English.
-    pt: Continue para o site pessoal em português de Portugal.
+    en: Open the site in British English.
+    pt: Abrir o site em português de Portugal.
+
+socialPreview:
+  alt:
+    en: The name Duarte Esteves on a warm, off-white background.
+    pt: O nome Duarte Esteves sobre um fundo claro, de tom quente.
 
 missingPage:
   title:
@@ -40,11 +45,11 @@ missingPage:
     en: Page not found
     pt: Página não encontrada
   description:
-    en: The requested page does not exist. Return to the Home page.
-    pt: A página pedida não existe. Regresse à página inicial.
+    en: This page does not exist. Go back Home.
+    pt: Esta página não existe. Volte ao início.
   homeLabel:
-    en: Return Home
-    pt: Regressar ao início
+    en: Go Home
+    pt: Voltar ao início
 
 library:
   heading:
@@ -54,11 +59,11 @@ library:
     en: Books Duarte Esteves is reading, has read, or plans to read.
     pt: Livros que Duarte Esteves está a ler, já leu ou pretende ler.
   introduction:
-    en: A growing record of books I am reading, have read, or want to read.
-    pt: Um registo em crescimento dos livros que estou a ler, já li ou quero ler.
+    en: Books I am reading, have read, or want to read.
+    pt: Livros que estou a ler, já li ou quero ler.
   currentlyReading:
     en: Currently reading
-    pt: A ler atualmente
+    pt: A ler
   searchLabel:
     en: Search the Library
     pt: Pesquisar a Biblioteca
@@ -93,10 +98,10 @@ library:
     en: "{matching} of {total} Books"
     pt: "{matching} de {total} livros"
   emptyStateLabel:
-    en: No Books match your search.
+    en: No books match your search.
     pt: Nenhum livro corresponde à pesquisa.
   favorite:
-    en: Favorite
+    en: Favourite
     pt: Favorito
   rereading:
     en: Rereading
@@ -108,7 +113,7 @@ library:
     en: In collection
     pt: Na coleção
   favorites:
-    en: Favorites
+    en: Favourites
     pt: Favoritos
   nextReads:
     en: Next reads

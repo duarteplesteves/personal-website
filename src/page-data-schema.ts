@@ -35,12 +35,14 @@ export const HomePageDataSchema = Schema.Struct({
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
   work: Schema.Struct({
+    technologiesLabel: Schema.NonEmptyString,
     workingOn: Schema.Struct({
       heading: Schema.NonEmptyString,
       items: Schema.Array(
         Schema.Struct({
           title: Schema.NonEmptyString,
           description: Schema.NonEmptyString,
+          technologies: Schema.Array(Schema.NonEmptyString),
         }),
       ),
     }),
@@ -50,7 +52,11 @@ export const HomePageDataSchema = Schema.Struct({
         Schema.Struct({
           title: Schema.NonEmptyString,
           context: Schema.NonEmptyString,
-          description: Schema.NonEmptyString,
+          points: Schema.Array(Schema.NonEmptyString),
+          technologies: Schema.Array(Schema.NonEmptyString),
+          link: Schema.optionalKey(
+            Schema.Struct({ label: Schema.NonEmptyString, href: Schema.NonEmptyString }),
+          ),
         }),
       ),
     }),
@@ -92,6 +98,7 @@ export const HomePageDataSchema = Schema.Struct({
     favorites: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
     nextReads: Schema.optionalKey(Schema.Array(PublicBookIdentitySchema)),
   }),
+  socialPreviewImageAlt: Schema.NonEmptyString,
   navigation: NavigationDataSchema,
 });
 
@@ -139,6 +146,7 @@ export const LibraryPageDataSchema = Schema.Struct({
   resultCountLabel: Schema.NonEmptyString,
   matchingResultCountLabel: Schema.NonEmptyString,
   emptyStateLabel: Schema.NonEmptyString,
+  socialPreviewImageAlt: Schema.NonEmptyString,
   navigation: NavigationDataSchema,
 });
 
@@ -151,6 +159,10 @@ export const RootPageDataSchema = Schema.Struct({
   introduction: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
   languages: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
   homePathnames: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
+  socialPreviewImageAlt: Schema.Struct({
+    en: Schema.NonEmptyString,
+    pt: Schema.NonEmptyString,
+  }),
   missingPage: Schema.Struct({
     title: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),
     heading: Schema.Struct({ en: Schema.NonEmptyString, pt: Schema.NonEmptyString }),

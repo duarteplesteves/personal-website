@@ -40,6 +40,7 @@ export const SiteContentSchema = Schema.Struct({
     heading: EquivalentTranslationSchema,
     introduction: EquivalentTranslationSchema,
   }),
+  socialPreview: Schema.Struct({ alt: EquivalentTranslationSchema }),
   missingPage: Schema.Struct({
     title: EquivalentTranslationSchema,
     heading: EquivalentTranslationSchema,

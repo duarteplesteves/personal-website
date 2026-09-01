@@ -95,11 +95,13 @@ export const projectHome = (
     introduction: home.introduction[siteLanguage],
     description: home.description[siteLanguage],
     work: {
+      technologiesLabel: home.work.technologiesLabel[siteLanguage],
       workingOn: {
         heading: home.work.workingOn.heading[siteLanguage],
         items: home.work.workingOn.items.map((item) => ({
           title: item.title[siteLanguage],
           description: item.description[siteLanguage],
+          technologies: item.technologies,
         })),
       },
       selected: {
@@ -107,7 +109,16 @@ export const projectHome = (
         items: home.work.selected.items.map((item) => ({
           title: item.title[siteLanguage],
           context: item.context[siteLanguage],
-          description: item.description[siteLanguage],
+          points: item.points.map((point) => point[siteLanguage]),
+          technologies: item.technologies,
+          ...(item.link === undefined
+            ? {}
+            : {
+                link: {
+                  label: item.link.label[siteLanguage],
+                  href: item.link.href.href,
+                },
+              }),
         })),
       },
       experience: {
@@ -156,6 +167,7 @@ export const projectHome = (
       ...(favorites.length > 0 ? { favorites } : {}),
       ...(nextReads.length > 0 ? { nextReads } : {}),
     },
+    socialPreviewImageAlt: site.socialPreview.alt[siteLanguage],
     navigation: projectNavigation(site, publication),
   };
 };
@@ -216,6 +228,7 @@ export const projectLibrary = (
     resultCountLabel: text.resultCountLabel[siteLanguage],
     matchingResultCountLabel: text.matchingResultCountLabel[siteLanguage],
     emptyStateLabel: text.emptyStateLabel[siteLanguage],
+    socialPreviewImageAlt: site.socialPreview.alt[siteLanguage],
     navigation: projectNavigation(site, publication),
   };
 };
@@ -240,5 +253,6 @@ export const projectRoot = (site: SiteContent): RootPageData => ({
     en: findPublication("home", "en").pathname,
     pt: findPublication("home", "pt").pathname,
   },
+  socialPreviewImageAlt: site.socialPreview.alt,
   missingPage: site.missingPage,
 });
