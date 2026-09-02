@@ -87,6 +87,10 @@ const renderDiscoveryArtifacts = Effect.fn("renderDiscoveryArtifacts")(function*
   );
   yield* Effect.all([
     writePage(
+      `${staging}/googled085d2f70d727b28.html`,
+      "google-site-verification: googled085d2f70d727b28.html",
+    ),
+    writePage(
       `${staging}/_redirects`,
       "/en/* /en/404.html 404\n/pt/* /pt/404.html 404\n/* /404.html 404\n",
     ),

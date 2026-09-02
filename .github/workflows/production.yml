@@ -61,14 +61,44 @@ jobs:
           exit 1
       - name: Verify production responses
         run: |
-          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/ | tr -d '\r' > headers
-          grep -Fqix 'referrer-policy: strict-origin-when-cross-origin' headers
-          grep -Fqix 'x-content-type-options: nosniff' headers
-          grep -Fqix 'cache-control: public, max-age=0, must-revalidate' headers
-          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://duarteesteves.com/assets/library.js | tr -d '\r' > asset-headers
-          grep -Fqix 'cache-control: public, max-age=86400' asset-headers
-          curl --fail --silent --show-error --retry 10 --retry-all-errors --head https://www.duarteesteves.com/ | tr -d '\r' > redirect-headers
-          grep -Fqix 'location: https://duarteesteves.com/' redirect-headers
+          for _ in {1..12}; do
+            if curl --fail --silent --show-error --head https://duarteesteves.com/ | tr -d '\r' > headers &&
+              grep -Fqix 'referrer-policy: strict-origin-when-cross-origin' headers &&
+              grep -Fqix 'x-content-type-options: nosniff' headers &&
+              grep -Fqix 'cache-control: public, max-age=0, must-revalidate' headers &&
+              curl --fail --silent --show-error --head https://duarteesteves.com/assets/library.js | tr -d '\r' > asset-headers &&
+              grep -Fqix 'cache-control: public, max-age=86400' asset-headers &&
+              curl --fail --silent --show-error --head https://www.duarteesteves.com/ | tr -d '\r' > redirect-headers &&
+              grep -Fqix 'location: https://duarteesteves.com/' redirect-headers; then
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 1
+      - name: Measure launch quality
+        run: |
+          mkdir lighthouse
+          for page in home library; do
+            path=en/
+            if test "$page" = library; then path=en/library/; fi
+            nubx -q -y lighthouse@13.0.3 "https://duarteesteves.com/$path" --quiet --chrome-flags='--headless --no-sandbox' --only-categories=performance,accessibility,seo,best-practices --output=json --output-path="lighthouse/$page.json"
+            jq -e '.audits["largest-contentful-paint"].numericValue <= 2500 and .audits["cumulative-layout-shift"].numericValue <= 0.1 and .audits["total-blocking-time"].numericValue <= 200 and .categories.accessibility.score == 1' "lighthouse/$page.json" > /dev/null
+          done
+          {
+            echo '### Lighthouse lab results'
+            echo '| Page | LCP | CLS | TBT | Requests | Shipped JS |'
+            echo '| --- | ---: | ---: | ---: | ---: | ---: |'
+            for page in home library; do
+              jq -r --arg page "$page" '[$page, .audits["largest-contentful-paint"].displayValue, .audits["cumulative-layout-shift"].displayValue, .audits["total-blocking-time"].displayValue, (.audits["network-requests"].details.items | length | tostring), ([.audits["network-requests"].details.items[] | select(.resourceType == "Script") | .transferSize] | add // 0 | tostring) + " B"] | "| " + join(" | ") + " |"' "lighthouse/$page.json"
+            done
+            echo
+            echo 'INP needs field data; TBT is the launch lab responsiveness guard.'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-production
+          path: lighthouse
+          if-no-files-found: error
 
   rollback:
     if: github.event_name == 'workflow_dispatch'

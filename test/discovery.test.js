@@ -59,6 +59,13 @@ for (const [directory, language, title, pathname, imageAlt] of routes) {
   });
 }
 
+test("the Search Console verification file is published at the root", async () => {
+  assert.equal(
+    await readFile("dist/googled085d2f70d727b28.html", "utf8"),
+    "google-site-verification: googled085d2f70d727b28.html",
+  );
+});
+
 test("the social-preview asset is a 1200×630 PNG", async () => {
   const image = await readFile("dist/assets/social-preview.png");
   assert.deepEqual(image.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));

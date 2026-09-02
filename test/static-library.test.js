@@ -60,6 +60,12 @@ for (const siteLanguage of ["en", "pt"]) {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
 
     assert.match(html, /<section class="library-controls"[^>]*hidden/);
+    assert.ok(
+      html.indexOf('document.documentElement.classList.add("enhanced")') <
+        html.indexOf('<section class="library-controls"'),
+      "enhancement must be known before controls render",
+    );
+    assert.match(html, /\.enhanced \.library-controls\[hidden\] \{ display: block !important; \}/);
     assert.match(html, /<input type="search"[^>]*data-library-search/);
     assert.match(html, /<fieldset><legend>[^<]+<\/legend>/);
     assert.match(html, /<input type="radio" name="library-show" value="all" checked/);

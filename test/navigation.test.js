@@ -6,9 +6,9 @@ import test from "node:test";
 const readArtifact = (path) => readFile(`dist${path}`, "utf8");
 
 const inlineScript = (html) => {
-  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
-  assert.equal(scripts.length, 1, "expected one inline enhancement script");
-  return scripts[0][1];
+  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
+  const enhancement = scripts.find((script) => script.includes("data-language-control"));
+  return enhancement ?? scripts[0];
 };
 
 const rootDestinations = [

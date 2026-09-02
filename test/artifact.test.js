@@ -88,6 +88,19 @@ test("browser code stays within the static enhancement boundary", async () => {
   assert.doesNotMatch(browserCode, /\b(?:effect|yaml|node:|octane)\b/i);
 });
 
+test("documents request no analytics, visitor statistics, error monitoring, or query collection", async () => {
+  for (const route of publicRoutes) {
+    const html = await (await get(route)).text();
+    assert.match(html, /<link rel="icon" href="data:image\/svg\+xml,/);
+    assert.doesNotMatch(
+      html,
+      /google-analytics|googletagmanager|plausible|posthog|sentry|segment|mixpanel|sendBeacon|XMLHttpRequest|\bfetch\s*\(/i,
+      route,
+    );
+    assert.doesNotMatch(html, /<script[^>]+src="(?:https?:)?\/\//i, route);
+  }
+});
+
 test("missing routes return localized HTTP 404 responses", async () => {
   for (const [route, text] of [
     ["/missing", "Page not found"],
