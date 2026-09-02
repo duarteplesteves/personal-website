@@ -1,5 +1,6 @@
 import type { PageData } from "./page-data-schema.ts";
 
+/** Render localized primary and Site-language navigation. */
 export function SiteHeader({ content }: { content: PageData }) @{
   <>
     <a class="skip-link" href="#content">
@@ -28,7 +29,6 @@ export function SiteHeader({ content }: { content: PageData }) @{
           href={content.navigation.equivalentPathname}
           hreflang={content.navigation.alternateDocumentLanguage}
           lang={content.navigation.alternateDocumentLanguage}
-          aria-label={content.navigation.switchLanguageLabel}
           data-language-control=""
           data-site-language={content.navigation.alternateSiteLanguage}
         >

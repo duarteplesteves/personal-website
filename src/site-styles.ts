@@ -1,3 +1,4 @@
+/** Shared styles for every static document. */
 export const siteStyles = `
 :root {
   color-scheme: light;
@@ -13,6 +14,7 @@ export const siteStyles = `
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+.enhanced .library-controls[hidden] { display: block !important; }
 html { background: var(--background); color: var(--text); }
 body { margin: 0; }
 a {

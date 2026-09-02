@@ -56,7 +56,7 @@ const htmlDocument = (
   discovery: string,
   browserModule?: string,
 ) =>
-  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${rendered.head ?? ""}${discovery}${rendered.css}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
+  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3ED%3C/text%3E%3C/svg%3E">${rendered.head ?? ""}${discovery}${rendered.css}${browserModule === undefined ? "" : '<script>document.documentElement.classList.add("enhanced")</script>'}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
 
 function renderHome(content: HomePageData, publication: Publication) {
   const rendered = renderToStaticMarkup(Home, { content }, { headChannel: "separate" });
