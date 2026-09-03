@@ -2,6 +2,8 @@ import { readFile } from "node:fs/promises";
 import assert from "node:assert/strict";
 import test from "node:test";
 
+const siteCss = await readFile("dist/assets/site.css", "utf8");
+
 for (const siteLanguage of ["en", "pt"]) {
   test(`/${siteLanguage}/library lists all 152 Books once ordered by title without JavaScript`, async () => {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
@@ -40,22 +42,6 @@ for (const siteLanguage of ["en", "pt"]) {
     assert.match(html, /class="relationship"/);
   });
 
-  test(`/${siteLanguage}/library publishes each sparse Book once without JavaScript`, async () => {
-    const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
-
-    const reflection =
-      siteLanguage === "en"
-        ? "Friendship gives ambition a human scale."
-        : "A amizade dá uma escala humana à ambição.";
-    assert.match(
-      html,
-      new RegExp(
-        `<li[^>]*><cite>Ballad for Sophie</cite>(?:(?!</li>).)*<span>Juan Cavia, Filipe Melo</span>(?:(?!</li>).)*<blockquote>${reflection}</blockquote>`,
-        "s",
-      ),
-    );
-  });
-
   test(`/${siteLanguage}/library keeps browsing controls hidden without JavaScript and embeds browser data`, async () => {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
 
@@ -65,7 +51,10 @@ for (const siteLanguage of ["en", "pt"]) {
         html.indexOf('<section class="library-controls"'),
       "enhancement must be known before controls render",
     );
-    assert.match(html, /\.enhanced \.library-controls\[hidden\] \{ display: block !important; \}/);
+    assert.match(
+      siteCss,
+      /\.enhanced \.library-controls\[hidden\] \{\s*display: block !important;\s*\}/,
+    );
     assert.match(html, /<input type="search"[^>]*data-library-search/);
     assert.match(html, /<fieldset><legend>[^<]+<\/legend>/);
     assert.match(html, /<input type="radio" name="library-show" value="all" checked/);

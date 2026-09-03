@@ -56,7 +56,7 @@ test("localized Home artifacts present active and selected work honestly", async
       workingOn: "Working on",
       selectedWork: "Selected work",
       betterSchedule: "Better Schedule",
-      mafaldaNutri: "Mafalda Nutri",
+      mafaldaNutri: "Mafalda Esteves Nutrição",
       selectedTitles: [
         "This site",
         "Identity-provider operations platform",
@@ -75,7 +75,7 @@ test("localized Home artifacts present active and selected work honestly", async
         "Technologies: TypeScript, Temporal, fast-check",
         "Technologies: Next.js, Elysia, Prisma, Neon, Better Auth",
         "Technologies: Octane, Effect, Vite",
-        "Technologies: TanStack Router, TanStack Query, TanStack Table, TanStack Form, Tailwind CSS, WorkOS",
+        "Technologies: TanStack, Tailwind CSS, WorkOS",
         "Technologies: Next.js, Payload CMS, Tailwind CSS, Motion",
         "Technologies: Next.js, Ant Design, Tailwind CSS",
       ],
@@ -85,7 +85,7 @@ test("localized Home artifacts present active and selected work honestly", async
       workingOn: "A trabalhar em",
       selectedWork: "Projetos selecionados",
       betterSchedule: "Better Schedule",
-      mafaldaNutri: "Mafalda Nutri",
+      mafaldaNutri: "Mafalda Esteves Nutrição",
       selectedTitles: [
         "Este site",
         "Plataforma de operações de fornecedores de identidade",
@@ -104,7 +104,7 @@ test("localized Home artifacts present active and selected work honestly", async
         "Tecnologias: TypeScript, Temporal, fast-check",
         "Tecnologias: Next.js, Elysia, Prisma, Neon, Better Auth",
         "Tecnologias: Octane, Effect, Vite",
-        "Tecnologias: TanStack Router, TanStack Query, TanStack Table, TanStack Form, Tailwind CSS, WorkOS",
+        "Tecnologias: TanStack, Tailwind CSS, WorkOS",
         "Tecnologias: Next.js, Payload CMS, Tailwind CSS, Motion",
         "Tecnologias: Next.js, Ant Design, Tailwind CSS",
       ],
@@ -146,16 +146,16 @@ test("localized Home artifacts present derived Experience without résumé treat
       heading: "Experience",
       entries: [
         ["Pixelmatters", "Frontend Engineer", "September 2025–present"],
-        ["BEAM – Managed IT Solutions", "Frontend Developer", "June 2024–September 2025"],
-        ["Bliss Applications", "Frontend Developer", "June 2022–January 2024"],
+        ["BEAM – Managed IT Solutions", "Frontend Engineer", "June 2024–September 2025"],
+        ["Bliss Applications", "Frontend Engineer", "June 2022–January 2024"],
       ],
     },
     pt: {
       heading: "Experiência",
       entries: [
         ["Pixelmatters", "Engenheiro frontend", "setembro de 2025–presente"],
-        ["BEAM – Managed IT Solutions", "Programador frontend", "junho de 2024–setembro de 2025"],
-        ["Bliss Applications", "Programador frontend", "junho de 2022–janeiro de 2024"],
+        ["BEAM – Managed IT Solutions", "Engenheiro frontend", "junho de 2024–setembro de 2025"],
+        ["Bliss Applications", "Engenheiro frontend", "junho de 2022–janeiro de 2024"],
       ],
     },
   };

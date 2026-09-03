@@ -12,7 +12,6 @@ import {
   type SiteLanguage,
 } from "./publication.ts";
 import { Root } from "./root.tsrx";
-import { siteStyles } from "./site-styles.ts";
 
 const absolute = (pathname: string) => `${productionOrigin}${pathname}`;
 
@@ -56,7 +55,7 @@ const htmlDocument = (
   discovery: string,
   browserModule?: string,
 ) =>
-  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3ED%3C/text%3E%3C/svg%3E">${rendered.head ?? ""}${discovery}${rendered.css}${browserModule === undefined ? "" : '<script>document.documentElement.classList.add("enhanced")</script>'}<style>${siteStyles}</style></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
+  `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3ED%3C/text%3E%3C/svg%3E">${rendered.head ?? ""}${discovery}${rendered.css}${browserModule === undefined ? "" : '<script>document.documentElement.classList.add("enhanced")</script>'}<link rel="stylesheet" href="/assets/site.css"></head><body>${rendered.html}<script>${enhancement}</script>${browserModule === undefined ? "" : `<script type="module" src="${browserModule}"></script>`}</body></html>`;
 
 function renderHome(content: HomePageData, publication: Publication) {
   const rendered = renderToStaticMarkup(Home, { content }, { headChannel: "separate" });
@@ -100,5 +99,5 @@ export function renderMissing(content: RootPageData, siteLanguage?: SiteLanguage
   const body = bilingual
     ? `<main><h1><span lang="pt-PT">${content.missingPage.heading.pt}</span> · <span lang="en-GB">${content.missingPage.heading.en}</span></h1><p lang="pt-PT">${content.missingPage.description.pt} <a href="${content.homePathnames.pt}">${content.missingPage.homeLabel.pt}</a></p><p lang="en-GB">${content.missingPage.description.en} <a href="${content.homePathnames.en}">${content.missingPage.homeLabel.en}</a></p></main>`
     : `<main><h1>${content.missingPage.heading[siteLanguage]}</h1><p>${content.missingPage.description[siteLanguage]}</p><a href="${content.homePathnames[siteLanguage]}">${content.missingPage.homeLabel[siteLanguage]}</a></main>`;
-  return `<!doctype html><html lang="${bilingual ? "en" : findPublication("home", siteLanguage).documentLanguage}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><meta name="robots" content="noindex, follow"><style>${siteStyles}</style></head><body>${body}</body></html>`;
+  return `<!doctype html><html lang="${bilingual ? "en" : findPublication("home", siteLanguage).documentLanguage}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><meta name="robots" content="noindex, follow"><link rel="stylesheet" href="/assets/site.css"></head><body>${body}</body></html>`;
 }
