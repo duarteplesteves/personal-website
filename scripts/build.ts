@@ -20,7 +20,16 @@ const output = "dist";
 const staging = ".dist-temporary";
 const rendererEntry = "../.vite-ssg/render-site.js";
 const libraryBrowserEntry = fileURLToPath(new URL("../.vite-browser/library.js", import.meta.url));
-const socialPreviewEntry = fileURLToPath(new URL("../assets/social-preview.png", import.meta.url));
+const socialPreviewEntry = fileURLToPath(
+  new URL("../public/assets/social-preview.png", import.meta.url),
+);
+const siteStylesEntry = fileURLToPath(new URL("../src/site.css", import.meta.url));
+const dmSansEntry = fileURLToPath(
+  new URL("../public/assets/fonts/dm-sans-variable.woff2", import.meta.url),
+);
+const dmSansItalicEntry = fileURLToPath(
+  new URL("../public/assets/fonts/dm-sans-italic-variable.woff2", import.meta.url),
+);
 
 class RendererLoadError extends Schema.TaggedError<RendererLoadError>()("RendererLoadError", {
   cause: Schema.Defect(),
@@ -107,10 +116,13 @@ const program = Effect.gen(function* () {
   const site = yield* compileSite();
 
   yield* cleanupStaging;
-  yield* fs.makeDirectory(`${staging}/assets`, { recursive: true });
+  yield* fs.makeDirectory(`${staging}/assets/fonts`, { recursive: true });
   yield* Effect.all([
     fs.copyFile(libraryBrowserEntry, `${staging}/assets/library.js`),
     fs.copyFile(socialPreviewEntry, `${staging}${socialPreviewImage.pathname}`),
+    fs.copyFile(siteStylesEntry, `${staging}/assets/site.css`),
+    fs.copyFile(dmSansEntry, `${staging}/assets/fonts/dm-sans-variable.woff2`),
+    fs.copyFile(dmSansItalicEntry, `${staging}/assets/fonts/dm-sans-italic-variable.woff2`),
   ]);
   yield* Effect.all(
     [

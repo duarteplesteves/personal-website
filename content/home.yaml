@@ -41,8 +41,8 @@ work:
           - Temporal
           - fast-check
       - title:
-          en: Mafalda Nutri
-          pt: Mafalda Nutri
+          en: Mafalda Esteves Nutrição
+          pt: Mafalda Esteves Nutrição
         description:
           en: >-
             This is a private product I am building around the day-to-day work
@@ -92,10 +92,7 @@ work:
           - en: I cannot share the client name or product details.
             pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
         technologies:
-          - TanStack Router
-          - TanStack Query
-          - TanStack Table
-          - TanStack Form
+          - TanStack
           - Tailwind CSS
           - WorkOS
       - title:
@@ -123,8 +120,8 @@ work:
           en: Intellectual-property platform
           pt: Plataforma de propriedade intelectual
         context:
-          en: BEAM – Managed IT Solutions · Frontend Developer · 2024–2025
-          pt: BEAM – Managed IT Solutions · Programador frontend · 2024–2025
+          en: BEAM – Managed IT Solutions · Frontend Engineer · 2024–2025
+          pt: BEAM – Managed IT Solutions · Engenheiro frontend · 2024–2025
         points:
           - en: I joined this project knowing almost nothing about intellectual property.
             pt: Entrei neste projeto sem saber quase nada sobre propriedade intelectual.
@@ -158,8 +155,8 @@ work:
       - company: BEAM – Managed IT Solutions
         roles:
           - title:
-              en: Frontend Developer
-              pt: Programador frontend
+              en: Frontend Engineer
+              pt: Engenheiro frontend
             startedOn: 2024-06
             endedOn: 2025-09
             current: false
@@ -169,8 +166,8 @@ work:
       - company: Bliss Applications
         roles:
           - title:
-              en: Frontend Developer
-              pt: Programador frontend
+              en: Frontend Engineer
+              pt: Engenheiro frontend
             startedOn: 2022-06
             endedOn: 2024-01
             current: false

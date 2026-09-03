@@ -8,6 +8,7 @@ The site publishes a useful root language chooser and bilingual, fully static Ho
 
 ```sh
 nub install --frozen-lockfile
+nub run dev
 nub run validate
 nub run boundary:check
 nub run typecheck
