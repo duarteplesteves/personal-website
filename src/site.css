@@ -124,6 +124,10 @@ h1 {
 main ul {
   margin-block: 0;
 }
+main ul[role="list"] {
+  padding-inline-start: 0;
+  list-style: none;
+}
 main section {
   margin-block-start: 5rem;
   display: flex;
