@@ -22,19 +22,28 @@ export function SiteHeader({ content }: { content: PageData }) @{
         </a>
       </nav>
       <p class="language-navigation">
+        {/* Languages keep a fixed English, Português order; only the highlight moves. */}
+        {content.navigation.alternateSiteLanguage === "en" && (
+          <LanguageLink navigation={content.navigation} />
+        )}
         <span class="visually-hidden">{content.navigation.currentLanguageLabel}</span>{" "}
         <span>{content.navigation.currentLanguageName}</span>
-        <span aria-hidden="true"> · </span>
-        <a
-          href={content.navigation.equivalentPathname}
-          hreflang={content.navigation.alternateDocumentLanguage}
-          lang={content.navigation.alternateDocumentLanguage}
-          data-language-control=""
-          data-site-language={content.navigation.alternateSiteLanguage}
-        >
-          {content.navigation.alternateLanguageName}
-        </a>
+        {content.navigation.alternateSiteLanguage === "pt" && (
+          <LanguageLink navigation={content.navigation} />
+        )}
       </p>
     </header>
   </>;
+}
+
+function LanguageLink({ navigation }: { navigation: PageData["navigation"] }) @{
+  <a
+    href={navigation.equivalentPathname}
+    hreflang={navigation.alternateDocumentLanguage}
+    lang={navigation.alternateDocumentLanguage}
+    data-language-control=""
+    data-site-language={navigation.alternateSiteLanguage}
+  >
+    {navigation.alternateLanguageName}
+  </a>;
 }

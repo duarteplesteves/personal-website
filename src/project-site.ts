@@ -103,13 +103,10 @@ const projectHome = (
         ...("description" in item
           ? { description: item.description[siteLanguage] }
           : {
-              context: item.context[siteLanguage],
               points: EffectArray.map(item.points, (point) => point[siteLanguage]),
               technologies: item.technologies,
             }),
-        ...(item.link === undefined
-          ? {}
-          : { link: { label: item.link.label[siteLanguage], href: item.link.href.href } }),
+        ...(item.link === undefined ? {} : { link: item.link.href }),
       })),
       experience: {
         heading: home.work.experience.heading[siteLanguage],
@@ -133,11 +130,6 @@ const projectHome = (
             description: entry.description[siteLanguage],
           })),
       },
-    },
-    setup: {
-      heading: home.setup.heading[siteLanguage],
-      updated: home.setup.updated[siteLanguage],
-      items: home.setup.items.map((item) => item[siteLanguage]),
     },
     contact: {
       heading: home.contact.heading[siteLanguage],

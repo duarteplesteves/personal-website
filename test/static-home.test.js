@@ -24,27 +24,21 @@ for (const [siteLanguage, introduction] of homes) {
   });
 }
 
-test("localized Home artifacts include Setup and tools and direct contact destinations", async () => {
-  const localizedContent = {
-    en: { setup: "Setup and tools", updated: "Updated September 2026" },
-    pt: { setup: "Configuração e ferramentas", updated: "Atualizado em setembro de 2026" },
-  };
-
+test("localized Home artifacts drop Setup and keep contact destinations in the footer", async () => {
   for (const siteLanguage of ["en", "pt"]) {
     const html = await readFile(`dist/${siteLanguage}/index.html`, "utf8");
-    const expected = localizedContent[siteLanguage];
+    const footer = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0];
 
-    assert.match(html, new RegExp(`<h2[^>]*>${expected.setup}</h2>`));
-    assert.ok(html.includes(expected.updated));
-    for (const tool of ["MacBook Pro M5 Pro", "Zed", "Ghostty", "Herdr", "Pi"]) {
-      assert.ok(html.includes(`<li>${tool}</li>`), `${siteLanguage} Home must include ${tool}`);
-    }
-    assert.match(html, /<li>Agent resources<\/li>|<li>Recursos para agentes<\/li>/);
-    assert.match(html, /href="mailto:duarteplesteves@gmail.com"[^>]*>Email<\/a>/);
-    assert.match(html, /href="https:\/\/github\.com\/duarteplesteves"[^>]*>GitHub<\/a>/);
+    assert.doesNotMatch(html, /Setup and tools|Configuração e ferramentas/);
+    assert.ok(footer, `${siteLanguage} Home must have a footer`);
+    assert.match(footer, /<a href="mailto:duarteplesteves@gmail.com">Email<\/a>/);
     assert.match(
-      html,
-      /href="https:\/\/www\.linkedin\.com\/in\/duarteplesteves"[^>]*>LinkedIn<\/a>/,
+      footer,
+      /href="https:\/\/github\.com\/duarteplesteves" target="_blank"[^>]*>GitHub<\/a>/,
+    );
+    assert.match(
+      footer,
+      /href="https:\/\/www\.linkedin\.com\/in\/duarteplesteves" target="_blank"[^>]*>LinkedIn<\/a>/,
     );
     assert.doesNotMatch(html, /<img\b/i);
   }
@@ -64,7 +58,6 @@ test("localized Home artifacts present one ordered Work section", async () => {
       ],
       fastiSummary:
         "I’m building fasti, an open-source TypeScript library for adding bookings to an application. It finds available times and handles booking, rescheduling and cancellation using the application’s own database.",
-      fastiLink: "View fasti on GitHub",
       mafaldaSummary:
         "I designed and built this private platform for a nutrition practice, from the interface to the database. The team uses it to manage patient records, write clinical notes and book appointments.",
       detailedEntryPoints: [
@@ -79,7 +72,7 @@ test("localized Home artifacts present one ordered Work section", async () => {
         "Technologies: Next.js, Payload CMS, Tailwind CSS, Motion",
         "Technologies: Next.js, Ant Design, Tailwind CSS",
       ],
-      pixelmattersLink: "Visit the Pixelmatters website",
+      pixelmattersTitle: "Pixelmatters website",
     },
     pt: {
       heading: "Trabalho",
@@ -93,7 +86,6 @@ test("localized Home artifacts present one ordered Work section", async () => {
       ],
       fastiSummary:
         "Estou a desenvolver o fasti, uma biblioteca de código aberto em TypeScript para integrar marcações numa aplicação. Permite consultar a disponibilidade, fazer e remarcar marcações ou cancelá-las, usando a base de dados da própria aplicação.",
-      fastiLink: "Ver o fasti no GitHub",
       mafaldaSummary:
         "Concebi e desenvolvi esta plataforma privada para uma prática de nutrição, da interface à base de dados. A equipa usa-a no dia a dia para gerir fichas de pacientes, registar notas clínicas e marcar consultas.",
       detailedEntryPoints: [
@@ -108,7 +100,7 @@ test("localized Home artifacts present one ordered Work section", async () => {
         "Tecnologias: Next.js, Payload CMS, Tailwind CSS, Motion",
         "Tecnologias: Next.js, Ant Design, Tailwind CSS",
       ],
-      pixelmattersLink: "Visitar o site da Pixelmatters",
+      pixelmattersTitle: "Site da Pixelmatters",
     },
   };
 
@@ -131,11 +123,13 @@ test("localized Home artifacts present one ordered Work section", async () => {
     );
     const titles = ["fasti", "Mafalda Esteves Nutrição", ...expected.detailedEntryTitles];
     assert.deepEqual(
-      [...work.matchAll(/<h3\b[^>]*>(.*?)<\/h3>/g)].map((match) => match[1]),
+      [...work.matchAll(/<h3\b[^>]*>(.*?)<\/h3>/g)].map((match) =>
+        match[1].replace(/<[^>]+>/g, ""),
+      ),
       titles,
     );
-    const homeEntryHeadings = [...html.matchAll(/<h3\b[^>]*>(.*?)<\/h3>/g)].map(
-      (match) => match[1],
+    const homeEntryHeadings = [...html.matchAll(/<h3\b[^>]*>(.*?)<\/h3>/g)].map((match) =>
+      match[1].replace(/<[^>]+>/g, ""),
     );
     assert.deepEqual(
       homeEntryHeadings.filter((heading) => titles.includes(heading)),
@@ -145,10 +139,14 @@ test("localized Home artifacts present one ordered Work section", async () => {
     const [fasti, mafalda] = [...work.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/g)].map(
       (match) => match[1],
     );
-    const fastiLink = `<a href="https://github.com/duarteplesteves/fasti">${expected.fastiLink}</a>`;
     const paragraphs = (entry) =>
       [...entry.matchAll(/<p\b[^>]*>(.*?)<\/p>/g)].map((match) => match[1]);
-    assert.deepEqual(paragraphs(fasti), [expected.fastiSummary, fastiLink]);
+    assert.ok(
+      fasti.includes(
+        '<a href="https://github.com/duarteplesteves/fasti" target="_blank">fasti</a>',
+      ),
+    );
+    assert.deepEqual(paragraphs(fasti), [expected.fastiSummary]);
     assert.deepEqual(paragraphs(mafalda), [expected.mafaldaSummary]);
     assert.doesNotMatch(mafalda, /<a\b/);
     for (const point of expected.detailedEntryPoints) {
@@ -158,7 +156,9 @@ test("localized Home artifacts present one ordered Work section", async () => {
       assert.ok(work.includes(technologies));
     }
     assert.ok(
-      work.includes(`<a href="https://www.pixelmatters.com/">${expected.pixelmattersLink}</a>`),
+      work.includes(
+        `<a href="https://www.pixelmatters.com/" target="_blank">${expected.pixelmattersTitle}</a>`,
+      ),
     );
   }
 });
@@ -212,8 +212,8 @@ test("the build emits the root and localized Home and Library routes", async () 
 
 test("Octane places Home metadata in the document head for each Site language", async () => {
   const descriptions = {
-    en: "Software, work, books, and tools from Duarte Esteves.",
-    pt: "Software, trabalho, livros e ferramentas de Duarte Esteves.",
+    en: "Software, work and books from Duarte Esteves.",
+    pt: "Software, trabalho e livros de Duarte Esteves.",
   };
 
   for (const siteLanguage of ["en", "pt"]) {

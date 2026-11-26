@@ -11,8 +11,8 @@ introduction:
     mudar a forma como vejo o mundo.
 
 description:
-  en: Software, work, books, and tools from Duarte Esteves.
-  pt: Software, trabalho, livros e ferramentas de Duarte Esteves.
+  en: Software, work and books from Duarte Esteves.
+  pt: Software, trabalho e livros de Duarte Esteves.
 
 work:
   heading:
@@ -34,11 +34,7 @@ work:
           Estou a desenvolver o fasti, uma biblioteca de código aberto em TypeScript
           para integrar marcações numa aplicação. Permite consultar a disponibilidade,
           fazer e remarcar marcações ou cancelá-las, usando a base de dados da própria aplicação.
-      link:
-        label:
-          en: View fasti on GitHub
-          pt: Ver o fasti no GitHub
-        href: https://github.com/duarteplesteves/fasti
+      link: https://github.com/duarteplesteves/fasti
     - title:
         en: Mafalda Esteves Nutrição
         pt: Mafalda Esteves Nutrição
@@ -54,9 +50,6 @@ work:
     - title:
         en: This site
         pt: Este site
-      context:
-        en: Independent work · Creator · 2026–present
-        pt: Trabalho independente · Autor · 2026–presente
       points:
         - en: I wanted a small, quiet place for my work, books, and other curiosities.
           pt: Queria um lugar pequeno e tranquilo para o meu trabalho, os meus livros e outras curiosidades.
@@ -69,9 +62,6 @@ work:
     - title:
         en: Identity-provider operations platform
         pt: Plataforma de operações de fornecedores de identidade
-      context:
-        en: Pixelmatters · Frontend Engineer · 2025
-        pt: Pixelmatters · Engenheiro frontend · 2025
       points:
         - en: I worked on interfaces for identity-provider operations, with complex workflows that had to stay clear and dependable.
           pt: Trabalhei em interfaces para operações de fornecedores de identidade, com fluxos de trabalho complexos que tinham de ser claros e fiáveis.
@@ -86,9 +76,6 @@ work:
     - title:
         en: Pixelmatters website
         pt: Site da Pixelmatters
-      context:
-        en: Pixelmatters · Frontend Engineer · 2025–present
-        pt: Pixelmatters · Engenheiro frontend · 2025–presente
       points:
         - en: I turn the design team's work into code for pages that rarely share the same shape.
           pt: Transformo o trabalho da equipa de design em código para páginas que raramente têm a mesma forma.
@@ -99,17 +86,10 @@ work:
         - Payload CMS
         - Tailwind CSS
         - Motion
-      link:
-        label:
-          en: Visit the Pixelmatters website
-          pt: Visitar o site da Pixelmatters
-        href: https://www.pixelmatters.com/
+      link: https://www.pixelmatters.com/
     - title:
         en: Intellectual-property platform
         pt: Plataforma de propriedade intelectual
-      context:
-        en: BEAM – Managed IT Solutions · Frontend Engineer · 2024–2025
-        pt: BEAM – Managed IT Solutions · Engenheiro frontend · 2024–2025
       points:
         - en: I joined this project knowing almost nothing about intellectual property.
           pt: Entrei neste projeto sem saber quase nada sobre propriedade intelectual.
@@ -163,26 +143,6 @@ work:
           en: I worked on large e-commerce and event projects in a bigger frontend team.
           pt: Trabalhei em grandes projetos de comércio eletrónico e eventos, integrado numa equipa de frontend maior.
 
-setup:
-  heading:
-    en: Setup and tools
-    pt: Configuração e ferramentas
-  updated:
-    en: Updated September 2026
-    pt: Atualizado em setembro de 2026
-  items:
-    - en: MacBook Pro M5 Pro
-      pt: MacBook Pro M5 Pro
-    - en: Zed
-      pt: Zed
-    - en: Ghostty
-      pt: Ghostty
-    - en: Herdr
-      pt: Herdr
-    - en: Pi
-      pt: Pi
-    - en: Agent resources
-      pt: Recursos para agentes
 
 contact:
   heading:

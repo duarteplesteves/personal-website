@@ -31,9 +31,6 @@ work:
     - title:
         en: Selected work
         pt: Trabalho selecionado
-      context:
-        en: Independent work · Creator · 2026
-        pt: Trabalho Independente · Criador · 2026
       points:
         - en: English selected work
           pt: Trabalho selecionado português
@@ -57,16 +54,7 @@ work:
         description:
           en: English experience
           pt: Experiência portuguesa
-setup:
-  heading:
-    en: Setup and tools
-    pt: Configuração e ferramentas
-  updated:
-    en: Updated February 2026
-    pt: Atualizado em fevereiro de 2026
-  items:
-    - en: Zed
-      pt: Zed
+
 contact:
   heading:
     en: Contact
