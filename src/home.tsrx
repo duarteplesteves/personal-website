@@ -29,7 +29,7 @@ export function Home({ content }: { content: HomePageData }) @{
                     ))}
                   </ul>
                   <p class="section-note technologies">
-                    {content.work.technologiesLabel}: {item.technologies.join(", ")}
+                    {`${content.work.technologiesLabel}: ${item.technologies.join(", ")}`}
                   </p>
                 </>
               )}
@@ -53,7 +53,9 @@ export function Home({ content }: { content: HomePageData }) @{
               <p>{item.description}</p>
               {item.roles.map((role) => (
                 <p class="section-note">
-                  {role.title} <span aria-hidden="true"> · </span> {role.dates}
+                  {role.title}
+                  <span aria-hidden="true"> · </span>
+                  {role.dates}
                 </p>
               ))}
             </article>

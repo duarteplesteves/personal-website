@@ -9,7 +9,17 @@
     "jsx": "preserve",
     "jsxImportSource": "octane",
     "types": ["node"],
-    "plugins": [{ "name": "@tsrx/typescript-plugin" }]
+    "plugins": [
+      {
+        "name": "@tsrx/typescript-plugin"
+      }
+    ]
   },
+  "contentMappers": [
+    {
+      "package": "@tsrx/content-mapper",
+      "extensions": [".tsrx"]
+    }
+  ],
   "include": ["scripts/**/*.ts", "src/**/*.ts", "src/**/*.tsrx", "vite.config.ts"]
 }
