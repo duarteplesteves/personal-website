@@ -21,20 +21,16 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22.22.2
-          cache: npm
-      - run: npm install --global @nubjs/nub@0.7.5
+          package-manager-cache: false
+      - run: npm install --global @nubjs/nub@0.11.2
       - run: nub ci
-      - run: nub run validate
-      - run: nub run typecheck
-      - run: nub run lint
-      - run: nub run format:check
-      - run: nub run test
+      - run: nub run check
       - id: deploy
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -94,7 +90,7 @@ jobs:
             echo
             echo 'INP needs field data; TBT is the launch lab responsiveness guard.'
           } >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: lighthouse-production
           path: lighthouse

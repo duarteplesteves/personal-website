@@ -1,0 +1,27 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "src/**/*.tsrx",
+        "src/browser/**",
+        "src/render-site.ts",
+        "src/publication.ts",
+        "src/inline-enhancements.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["effect", "effect/*", "@effect/*", "yaml", "node:*", "node:*/**", "**/repository/**"],
+                "allowTypeImports": true,
+                "message": "Frontend modules render static HTML or run in the browser: keep Effect, YAML, Node.js and repository code out."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
