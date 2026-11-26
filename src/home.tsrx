@@ -1,6 +1,7 @@
 import type { HomePageData } from "./page-data-schema.ts";
 import { SiteHeader } from "./site-header.tsrx";
 
+/** Render the static Home document in its selected Site language. */
 export function Home({ content }: { content: HomePageData }) @{
   <>
     <title>{content.title}</title>
@@ -9,39 +10,29 @@ export function Home({ content }: { content: HomePageData }) @{
     <main id="content">
       <h1>{content.title}</h1>
       <p class="introduction">{content.introduction}</p>
-      <section aria-labelledby="working-on-heading">
-        <h2 id="working-on-heading">{content.work.workingOn.heading}</h2>
+      <section aria-labelledby="work-heading">
+        <h2 id="work-heading">{content.work.heading}</h2>
         <div class="work-entries">
-          {content.work.workingOn.items.map((item) => (
+          {content.work.items.map((item) => (
             <article class="work-entry">
               <div class="work-entry-header">
                 <h3>{item.title}</h3>
+                {"context" in item && <p class="section-note">{item.context}</p>}
               </div>
-              <p>{item.description}</p>
-              <p class="section-note technologies">
-                {content.work.technologiesLabel}: {item.technologies.join(", ")}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
-      <section aria-labelledby="selected-work-heading">
-        <h2 id="selected-work-heading">{content.work.selected.heading}</h2>
-        <div class="work-entries">
-          {content.work.selected.items.map((item) => (
-            <article class="work-entry">
-              <div class="work-entry-header">
-                <h3>{item.title}</h3>
-                <p class="section-note">{item.context}</p>
-              </div>
-              <ul role="list">
-                {item.points.map((point) => (
-                  <li>{point}</li>
-                ))}
-              </ul>
-              <p class="section-note technologies">
-                {content.work.technologiesLabel}: {item.technologies.join(", ")}
-              </p>
+              {"description" in item ? (
+                <p>{item.description}</p>
+              ) : (
+                <>
+                  <ul role="list">
+                    {item.points.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                  <p class="section-note technologies">
+                    {content.work.technologiesLabel}: {item.technologies.join(", ")}
+                  </p>
+                </>
+              )}
               {item.link && (
                 <p class="work-link">
                   <a href={item.link.href}>{item.link.label}</a>

@@ -15,38 +15,30 @@ description:
   en: English description
   pt: Descrição portuguesa
 work:
+  heading:
+    en: Work
+    pt: Trabalho
   technologiesLabel:
     en: Technologies
     pt: Tecnologias
-  workingOn:
-    heading:
-      en: Working on
-      pt: A trabalhar em
-    items:
-      - title:
-          en: Active work
-          pt: Trabalho ativo
-        description:
-          en: English active work
-          pt: Trabalho ativo português
-        technologies:
-          - TypeScript
-  selected:
-    heading:
-      en: Selected work
-      pt: Trabalho selecionado
-    items:
-      - title:
-          en: Selected work
-          pt: Trabalho selecionado
-        context:
-          en: Independent work · Creator · 2026
-          pt: Trabalho Independente · Criador · 2026
-        points:
-          - en: English selected work
-            pt: Trabalho selecionado português
-        technologies:
-          - TypeScript
+  items:
+    - title:
+        en: Example project
+        pt: Projeto de exemplo
+      description:
+        en: English summary
+        pt: Resumo português
+    - title:
+        en: Selected work
+        pt: Trabalho selecionado
+      context:
+        en: Independent work · Creator · 2026
+        pt: Trabalho Independente · Criador · 2026
+      points:
+        - en: English selected work
+          pt: Trabalho selecionado português
+      technologies:
+        - TypeScript
   experience:
     heading:
       en: Experience

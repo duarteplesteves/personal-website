@@ -15,124 +15,112 @@ description:
   pt: Software, trabalho, livros e ferramentas de Duarte Esteves.
 
 work:
+  heading:
+    en: Work
+    pt: Trabalho
   technologiesLabel:
     en: Technologies
     pt: Tecnologias
-  workingOn:
-    heading:
-      en: Working on
-      pt: A trabalhar em
-    items:
-      - title:
-          en: Better Schedule
-          pt: Better Schedule
-        description:
-          en: >-
-            I kept finding scheduling rules that were harder to express than
-            they should be. I started building a small library to make that work
-            simpler. It is active, but not published yet.
-          pt: >-
-            Fui encontrando regras de horários e marcações mais difíceis de
-            exprimir do que deviam. Comecei a criar uma pequena biblioteca para
-            simplificar esse trabalho. Está em desenvolvimento, mas ainda não
-            foi publicada.
-        technologies:
-          - TypeScript
-          - Temporal
-          - fast-check
-      - title:
-          en: Mafalda Esteves Nutrição
-          pt: Mafalda Esteves Nutrição
-        description:
-          en: >-
-            This is a private product I am building around the day-to-day work
-            of a nutritionist. Right now, I am focused on patient plans. It is
-            still in pre-production.
-          pt: >-
-            Este é um produto privado que estou a criar a pensar no dia a dia de
-            uma nutricionista. Neste momento, estou focado no módulo de planos
-            alimentares. Ainda está em pré-produção.
-        technologies:
-          - Next.js
-          - Elysia
-          - Prisma
-          - Neon
-          - Better Auth
-  selected:
-    heading:
-      en: Selected work
-      pt: Projetos selecionados
-    items:
-      - title:
-          en: This site
-          pt: Este site
-        context:
-          en: Independent work · Creator · 2026–present
-          pt: Trabalho independente · Autor · 2026–presente
-        points:
-          - en: I wanted a small, quiet place for my work, books, and other curiosities.
-            pt: Queria um lugar pequeno e tranquilo para o meu trabalho, os meus livros e outras curiosidades.
-          - en: Static pages keep it quick and let the Library remain readable without JavaScript.
-            pt: As páginas estáticas mantêm o site rápido e permitem consultar a Biblioteca sem JavaScript.
-        technologies:
-          - Octane
-          - Effect
-          - Vite
-      - title:
-          en: Identity-provider operations platform
-          pt: Plataforma de operações de fornecedores de identidade
-        context:
-          en: Pixelmatters · Frontend Engineer · 2025
-          pt: Pixelmatters · Engenheiro frontend · 2025
-        points:
-          - en: I worked on interfaces for identity-provider operations, with complex workflows that had to stay clear and dependable.
-            pt: Trabalhei em interfaces para operações de fornecedores de identidade, com fluxos de trabalho complexos que tinham de ser claros e fiáveis.
-          - en: I shaped those workflows with the product and engineering team.
-            pt: Trabalhei com a equipa de produto e engenharia para lhes dar forma.
-          - en: I cannot share the client name or product details.
-            pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
-        technologies:
-          - TanStack
-          - Tailwind CSS
-          - WorkOS
-      - title:
-          en: Pixelmatters website
-          pt: Site da Pixelmatters
-        context:
-          en: Pixelmatters · Frontend Engineer · 2025–present
-          pt: Pixelmatters · Engenheiro frontend · 2025–presente
-        points:
-          - en: I turn the design team's work into code for pages that rarely share the same shape.
-            pt: Transformo o trabalho da equipa de design em código para páginas que raramente têm a mesma forma.
-          - en: Much of my work is in the details — layout, motion, content flexibility, and speed.
-            pt: Grande parte do meu trabalho está nos pormenores — estrutura, animação, flexibilidade do conteúdo e rapidez.
-        technologies:
-          - Next.js
-          - Payload CMS
-          - Tailwind CSS
-          - Motion
-        link:
-          label:
-            en: Visit the Pixelmatters website
-            pt: Visitar o site da Pixelmatters
-          href: https://www.pixelmatters.com/
-      - title:
-          en: Intellectual-property platform
-          pt: Plataforma de propriedade intelectual
-        context:
-          en: BEAM – Managed IT Solutions · Frontend Engineer · 2024–2025
-          pt: BEAM – Managed IT Solutions · Engenheiro frontend · 2024–2025
-        points:
-          - en: I joined this project knowing almost nothing about intellectual property.
-            pt: Entrei neste projeto sem saber quase nada sobre propriedade intelectual.
-          - en: The interfaces changed as the team and I learned how the domain worked.
-            pt: As interfaces foram mudando à medida que percebíamos melhor o domínio.
-          - en: I cannot share the client name or product details.
-            pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
-        technologies:
-          - Next.js
-          - Ant Design
-          - Tailwind CSS
+  items:
+    - title:
+        en: fasti
+        pt: fasti
+      description:
+        en: >-
+          I’m building fasti, an open-source TypeScript library for adding bookings
+          to an application. It finds available times and handles booking,
+          rescheduling and cancellation using the application’s own database.
+        pt: >-
+          Estou a desenvolver o fasti, uma biblioteca de código aberto em TypeScript
+          para integrar marcações numa aplicação. Permite consultar a disponibilidade,
+          fazer e remarcar marcações ou cancelá-las, usando a base de dados da própria aplicação.
+      link:
+        label:
+          en: View fasti on GitHub
+          pt: Ver o fasti no GitHub
+        href: https://github.com/duarteplesteves/fasti
+    - title:
+        en: Mafalda Esteves Nutrição
+        pt: Mafalda Esteves Nutrição
+      description:
+        en: >-
+          I designed and built this private platform for a nutrition practice,
+          from the interface to the database. The team uses it to manage patient
+          records, write clinical notes and book appointments.
+        pt: >-
+          Concebi e desenvolvi esta plataforma privada para uma prática de nutrição,
+          da interface à base de dados. A equipa usa-a no dia a dia para gerir fichas
+          de pacientes, registar notas clínicas e marcar consultas.
+    - title:
+        en: This site
+        pt: Este site
+      context:
+        en: Independent work · Creator · 2026–present
+        pt: Trabalho independente · Autor · 2026–presente
+      points:
+        - en: I wanted a small, quiet place for my work, books, and other curiosities.
+          pt: Queria um lugar pequeno e tranquilo para o meu trabalho, os meus livros e outras curiosidades.
+        - en: Static pages keep it quick and let the Library remain readable without JavaScript.
+          pt: As páginas estáticas mantêm o site rápido e permitem consultar a Biblioteca sem JavaScript.
+      technologies:
+        - Octane
+        - Effect
+        - Vite
+    - title:
+        en: Identity-provider operations platform
+        pt: Plataforma de operações de fornecedores de identidade
+      context:
+        en: Pixelmatters · Frontend Engineer · 2025
+        pt: Pixelmatters · Engenheiro frontend · 2025
+      points:
+        - en: I worked on interfaces for identity-provider operations, with complex workflows that had to stay clear and dependable.
+          pt: Trabalhei em interfaces para operações de fornecedores de identidade, com fluxos de trabalho complexos que tinham de ser claros e fiáveis.
+        - en: I shaped those workflows with the product and engineering team.
+          pt: Trabalhei com a equipa de produto e engenharia para lhes dar forma.
+        - en: I cannot share the client name or product details.
+          pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
+      technologies:
+        - TanStack
+        - Tailwind CSS
+        - WorkOS
+    - title:
+        en: Pixelmatters website
+        pt: Site da Pixelmatters
+      context:
+        en: Pixelmatters · Frontend Engineer · 2025–present
+        pt: Pixelmatters · Engenheiro frontend · 2025–presente
+      points:
+        - en: I turn the design team's work into code for pages that rarely share the same shape.
+          pt: Transformo o trabalho da equipa de design em código para páginas que raramente têm a mesma forma.
+        - en: Much of my work is in the details — layout, motion, content flexibility, and speed.
+          pt: Grande parte do meu trabalho está nos pormenores — estrutura, animação, flexibilidade do conteúdo e rapidez.
+      technologies:
+        - Next.js
+        - Payload CMS
+        - Tailwind CSS
+        - Motion
+      link:
+        label:
+          en: Visit the Pixelmatters website
+          pt: Visitar o site da Pixelmatters
+        href: https://www.pixelmatters.com/
+    - title:
+        en: Intellectual-property platform
+        pt: Plataforma de propriedade intelectual
+      context:
+        en: BEAM – Managed IT Solutions · Frontend Engineer · 2024–2025
+        pt: BEAM – Managed IT Solutions · Engenheiro frontend · 2024–2025
+      points:
+        - en: I joined this project knowing almost nothing about intellectual property.
+          pt: Entrei neste projeto sem saber quase nada sobre propriedade intelectual.
+        - en: The interfaces changed as the team and I learned how the domain worked.
+          pt: As interfaces foram mudando à medida que percebíamos melhor o domínio.
+        - en: I cannot share the client name or product details.
+          pt: Não posso partilhar o nome do cliente nem os detalhes do produto.
+      technologies:
+        - Next.js
+        - Ant Design
+        - Tailwind CSS
 
   experience:
     heading:

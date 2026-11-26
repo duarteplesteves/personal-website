@@ -2,19 +2,20 @@ import { Schema } from "effect";
 import { IsoPartialDate, SafeUrl } from "./authored-fields.ts";
 import { EquivalentTranslationSchema } from "./equivalent-translation.ts";
 
-const WorkingOnEntrySchema = Schema.Struct({
+const workEntryFields = {
   title: EquivalentTranslationSchema,
-  description: EquivalentTranslationSchema,
-  technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
-});
-
-const SelectedWorkEntrySchema = Schema.Struct({
-  title: EquivalentTranslationSchema,
-  context: EquivalentTranslationSchema,
-  points: Schema.NonEmptyArray(EquivalentTranslationSchema),
-  technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
   link: Schema.optionalKey(Schema.Struct({ label: EquivalentTranslationSchema, href: SafeUrl })),
-});
+};
+
+const WorkEntrySchema = Schema.Union([
+  Schema.Struct({ ...workEntryFields, description: EquivalentTranslationSchema }),
+  Schema.Struct({
+    ...workEntryFields,
+    context: EquivalentTranslationSchema,
+    points: Schema.NonEmptyArray(EquivalentTranslationSchema),
+    technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
+  }),
+]);
 
 const ExperienceMonthSchema = IsoPartialDate.pipe(Schema.check(Schema.isPattern(/^\d{4}-\d{2}$/)));
 
@@ -62,15 +63,9 @@ export const HomeContentSchema = Schema.Struct({
   introduction: EquivalentTranslationSchema,
   description: EquivalentTranslationSchema,
   work: Schema.Struct({
+    heading: EquivalentTranslationSchema,
     technologiesLabel: EquivalentTranslationSchema,
-    workingOn: Schema.Struct({
-      heading: EquivalentTranslationSchema,
-      items: Schema.NonEmptyArray(WorkingOnEntrySchema),
-    }),
-    selected: Schema.Struct({
-      heading: EquivalentTranslationSchema,
-      items: Schema.NonEmptyArray(SelectedWorkEntrySchema),
-    }),
+    items: Schema.NonEmptyArray(WorkEntrySchema),
     experience: Schema.Struct({
       heading: EquivalentTranslationSchema,
       present: EquivalentTranslationSchema,

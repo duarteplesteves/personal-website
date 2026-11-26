@@ -29,37 +29,32 @@ const PublicBookIdentitySchema = Schema.Struct({
   ),
 });
 
-export const HomePageDataSchema = Schema.Struct({
+const workEntryFields = {
+  title: Schema.NonEmptyString,
+  link: Schema.optionalKey(
+    Schema.Struct({ label: Schema.NonEmptyString, href: Schema.NonEmptyString }),
+  ),
+};
+
+const WorkEntryDataSchema = Schema.Union([
+  Schema.Struct({ ...workEntryFields, description: Schema.NonEmptyString }),
+  Schema.Struct({
+    ...workEntryFields,
+    context: Schema.NonEmptyString,
+    points: Schema.NonEmptyArray(Schema.NonEmptyString),
+    technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
+  }),
+]);
+
+const HomePageDataSchema = Schema.Struct({
   page: Schema.Literal("home"),
   title: Schema.NonEmptyString,
   introduction: Schema.NonEmptyString,
   description: Schema.NonEmptyString,
   work: Schema.Struct({
+    heading: Schema.NonEmptyString,
     technologiesLabel: Schema.NonEmptyString,
-    workingOn: Schema.Struct({
-      heading: Schema.NonEmptyString,
-      items: Schema.Array(
-        Schema.Struct({
-          title: Schema.NonEmptyString,
-          description: Schema.NonEmptyString,
-          technologies: Schema.Array(Schema.NonEmptyString),
-        }),
-      ),
-    }),
-    selected: Schema.Struct({
-      heading: Schema.NonEmptyString,
-      items: Schema.Array(
-        Schema.Struct({
-          title: Schema.NonEmptyString,
-          context: Schema.NonEmptyString,
-          points: Schema.Array(Schema.NonEmptyString),
-          technologies: Schema.Array(Schema.NonEmptyString),
-          link: Schema.optionalKey(
-            Schema.Struct({ label: Schema.NonEmptyString, href: Schema.NonEmptyString }),
-          ),
-        }),
-      ),
-    }),
+    items: Schema.NonEmptyArray(WorkEntryDataSchema),
     experience: Schema.Struct({
       heading: Schema.NonEmptyString,
       items: Schema.Array(
@@ -171,6 +166,7 @@ export const RootPageDataSchema = Schema.Struct({
   }),
 });
 
+/** Localized, validated data for rendering Home. */
 export type HomePageData = typeof HomePageDataSchema.Type;
 export type LibraryPageData = typeof LibraryPageDataSchema.Type;
 export type PageData = typeof PageDataSchema.Type;
