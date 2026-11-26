@@ -34,18 +34,21 @@ export function Library({ content }: { content: LibraryPageData }) @{
         </h2>
         <div class="library-search">
           <label for="library-search">{content.searchLabel}</label>
-          <input
-            type="search"
-            id="library-search"
-            data-library-search
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            placeholder={content.searchPlaceholder}
-          />
-          <button type="button" data-library-clear>
-            {content.clearSearchLabel}
-          </button>
+          <div class="library-search-field">
+            <input
+              type="search"
+              id="library-search"
+              data-library-search
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder={content.searchPlaceholder}
+            />
+            <button type="button" data-library-clear hidden>
+              <span aria-hidden="true">×</span>
+              <span class="visually-hidden">{content.clearSearchLabel}</span>
+            </button>
+          </div>
         </div>
         <div class="library-options">
           <fieldset>

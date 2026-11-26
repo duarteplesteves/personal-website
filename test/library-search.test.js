@@ -181,8 +181,10 @@ test("clear restores the full listing and returns focus to the search control", 
     "Solaris Stanisław Lem",
   ]);
 
+  assert.equal(env.clear.hidden, true, "nothing to clear before typing");
   env.input.value = "scarlet";
   env.input.dispatch("input");
+  assert.equal(env.clear.hidden, false);
   assert.equal(env.count.textContent, "1 of 2 Books");
   assert.equal(env.empty.hidden, true);
   await new Promise((resolve) => setTimeout(resolve, 350));
@@ -194,6 +196,7 @@ test("clear restores the full listing and returns focus to the search control", 
   assert.equal(env.count.textContent, "2 Books");
   assert.equal(env.empty.hidden, true);
   assert.equal(env.input.focused, true);
+  assert.equal(env.clear.hidden, true);
   await new Promise((resolve) => setTimeout(resolve, 350));
   assert.equal(env.announcement.textContent, "2 Books");
 });

@@ -230,7 +230,7 @@ cite {
   flex-direction: column;
   gap: 1.25rem;
   padding: 0;
-  margin-block: 1.25rem 0;
+  margin-block: 0.5rem 0;
   list-style: none;
   overflow-wrap: break-word;
 }
@@ -242,31 +242,57 @@ cite {
   margin: 0.25rem 0 0;
   font-style: italic;
 }
+.library-controls {
+  gap: 1.5rem;
+}
 .library-search {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.library-search-field {
+  position: relative;
 }
 .library-search label,
 .library-controls legend {
   color: var(--muted);
 }
 .library-search input {
-  min-width: 0;
-  flex: 1 1 14rem;
-  padding: 0.5rem 0.65rem;
-  border: 0.07rem solid var(--subtle);
-  background: var(--background);
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 0;
+  border: 0;
+  border-block-end: 0.07rem solid var(--subtle);
+  border-radius: 0;
+  background: none;
   color: var(--text);
   font: inherit;
+  appearance: none;
+  transition: border-color 0.15s ease;
+}
+.library-search input:hover,
+.library-search input:focus {
+  border-color: var(--text);
+}
+/* The × button replaces the browser's own clear control. */
+.library-search input::-webkit-search-cancel-button {
+  appearance: none;
+}
+.library-search input::placeholder {
+  color: var(--subtle);
 }
 .library-controls :focus-visible {
   outline: 0.15rem solid var(--focus);
   outline-offset: 0.1rem;
 }
 .library-search button {
-  padding: 0.5rem 0.25rem;
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 2.5rem;
+  padding: 0;
   border: 0;
   background: none;
   color: var(--subtle);
@@ -276,6 +302,11 @@ cite {
 }
 .library-search button:hover {
   color: var(--text);
+}
+/* The × glyph is an icon, so it is sized to read like one rather than as text. */
+.library-search button [aria-hidden] {
+  font-size: 1.5rem;
+  line-height: 1;
 }
 .library-options {
   display: flex;
@@ -333,7 +364,7 @@ cite {
   color: var(--muted);
 }
 .enhanced .result-count {
-  margin-block-start: 1.25rem;
+  margin-block-start: 3rem;
 }
 .empty-state {
   margin-block: 1.25rem 0;
