@@ -250,6 +250,7 @@ cite {
 .library-search {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 .library-search-field {
   position: relative;
@@ -260,7 +261,7 @@ cite {
 }
 .library-search input {
   width: 100%;
-  padding: 0.25rem 2.5rem 0.5rem 0;
+  padding: 0 2.5rem 0.5rem 0;
   border: 0;
   border-block-end: 0.07rem solid var(--subtle);
   border-radius: 0;
@@ -269,6 +270,10 @@ cite {
   font: inherit;
   appearance: none;
   transition: border-color 0.15s ease;
+}
+/* The field has no side padding, so the ring needs room to clear the text. */
+.library-search input:focus-visible {
+  outline-offset: 0.4rem;
 }
 .library-search input:hover,
 .library-search input:focus {
