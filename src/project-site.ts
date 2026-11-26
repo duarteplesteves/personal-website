@@ -1,3 +1,4 @@
+import { Array as EffectArray } from "effect";
 import type { HomePageData, LibraryPageData, PageData, RootPageData } from "./page-data-schema.ts";
 import { equivalentPublication, findPublication, type Publication } from "./publication.ts";
 import type { HomeContent } from "./repository/home-content.ts";
@@ -74,7 +75,7 @@ const projectBooks = (library: LibraryContent, siteLanguage?: "en" | "pt") => {
   });
 };
 
-export const projectHome = (
+const projectHome = (
   home: HomeContent,
   library: LibraryContent,
   site: SiteContent,
@@ -95,32 +96,21 @@ export const projectHome = (
     introduction: home.introduction[siteLanguage],
     description: home.description[siteLanguage],
     work: {
+      heading: home.work.heading[siteLanguage],
       technologiesLabel: home.work.technologiesLabel[siteLanguage],
-      workingOn: {
-        heading: home.work.workingOn.heading[siteLanguage],
-        items: home.work.workingOn.items.map((item) => ({
-          title: item.title[siteLanguage],
-          description: item.description[siteLanguage],
-          technologies: item.technologies,
-        })),
-      },
-      selected: {
-        heading: home.work.selected.heading[siteLanguage],
-        items: home.work.selected.items.map((item) => ({
-          title: item.title[siteLanguage],
-          context: item.context[siteLanguage],
-          points: item.points.map((point) => point[siteLanguage]),
-          technologies: item.technologies,
-          ...(item.link === undefined
-            ? {}
-            : {
-                link: {
-                  label: item.link.label[siteLanguage],
-                  href: item.link.href.href,
-                },
-              }),
-        })),
-      },
+      items: EffectArray.map(home.work.items, (item) => ({
+        title: item.title[siteLanguage],
+        ...("description" in item
+          ? { description: item.description[siteLanguage] }
+          : {
+              context: item.context[siteLanguage],
+              points: EffectArray.map(item.points, (point) => point[siteLanguage]),
+              technologies: item.technologies,
+            }),
+        ...(item.link === undefined
+          ? {}
+          : { link: { label: item.link.label[siteLanguage], href: item.link.href.href } }),
+      })),
       experience: {
         heading: home.work.experience.heading[siteLanguage],
         items: home.work.experience.items

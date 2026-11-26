@@ -50,30 +50,30 @@ test("localized Home artifacts include Setup and tools and direct contact destin
   }
 });
 
-test("localized Home artifacts present active and selected work honestly", async () => {
+test("localized Home artifacts present one ordered Work section", async () => {
   const localizedContent = {
     en: {
-      workingOn: "Working on",
-      selectedWork: "Selected work",
-      betterSchedule: "Better Schedule",
-      mafaldaNutri: "Mafalda Esteves Nutrição",
-      selectedTitles: [
+      heading: "Work",
+      formerHeadings: /^(Working on|Selected work)$/,
+      experienceHeading: "Experience",
+      detailedEntryTitles: [
         "This site",
         "Identity-provider operations platform",
         "Pixelmatters website",
         "Intellectual-property platform",
       ],
-      betterScheduleState: "scheduling rules that were harder to express than they should be",
-      mafaldaNutriState: "pre-production",
-      selectedPoints: [
+      fastiSummary:
+        "I’m building fasti, an open-source TypeScript library for adding bookings to an application. It finds available times and handles booking, rescheduling and cancellation using the application’s own database.",
+      fastiLink: "View fasti on GitHub",
+      mafaldaSummary:
+        "I designed and built this private platform for a nutrition practice, from the interface to the database. The team uses it to manage patient records, write clinical notes and book appointments.",
+      detailedEntryPoints: [
         "I wanted a small, quiet place for my work, books, and other curiosities.",
         "I worked on interfaces for identity-provider operations",
         "pages that rarely share the same shape",
         "I joined this project knowing almost nothing about intellectual property.",
       ],
       technologies: [
-        "Technologies: TypeScript, Temporal, fast-check",
-        "Technologies: Next.js, Elysia, Prisma, Neon, Better Auth",
         "Technologies: Octane, Effect, Vite",
         "Technologies: TanStack, Tailwind CSS, WorkOS",
         "Technologies: Next.js, Payload CMS, Tailwind CSS, Motion",
@@ -82,27 +82,27 @@ test("localized Home artifacts present active and selected work honestly", async
       pixelmattersLink: "Visit the Pixelmatters website",
     },
     pt: {
-      workingOn: "A trabalhar em",
-      selectedWork: "Projetos selecionados",
-      betterSchedule: "Better Schedule",
-      mafaldaNutri: "Mafalda Esteves Nutrição",
-      selectedTitles: [
+      heading: "Trabalho",
+      formerHeadings: /^(A trabalhar em|Projetos selecionados)$/,
+      experienceHeading: "Experiência",
+      detailedEntryTitles: [
         "Este site",
         "Plataforma de operações de fornecedores de identidade",
         "Site da Pixelmatters",
         "Plataforma de propriedade intelectual",
       ],
-      betterScheduleState: "regras de horários e marcações mais difíceis de exprimir do que deviam",
-      mafaldaNutriState: "pré-produção",
-      selectedPoints: [
+      fastiSummary:
+        "Estou a desenvolver o fasti, uma biblioteca de código aberto em TypeScript para integrar marcações numa aplicação. Permite consultar a disponibilidade, fazer e remarcar marcações ou cancelá-las, usando a base de dados da própria aplicação.",
+      fastiLink: "Ver o fasti no GitHub",
+      mafaldaSummary:
+        "Concebi e desenvolvi esta plataforma privada para uma prática de nutrição, da interface à base de dados. A equipa usa-a no dia a dia para gerir fichas de pacientes, registar notas clínicas e marcar consultas.",
+      detailedEntryPoints: [
         "Queria um lugar pequeno e tranquilo para o meu trabalho, os meus livros e outras curiosidades.",
         "Trabalhei em interfaces para operações de fornecedores de identidade",
         "páginas que raramente têm a mesma forma",
         "Entrei neste projeto sem saber quase nada sobre propriedade intelectual.",
       ],
       technologies: [
-        "Tecnologias: TypeScript, Temporal, fast-check",
-        "Tecnologias: Next.js, Elysia, Prisma, Neon, Better Auth",
         "Tecnologias: Octane, Effect, Vite",
         "Tecnologias: TanStack, Tailwind CSS, WorkOS",
         "Tecnologias: Next.js, Payload CMS, Tailwind CSS, Motion",
@@ -116,26 +116,49 @@ test("localized Home artifacts present active and selected work honestly", async
     const html = await readFile(`dist/${siteLanguage}/index.html`, "utf8");
     const expected = localizedContent[siteLanguage];
 
-    assert.match(html, new RegExp(`<h2[^>]*>${expected.workingOn}</h2>`));
-    assert.match(html, new RegExp(`<h2[^>]*>${expected.selectedWork}</h2>`));
-    assert.ok(html.includes(expected.betterScheduleState));
-    assert.ok(html.includes(expected.mafaldaNutriState));
-    for (const title of [
-      expected.betterSchedule,
-      expected.mafaldaNutri,
-      ...expected.selectedTitles,
-    ]) {
-      assert.match(html, new RegExp(`<h3>${title}</h3>`));
-      assert.doesNotMatch(html, new RegExp(`<h3><a[^>]*>${title}</a></h3>`));
-    }
-    for (const point of expected.selectedPoints) {
-      assert.ok(html.includes(point));
+    const headings = [...html.matchAll(/<h2\b[^>]*>(.*?)<\/h2>/g)].map((match) => match[1]);
+    assert.equal(headings.filter((heading) => heading === expected.heading).length, 1);
+    assert.ok(headings.every((heading) => !expected.formerHeadings.test(heading)));
+    assert.equal(headings[headings.indexOf(expected.heading) + 1], expected.experienceHeading);
+
+    const work = html.match(
+      new RegExp(`<section\\b[^>]*>\\s*<h2\\b[^>]*>${expected.heading}</h2>[\\s\\S]*?</section>`),
+    )?.[0];
+    assert.ok(work, `${siteLanguage} Home must have a Work section`);
+    assert.doesNotMatch(
+      work,
+      /<(?:template|noscript|script)\b|<[^>]+\s(?:hidden|inert)(?=[\s=>])/i,
+    );
+    const titles = ["fasti", "Mafalda Esteves Nutrição", ...expected.detailedEntryTitles];
+    assert.deepEqual(
+      [...work.matchAll(/<h3\b[^>]*>(.*?)<\/h3>/g)].map((match) => match[1]),
+      titles,
+    );
+    const homeEntryHeadings = [...html.matchAll(/<h3\b[^>]*>(.*?)<\/h3>/g)].map(
+      (match) => match[1],
+    );
+    assert.deepEqual(
+      homeEntryHeadings.filter((heading) => titles.includes(heading)),
+      titles,
+    );
+
+    const [fasti, mafalda] = [...work.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/g)].map(
+      (match) => match[1],
+    );
+    const fastiLink = `<a href="https://github.com/duarteplesteves/fasti">${expected.fastiLink}</a>`;
+    const paragraphs = (entry) =>
+      [...entry.matchAll(/<p\b[^>]*>(.*?)<\/p>/g)].map((match) => match[1]);
+    assert.deepEqual(paragraphs(fasti), [expected.fastiSummary, fastiLink]);
+    assert.deepEqual(paragraphs(mafalda), [expected.mafaldaSummary]);
+    assert.doesNotMatch(mafalda, /<a\b/);
+    for (const point of expected.detailedEntryPoints) {
+      assert.ok(work.includes(point));
     }
     for (const technologies of expected.technologies) {
-      assert.ok(html.includes(technologies));
+      assert.ok(work.includes(technologies));
     }
     assert.ok(
-      html.includes(`<a href="https://www.pixelmatters.com/">${expected.pixelmattersLink}</a>`),
+      work.includes(`<a href="https://www.pixelmatters.com/">${expected.pixelmattersLink}</a>`),
     );
   }
 });
