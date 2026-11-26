@@ -65,11 +65,11 @@ library:
     en: Currently reading
     pt: A ler
   searchLabel:
-    en: Search the Library
-    pt: Pesquisar a Biblioteca
+    en: Search
+    pt: Pesquisar
   searchPlaceholder:
-    en: Search by title or author
-    pt: Pesquisar por título ou autor
+    en: Title or author
+    pt: Título ou autor
   clearSearchLabel:
     en: Clear search
     pt: Limpar pesquisa
@@ -109,9 +109,6 @@ library:
   readTimes:
     en: Read {count} times
     pt: Lido {count} vezes
-  inCollection:
-    en: In collection
-    pt: Na coleção
   favorites:
     en: Favourites
     pt: Favoritos

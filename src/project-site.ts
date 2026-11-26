@@ -55,10 +55,6 @@ const projectBooks = (library: LibraryContent, siteLanguage?: "en" | "pt") => {
     return {
       ...book,
       alternateTitles: book.alternateTitles ?? [],
-      inCollection:
-        library.editions?.some(
-          (edition) => edition.bookId === book.id && edition.inCollection === true,
-        ) ?? false,
       readingStatus: deriveReadingStatus(
         completionCount,
         active,
@@ -172,7 +168,6 @@ export const projectLibrary = (
         !active &&
           book.completionCount > 1 &&
           text.readTimes[siteLanguage].replace("{count}", String(book.completionCount)),
-        book.inCollection && text.inCollection[siteLanguage],
         book.nextRead && text.nextReads[siteLanguage],
       ].filter((part): part is string => typeof part === "string");
       return parts.length > 0 ? { ...book, relationship: parts.join(" · ") } : book;
@@ -203,7 +198,6 @@ export const projectLibrary = (
     readLabel: text.readLabel[siteLanguage],
     favoritesLabel: text.favorites[siteLanguage],
     nextReadsLabel: text.nextReads[siteLanguage],
-    inCollectionLabel: text.inCollection[siteLanguage],
     orderByLabel: text.orderByLabel[siteLanguage],
     titleOrderLabel: text.titleOrderLabel[siteLanguage],
     authorOrderLabel: text.authorOrderLabel[siteLanguage],

@@ -82,6 +82,7 @@ const enhanceLibrary = () => {
         ? totalLabel.replace("{count}", String(total))
         : matchingLabel.replace("{matching}", String(matching)).replace("{total}", String(total));
     empty.hidden = matching > 0;
+    clear.hidden = input.value === "";
   };
 
   const announce = (delay = 0) => {

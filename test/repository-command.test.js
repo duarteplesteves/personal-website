@@ -260,7 +260,7 @@ test("validate accepts complete Editions and format-appropriate optional fields"
 
   assert.equal(result.status, 0, result.stderr);
   assert.equal(built.status, 0, built.stderr);
-  assert.match(html, /Ballad for Sophie(?:(?!<\/li>).)*In collection/s);
+  assert.match(html, /<cite>Ballad for Sophie<\/cite>/);
   assert.doesNotMatch(html, /Balada para Sophie/);
 });
 

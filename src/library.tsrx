@@ -12,7 +12,7 @@ export function Library({ content }: { content: LibraryPageData }) @{
       {content.currentlyReading && (
         <section aria-labelledby="currently-reading-heading">
           <h2 id="currently-reading-heading">{content.currentlyReadingLabel}</h2>
-          <ul role="list">
+          <ul class="book-lines" role="list">
             {content.currentlyReading.map((book) => (
               <li>
                 <cite>{book.title}</cite>
@@ -34,18 +34,21 @@ export function Library({ content }: { content: LibraryPageData }) @{
         </h2>
         <div class="library-search">
           <label for="library-search">{content.searchLabel}</label>
-          <input
-            type="search"
-            id="library-search"
-            data-library-search
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            placeholder={content.searchPlaceholder}
-          />
-          <button type="button" data-library-clear>
-            {content.clearSearchLabel}
-          </button>
+          <div class="library-search-field">
+            <input
+              type="search"
+              id="library-search"
+              data-library-search
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder={content.searchPlaceholder}
+            />
+            <button type="button" data-library-clear hidden>
+              <span aria-hidden="true">×</span>
+              <span class="visually-hidden">{content.clearSearchLabel}</span>
+            </button>
+          </div>
         </div>
         <div class="library-options">
           <fieldset>
@@ -71,12 +74,6 @@ export function Library({ content }: { content: LibraryPageData }) @{
                 <label class="library-choice">
                   <input type="radio" name="library-show" value="next-reads" />
                   <span>{content.nextReadsLabel}</span>
-                </label>
-              )}
-              {content.books.some((book) => book.inCollection) && (
-                <label class="library-choice">
-                  <input type="radio" name="library-show" value="in-collection" />
-                  <span>{content.inCollectionLabel}</span>
                 </label>
               )}
             </div>
@@ -122,7 +119,6 @@ export function Library({ content }: { content: LibraryPageData }) @{
               book.completionCount > 0 && "read",
               book.favorite && "favorites",
               book.nextRead && "next-reads",
-              book.inCollection && "in-collection",
             ]
               .filter(Boolean)
               .join(" ")}

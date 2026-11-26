@@ -22,7 +22,7 @@
   --text: oklch(0.24 0.02 65);
   --muted: oklch(0.43 0.025 65);
   --subtle: oklch(0.55 0.02 65);
-  --focus: oklch(0.48 0.14 48);
+  --focus: var(--text);
   --hover: oklch(0.95 0.004 65);
 }
 
@@ -33,9 +33,11 @@
   display: none !important;
 }
 .enhanced .library-controls[hidden] {
-  display: block !important;
+  display: flex !important;
 }
 html {
+  /* Filtering can shorten the page below the viewport; keep the gutter so nothing shifts. */
+  scrollbar-gutter: stable;
   background: var(--background);
   color: var(--text);
 }
@@ -207,8 +209,14 @@ main p {
 .book-group h3 {
   margin-block-end: 0.25rem;
 }
-.book-group ul {
+/* Book lines read as "Title — Author": the title is content, the rest supports it. */
+.book-lines,
+.book-list {
   color: var(--muted);
+}
+cite {
+  font-style: normal;
+  color: var(--text);
 }
 .site-footer nav {
   display: flex;
@@ -220,70 +228,97 @@ main p {
   content: " →" / "";
 }
 .book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   padding: 0;
-  margin-block: 3rem 0;
+  margin-block: 0.5rem 0;
   list-style: none;
-  line-height: 1.6;
   overflow-wrap: break-word;
-}
-.book-list cite {
-  font-style: normal;
 }
 .book-list .relationship {
   display: block;
-  color: var(--muted);
 }
 .book-list blockquote {
   max-width: 58ch;
-  margin: 0.75rem 0 0;
-  color: var(--muted);
+  margin: 0.25rem 0 0;
   font-style: italic;
 }
-.book-list li + li {
-  margin-block-start: 2rem;
-}
 .library-controls {
-  margin-block-start: 3rem;
+  gap: 1.5rem;
 }
 .library-search {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.library-search-field {
+  position: relative;
 }
 .library-search label,
 .library-controls legend {
   color: var(--muted);
 }
 .library-search input {
-  min-width: 0;
-  flex: 1 1 14rem;
-  padding: 0.5rem 0.65rem;
-  border: 0.07rem solid var(--muted);
-  background: var(--background);
+  width: 100%;
+  padding: 0 2.5rem 0.5rem 0;
+  border: 0;
+  border-block-end: 0.07rem solid var(--subtle);
+  border-radius: 0;
+  background: none;
   color: var(--text);
   font: inherit;
+  appearance: none;
+  transition: border-color 0.15s ease;
+}
+/* The field is an underline, so focus strengthens the underline instead of drawing a ring. */
+.library-search input:focus-visible {
+  outline: none;
+  box-shadow: 0 0.07rem 0 var(--text);
+}
+.library-search input:hover,
+.library-search input:focus {
+  border-color: var(--text);
+}
+/* The × button replaces the browser's own clear control. */
+.library-search input::-webkit-search-cancel-button {
+  appearance: none;
+}
+.library-search input::placeholder {
+  color: var(--subtle);
 }
 .library-controls :focus-visible {
   outline: 0.15rem solid var(--focus);
   outline-offset: 0.1rem;
 }
 .library-search button {
-  padding: 0.5rem 0.7rem;
-  border: 0.07rem solid var(--muted);
-  background: var(--background);
-  color: var(--text);
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 2.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--subtle);
   font: inherit;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 .library-search button:hover {
-  border-color: var(--text);
+  color: var(--text);
+}
+/* The × glyph is an icon, so it is sized to read like one rather than as text. */
+.library-search button [aria-hidden] {
+  font-size: 1.5rem;
+  line-height: 1;
 }
 .library-options {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem 2rem;
-  margin-block-start: 1.5rem;
 }
 .library-options fieldset {
   min-width: 0;
@@ -316,9 +351,11 @@ main p {
   cursor: pointer;
 }
 .library-choice span {
-  text-decoration-color: transparent;
-  text-decoration-thickness: 0.1em;
-  text-underline-offset: 0.18em;
+  color: var(--subtle);
+  transition: color 0.15s ease;
+}
+.library-choice:hover span {
+  color: var(--text);
 }
 .library-choice input:focus-visible + span {
   outline: 0.15rem solid var(--focus);
@@ -326,16 +363,18 @@ main p {
 }
 .library-choice input:checked + span {
   color: var(--text);
-  font-weight: 650;
-  text-decoration-line: underline;
-  text-decoration-color: currentColor;
+  font-weight: 500;
 }
+/* Without JavaScript the controls stay hidden, so the count starts the next section. */
 .result-count {
-  margin-block: 1rem 0;
+  margin-block: 5rem 0;
   color: var(--muted);
 }
+.enhanced .result-count {
+  margin-block-start: 3rem;
+}
 .empty-state {
-  margin-block: 2rem 0;
+  margin-block: 1.25rem 0;
   color: var(--muted);
 }
 .language-chooser {
@@ -384,5 +423,10 @@ main p {
   .library-choice input:focus-visible + span,
   .work-entry:has(a:focus-visible) {
     outline-color: Highlight;
+  }
+  /* Forced colours drop box-shadow, so the search field falls back to a ring. */
+  .library-search input:focus-visible {
+    outline: 0.15rem solid Highlight;
+    outline-offset: 0.4rem;
   }
 }
