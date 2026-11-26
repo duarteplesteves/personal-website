@@ -32,7 +32,8 @@
     "@types/node": "26.6.10",
     "oxc-tsrx": "0.6.1",
     "typescript": "7.1.0-beta",
-    "vite": "8.3.8"
+    "vite": "8.3.8",
+    "wrangler": "4.168.0"
   },
   "engines": {
     "node": ">=22.22.2"

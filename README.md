@@ -4,7 +4,7 @@ The site publishes a useful root language chooser and bilingual, fully static Ho
 
 ## Tooling
 
-[Nub](https://nubjs.com/) is the project package manager and command runner. The exact version is recorded in `package.json`; dependencies are pinned in `bun.lock`, which Nub reads and writes.
+[Nub](https://nubjs.com/) is the project package manager and command runner. The exact version is recorded in `package.json`; dependencies are pinned in Nub's own `nub.lock`.
 
 ```sh
 nub install --frozen-lockfile
