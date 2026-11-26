@@ -4,14 +4,13 @@ import { EquivalentTranslationSchema } from "./equivalent-translation.ts";
 
 const workEntryFields = {
   title: EquivalentTranslationSchema,
-  link: Schema.optionalKey(Schema.Struct({ label: EquivalentTranslationSchema, href: SafeUrl })),
+  link: Schema.optionalKey(SafeUrl),
 };
 
 const WorkEntrySchema = Schema.Union([
   Schema.Struct({ ...workEntryFields, description: EquivalentTranslationSchema }),
   Schema.Struct({
     ...workEntryFields,
-    context: EquivalentTranslationSchema,
     points: Schema.NonEmptyArray(EquivalentTranslationSchema),
     technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
   }),
@@ -71,11 +70,6 @@ export const HomeContentSchema = Schema.Struct({
       present: EquivalentTranslationSchema,
       items: Schema.NonEmptyArray(ExperienceEntrySchema),
     }),
-  }),
-  setup: Schema.Struct({
-    heading: EquivalentTranslationSchema,
-    updated: EquivalentTranslationSchema,
-    items: Schema.NonEmptyArray(EquivalentTranslationSchema),
   }),
   contact: Schema.Struct({
     heading: EquivalentTranslationSchema,

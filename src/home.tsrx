@@ -15,10 +15,15 @@ export function Home({ content }: { content: HomePageData }) @{
         <div class="work-entries">
           {content.work.items.map((item) => (
             <article class="work-entry">
-              <div class="work-entry-header">
-                <h3>{item.title}</h3>
-                {"context" in item && <p class="section-note">{item.context}</p>}
-              </div>
+              <h3>
+                {item.link ? (
+                  <a href={item.link} target="_blank">
+                    {item.title}
+                  </a>
+                ) : (
+                  item.title
+                )}
+              </h3>
               {"description" in item ? (
                 <p>{item.description}</p>
               ) : (
@@ -33,11 +38,6 @@ export function Home({ content }: { content: HomePageData }) @{
                   </p>
                 </>
               )}
-              {item.link && (
-                <p class="work-link">
-                  <a href={item.link.href}>{item.link.label}</a>
-                </p>
-              )}
             </article>
           ))}
         </div>
@@ -47,9 +47,7 @@ export function Home({ content }: { content: HomePageData }) @{
         <div class="work-entries">
           {content.work.experience.items.map((item) => (
             <article class="work-entry">
-              <div class="work-entry-header">
-                <h3>{item.company}</h3>
-              </div>
+              <h3>{item.company}</h3>
               <p>{item.description}</p>
               {item.roles.map((role) => (
                 <p class="section-note">
@@ -90,26 +88,16 @@ export function Home({ content }: { content: HomePageData }) @{
           <a href={content.libraryPreview.libraryPathname}>{content.libraryPreview.libraryLabel}</a>
         </section>
       )}
-      <section aria-labelledby="setup-heading">
-        <h2 id="setup-heading">{content.setup.heading}</h2>
-        <ul role="list">
-          {content.setup.items.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-        <p class="section-note">{content.setup.updated}</p>
-      </section>
-      <section aria-labelledby="contact-heading">
-        <h2 id="contact-heading">{content.contact.heading}</h2>
-        <ul role="list">
-          {content.contact.links.map((link) => (
-            <li>
-              <a href={link.href}>{link.label}</a>
-            </li>
-          ))}
-        </ul>
-      </section>
     </main>
+    <footer class="site-footer">
+      <nav aria-label={content.contact.heading}>
+        {content.contact.links.map((link) => (
+          <a href={link.href} target={link.href.startsWith("http") ? "_blank" : undefined}>
+            {link.label}
+          </a>
+        ))}
+      </nav>
+    </footer>
   </>;
 }
 

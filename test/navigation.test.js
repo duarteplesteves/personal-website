@@ -138,3 +138,13 @@ test("the language control saves the explicit choice and preserves Library query
   assert.deepEqual(saved, ["site-language", "pt"]);
   assert.equal(control.href, "https://example.test/pt/library?q=effect&show=read");
 });
+
+test("the language toggle keeps a fixed English, Português order", async () => {
+  for (const route of localizedRoutes) {
+    const html = await readArtifact(route.path);
+    const toggle = html.match(/<p class="language-navigation">([\s\S]*?)<\/p>/)?.[1];
+
+    assert.ok(toggle, `${route.path} must have a language toggle`);
+    assert.ok(toggle.indexOf(">English<") < toggle.indexOf(">Português<"));
+  }
+});

@@ -31,16 +31,13 @@ const PublicBookIdentitySchema = Schema.Struct({
 
 const workEntryFields = {
   title: Schema.NonEmptyString,
-  link: Schema.optionalKey(
-    Schema.Struct({ label: Schema.NonEmptyString, href: Schema.NonEmptyString }),
-  ),
+  link: Schema.optionalKey(Schema.NonEmptyString),
 };
 
 const WorkEntryDataSchema = Schema.Union([
   Schema.Struct({ ...workEntryFields, description: Schema.NonEmptyString }),
   Schema.Struct({
     ...workEntryFields,
-    context: Schema.NonEmptyString,
     points: Schema.NonEmptyArray(Schema.NonEmptyString),
     technologies: Schema.NonEmptyArray(Schema.NonEmptyString),
   }),
@@ -70,11 +67,6 @@ const HomePageDataSchema = Schema.Struct({
         }),
       ),
     }),
-  }),
-  setup: Schema.Struct({
-    heading: Schema.NonEmptyString,
-    updated: Schema.NonEmptyString,
-    items: Schema.Array(Schema.NonEmptyString),
   }),
   contact: Schema.Struct({
     heading: Schema.NonEmptyString,

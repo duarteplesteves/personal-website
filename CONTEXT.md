@@ -101,7 +101,3 @@ _Avoid_: Activity feed, recommendations
 **Standalone section**:
 A topic with enough meaningful material and its own browsing need to justify a primary destination. In version one, only the Library qualifies; other topics remain on Home or in detail pages until they earn this status.
 _Avoid_: Top-level page
-
-**Setup and tools**:
-A compact, date-stamped Home snapshot of hardware and software Duarte currently relies on, including selected agent-workflow resources he actively uses or has adapted. It is neither an endorsement nor a comprehensive inventory, and interests alone do not qualify.
-_Avoid_: Uses page, recommendations, tool inventory
