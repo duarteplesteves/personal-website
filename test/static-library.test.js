@@ -37,9 +37,8 @@ for (const siteLanguage of ["en", "pt"]) {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
 
     const favorite = siteLanguage === "en" ? "Favourite" : "Favorito";
-    const inCollection = siteLanguage === "en" ? "In collection" : "Na coleção";
-    assert.match(html, new RegExp(`${favorite} · ${inCollection}`));
-    assert.match(html, /class="relationship"/);
+    assert.match(html, new RegExp(`<span class="relationship">${favorite}</span>`));
+    assert.doesNotMatch(html, /In collection|Na coleção/);
   });
 
   test(`/${siteLanguage}/library keeps browsing controls hidden without JavaScript and embeds browser data`, async () => {
@@ -53,7 +52,7 @@ for (const siteLanguage of ["en", "pt"]) {
     );
     assert.match(
       siteCss,
-      /\.enhanced \.library-controls\[hidden\] \{\s*display: block !important;\s*\}/,
+      /\.enhanced \.library-controls\[hidden\] \{\s*display: flex !important;\s*\}/,
     );
     assert.match(html, /<input type="search"[^>]*data-library-search/);
     assert.match(html, /<fieldset><legend>[^<]+<\/legend>/);
@@ -62,7 +61,7 @@ for (const siteLanguage of ["en", "pt"]) {
     assert.match(html, /<input type="radio" name="library-order" value="author"/);
     assert.match(html, /<input type="radio" name="library-show" value="read"/);
     assert.match(html, /<input type="radio" name="library-show" value="favorites"/);
-    assert.match(html, /<input type="radio" name="library-show" value="in-collection"/);
+    assert.doesNotMatch(html, /value="in-collection"/);
     assert.doesNotMatch(html, /<input type="radio" name="library-show" value="next-reads"/);
     assert.match(
       html,
@@ -72,7 +71,7 @@ for (const siteLanguage of ["en", "pt"]) {
     );
     assert.match(
       html,
-      /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo" data-views="read in-collection" data-title="Ballad for Sophie" data-author-sort="Juan Cavia"/,
+      /<li data-search="Ballad for Sophie Juan Cavia Filipe Melo" data-views="read" data-title="Ballad for Sophie" data-author-sort="Juan Cavia"/,
     );
     assert.match(html, /<script type="module" src="\/assets\/library\.js"><\/script>/);
     assert.match(

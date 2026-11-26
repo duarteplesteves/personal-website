@@ -56,7 +56,7 @@ const runLibraryScript = (script, books, search = "") => {
       this.order = ordered;
     },
   });
-  const showChoices = ["all", "read", "favorites", "next-reads", "in-collection"].map((value) =>
+  const showChoices = ["all", "read", "favorites", "next-reads"].map((value) =>
     element({ value, checked: value === "all" }),
   );
   const orderChoices = ["title", "author"].map((value) =>

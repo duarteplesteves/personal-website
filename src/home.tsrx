@@ -110,7 +110,7 @@ function BookGroup({
 }) @{
   <div class="book-group">
     <h3>{heading}</h3>
-    <ul role="list">
+    <ul class="book-lines" role="list">
       {books?.map((book) => (
         <li>
           <cite>{book.title}</cite>

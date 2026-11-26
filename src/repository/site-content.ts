@@ -67,7 +67,6 @@ export const SiteContentSchema = Schema.Struct({
     favorite: EquivalentTranslationSchema,
     rereading: EquivalentTranslationSchema,
     readTimes: EquivalentTranslationSchema,
-    inCollection: EquivalentTranslationSchema,
     favorites: EquivalentTranslationSchema,
     nextReads: EquivalentTranslationSchema,
     viewLibrary: EquivalentTranslationSchema,

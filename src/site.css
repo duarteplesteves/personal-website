@@ -33,7 +33,7 @@
   display: none !important;
 }
 .enhanced .library-controls[hidden] {
-  display: block !important;
+  display: flex !important;
 }
 html {
   background: var(--background);
@@ -207,8 +207,14 @@ main p {
 .book-group h3 {
   margin-block-end: 0.25rem;
 }
-.book-group ul {
+/* Book lines read as "Title — Author": the title is content, the rest supports it. */
+.book-lines,
+.book-list {
   color: var(--muted);
+}
+cite {
+  font-style: normal;
+  color: var(--text);
 }
 .site-footer nav {
   display: flex;
@@ -220,30 +226,21 @@ main p {
   content: " →" / "";
 }
 .book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   padding: 0;
-  margin-block: 3rem 0;
+  margin-block: 1.25rem 0;
   list-style: none;
-  line-height: 1.6;
   overflow-wrap: break-word;
-}
-.book-list cite {
-  font-style: normal;
 }
 .book-list .relationship {
   display: block;
-  color: var(--muted);
 }
 .book-list blockquote {
   max-width: 58ch;
-  margin: 0.75rem 0 0;
-  color: var(--muted);
+  margin: 0.25rem 0 0;
   font-style: italic;
-}
-.book-list li + li {
-  margin-block-start: 2rem;
-}
-.library-controls {
-  margin-block-start: 3rem;
 }
 .library-search {
   display: flex;
@@ -259,7 +256,7 @@ main p {
   min-width: 0;
   flex: 1 1 14rem;
   padding: 0.5rem 0.65rem;
-  border: 0.07rem solid var(--muted);
+  border: 0.07rem solid var(--subtle);
   background: var(--background);
   color: var(--text);
   font: inherit;
@@ -269,21 +266,21 @@ main p {
   outline-offset: 0.1rem;
 }
 .library-search button {
-  padding: 0.5rem 0.7rem;
-  border: 0.07rem solid var(--muted);
-  background: var(--background);
-  color: var(--text);
+  padding: 0.5rem 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--subtle);
   font: inherit;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 .library-search button:hover {
-  border-color: var(--text);
+  color: var(--text);
 }
 .library-options {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem 2rem;
-  margin-block-start: 1.5rem;
 }
 .library-options fieldset {
   min-width: 0;
@@ -316,9 +313,11 @@ main p {
   cursor: pointer;
 }
 .library-choice span {
-  text-decoration-color: transparent;
-  text-decoration-thickness: 0.1em;
-  text-underline-offset: 0.18em;
+  color: var(--subtle);
+  transition: color 0.15s ease;
+}
+.library-choice:hover span {
+  color: var(--text);
 }
 .library-choice input:focus-visible + span {
   outline: 0.15rem solid var(--focus);
@@ -326,16 +325,18 @@ main p {
 }
 .library-choice input:checked + span {
   color: var(--text);
-  font-weight: 650;
-  text-decoration-line: underline;
-  text-decoration-color: currentColor;
+  font-weight: 500;
 }
+/* Without JavaScript the controls stay hidden, so the count starts the next section. */
 .result-count {
-  margin-block: 1rem 0;
+  margin-block: 5rem 0;
   color: var(--muted);
 }
+.enhanced .result-count {
+  margin-block-start: 1.25rem;
+}
 .empty-state {
-  margin-block: 2rem 0;
+  margin-block: 1.25rem 0;
   color: var(--muted);
 }
 .language-chooser {
