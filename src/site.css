@@ -22,7 +22,7 @@
   --text: oklch(0.24 0.02 65);
   --muted: oklch(0.43 0.025 65);
   --subtle: oklch(0.55 0.02 65);
-  --focus: oklch(0.48 0.14 48);
+  --focus: var(--text);
   --hover: oklch(0.95 0.004 65);
 }
 
@@ -36,6 +36,8 @@
   display: flex !important;
 }
 html {
+  /* Filtering can shorten the page below the viewport; keep the gutter so nothing shifts. */
+  scrollbar-gutter: stable;
   background: var(--background);
   color: var(--text);
 }
@@ -248,7 +250,6 @@ cite {
 .library-search {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 }
 .library-search-field {
   position: relative;
@@ -259,7 +260,7 @@ cite {
 }
 .library-search input {
   width: 100%;
-  padding: 0.5rem 2.5rem 0.5rem 0;
+  padding: 0.25rem 2.5rem 0.5rem 0;
   border: 0;
   border-block-end: 0.07rem solid var(--subtle);
   border-radius: 0;

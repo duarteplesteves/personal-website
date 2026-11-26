@@ -68,8 +68,8 @@ library:
     en: Search
     pt: Pesquisar
   searchPlaceholder:
-    en: Search by title or author
-    pt: Pesquisar por título ou autor
+    en: Title or author
+    pt: Título ou autor
   clearSearchLabel:
     en: Clear search
     pt: Limpar pesquisa
