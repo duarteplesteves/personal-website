@@ -250,7 +250,7 @@ cite {
 .library-search {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 .library-search-field {
   position: relative;
@@ -271,9 +271,10 @@ cite {
   appearance: none;
   transition: border-color 0.15s ease;
 }
-/* The field has no side padding, so the ring needs room to clear the text. */
+/* The field is an underline, so focus strengthens the underline instead of drawing a ring. */
 .library-search input:focus-visible {
-  outline-offset: 0.4rem;
+  outline: none;
+  box-shadow: 0 0.07rem 0 var(--text);
 }
 .library-search input:hover,
 .library-search input:focus {
@@ -422,5 +423,10 @@ cite {
   .library-choice input:focus-visible + span,
   .work-entry:has(a:focus-visible) {
     outline-color: Highlight;
+  }
+  /* Forced colours drop box-shadow, so the search field falls back to a ring. */
+  .library-search input:focus-visible {
+    outline: 0.15rem solid Highlight;
+    outline-offset: 0.4rem;
   }
 }
