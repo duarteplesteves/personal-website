@@ -45,8 +45,8 @@ missingPage:
     en: Page not found
     pt: Página não encontrada
   description:
-    en: This page does not exist. Go back Home.
-    pt: Esta página não existe. Volte ao início.
+    en: This page does not exist.
+    pt: Esta página não existe.
   homeLabel:
     en: Go Home
     pt: Voltar ao início

@@ -47,8 +47,14 @@ a {
   text-underline-position: from-font;
   text-underline-offset: 0.16em;
 }
-a:hover {
-  text-decoration-thickness: 0.12em;
+@media (hover: hover) {
+  a:hover {
+    text-decoration-thickness: 0.12em;
+  }
+  .library-search button:hover {
+    border-color: var(--link);
+    color: var(--link);
+  }
 }
 a:focus-visible {
   outline: 0.15rem solid var(--focus);
@@ -114,7 +120,7 @@ h1 {
   text-wrap: balance;
 }
 .introduction {
-  max-width: 62ch;
+  max-width: 46ch;
   margin-block: 2rem 0;
   color: var(--muted);
   font-size: clamp(1.08rem, 3vw, 1.25rem);
@@ -158,12 +164,7 @@ main section h2 {
   margin-block: 0;
 }
 .work-entry p {
-  margin-block: 0;
-  line-height: 1.6;
-  text-wrap: pretty;
-  font-size: 0.875rem;
-}
-.work-entry p {
+  max-width: 47ch;
   margin-block: 0;
   line-height: 1.6;
   text-wrap: pretty;
@@ -173,6 +174,7 @@ main section h2 {
   margin-block-start: 0.5rem;
 }
 main section ul {
+  max-width: 47ch;
   padding-inline-start: 1.25rem;
   line-height: 1.7;
   font-size: 0.875rem;
@@ -250,6 +252,8 @@ main section ul {
   background: var(--background);
   color: var(--text);
   font: inherit;
+  /* iOS Safari zooms the page when an input is under 16px. */
+  font-size: max(1rem, 16px);
 }
 .library-controls :focus-visible {
   outline: 0.15rem solid var(--focus);
@@ -262,10 +266,6 @@ main section ul {
   color: var(--text);
   font: inherit;
   cursor: pointer;
-}
-.library-search button:hover {
-  border-color: var(--link);
-  color: var(--link);
 }
 .library-options {
   display: flex;
@@ -285,7 +285,7 @@ main section ul {
 .library-choices {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1rem;
+  gap: 0.5rem 0.75rem;
 }
 .library-choice {
   position: relative;
@@ -304,22 +304,22 @@ main section ul {
   cursor: pointer;
 }
 .library-choice span {
-  text-decoration-color: transparent;
-  text-decoration-thickness: 0.1em;
-  text-underline-offset: 0.18em;
+  padding: 0.25rem 0.65rem;
+  border: 0.07rem solid var(--muted);
 }
 .library-choice input:focus-visible + span {
   outline: 0.15rem solid var(--focus);
   outline-offset: 0.15rem;
 }
 .library-choice input:checked + span {
-  color: var(--text);
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--background);
   font-weight: 650;
-  text-decoration-line: underline;
-  text-decoration-color: currentColor;
 }
 .result-count {
   margin-block: 1rem 0;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
   font-size: 0.9rem;
 }
