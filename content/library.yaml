@@ -276,6 +276,11 @@ books:
     authors:
       - displayName: Rafael Gallo
         sortValue: Rafael Gallo
+  - id: 01a21eaf-aa7e-775e-b326-28bd1740029c
+    title: É sempre a hora da nossa morte amém
+    authors:
+      - displayName: Mariana Salomão Carrara
+        sortValue: Mariana Salomão Carrara
   - id: 01a2d000-0000-7037-8037-000000000037
     title: Ecologia
     authors:
@@ -2006,7 +2011,7 @@ readings:
     state: completed
   - id: 01a2d000-0000-716d-816d-00000000016d
     bookId: 01a2d000-0000-70e0-80e0-0000000000e0
-    state: active
+    state: completed
   - id: 01a2d000-0000-716e-816e-00000000016e
     bookId: 01a2d000-0000-70e3-80e3-0000000000e3
     state: completed
@@ -2082,6 +2087,15 @@ readings:
   - id: 01a2d000-0000-7186-8186-000000000186
     bookId: 01a2d000-0000-710a-810a-00000000010a
     state: completed
+  - id: 01a21eaf-d54a-7d1d-b270-ef1db3f5ef5e
+    bookId: 01a21eaf-aa7e-775e-b326-28bd1740029c
+    state: completed
+  - id: 01a21eaf-d62f-79da-83b2-f2691e335fec
+    bookId: 01a2d000-0000-704b-804b-00000000004b
+    state: completed
+  - id: 01a21eaf-d717-74dd-876c-332242f29f30
+    bookId: 01a2d000-0000-7022-8022-000000000022
+    state: active
 favorites:
   - 01a2d000-0000-7010-8010-000000000010
   - 01a2d000-0000-702d-802d-00000000002d

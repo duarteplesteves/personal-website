@@ -5,14 +5,14 @@ import test from "node:test";
 const siteCss = await readFile("dist/assets/site.css", "utf8");
 
 for (const siteLanguage of ["en", "pt"]) {
-  test(`/${siteLanguage}/library lists all 152 Books once ordered by title without JavaScript`, async () => {
+  test(`/${siteLanguage}/library lists all 153 Books once ordered by title without JavaScript`, async () => {
     const html = await readFile(`dist/${siteLanguage}/library/index.html`, "utf8");
 
     const listing = html.slice(html.indexOf('<ol class="book-list"'));
     const titles = [...listing.matchAll(/<li[^>]*><cite>([^<]+)<\/cite>/g)].map(
       (match) => match[1],
     );
-    assert.equal(titles.length, 152);
+    assert.equal(titles.length, 153);
     const collator = new Intl.Collator(siteLanguage === "en" ? "en-GB" : "pt-PT");
     assert.deepEqual(
       titles,
@@ -27,10 +27,10 @@ for (const siteLanguage of ["en", "pt"]) {
     const heading = siteLanguage === "en" ? "Currently reading" : "A ler";
     assert.match(
       html,
-      new RegExp(`<h2[^>]*>${heading}</h2>(?:(?!</section>).)*<cite>O Som e a Fúria</cite>`, "s"),
+      new RegExp(`<h2[^>]*>${heading}</h2>(?:(?!</section>).)*<cite>Beleza</cite>`, "s"),
     );
     const listing = html.slice(html.indexOf('<ol class="book-list"'));
-    assert.match(listing, /<cite>O Som e a Fúria<\/cite>/);
+    assert.match(listing, /<cite>Beleza<\/cite>/);
   });
 
   test(`/${siteLanguage}/library shows quiet relationship metadata on Book lines`, async () => {
@@ -66,7 +66,7 @@ for (const siteLanguage of ["en", "pt"]) {
     assert.match(
       html,
       new RegExp(
-        `<p class="result-count"[^>]*>${siteLanguage === "en" ? "152 Books" : "152 livros"}</p>`,
+        `<p class="result-count"[^>]*>${siteLanguage === "en" ? "153 Books" : "153 livros"}</p>`,
       ),
     );
     assert.match(
